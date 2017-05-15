@@ -1,0 +1,7 @@
+|bit_stuffing_framer
+rx_bit => ~NO_FANOUT~
+clock => ~NO_FANOUT~
+tx_bit << <GND>
+reset => ~NO_FANOUT~
+
+
