@@ -1,0 +1,29 @@
+module framer_FSM(
+clock,
+reset,
+
+rx_bit,  // Sinal com o bit a ser lido
+rx_clk,  // Indica quando o bit deve ser lido (na transicao deste sinal de 0 para 1)
+
+error_in	// Sinal de erro (O modulo pode ser avisado por outros que houve um erro)
+error_out// Sinal de erro (O modulo pode avisar aos outros que houve um erro)
+);
+
+
+// == Input pins/ports == 
+input wire	rx_bit;
+input wire	rx_clk;
+
+input	wire	clock;
+input	wire	reset;
+
+input wire error_in;
+
+// == Output pins/ports == 
+output wire error_out;
+
+// == Data types == 
+reg[0:127] 		rx_frame;
+integer 			rx_index;
+
+// == Behaviour == 
