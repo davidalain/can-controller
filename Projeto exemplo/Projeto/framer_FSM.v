@@ -1,12 +1,14 @@
+include "can_crc.v"
+
 module framer_FSM(
-clock,
-reset,
+	clock,
+	reset,
 
-rx_bit,  // Sinal com o bit a ser lido
-rx_clk,  // Indica quando o bit deve ser lido (na transicao deste sinal de 0 para 1)
+	rx_bit,  // Sinal com o bit a ser lido
+	rx_clk,  // Indica quando o bit deve ser lido (na transicao deste sinal de 0 para 1)
 
-error_in,	// Sinal de erro (O modulo pode ser avisado por outros que houve um erro)
-error_out// Sinal de erro (O modulo pode avisar aos outros que houve um erro)
+	error_in,	// Sinal de erro (O modulo pode ser avisado por outros que houve um erro)
+	error_out// Sinal de erro (O modulo pode avisar aos outros que houve um erro)
 );
 
 
@@ -45,10 +47,10 @@ parameter ERROR  			= 5'd18;
 
 parameter size_IDENTIFIER_A = 4'd11;
 
-
 // == Internal Variables == 
+
 reg[0:127] 	rx_frame;
-integer 		rx_index;
+reg[7:0]		rx_index;
 
 reg[4:0] 	state; 
 reg[4:0]		next_state;
@@ -59,36 +61,78 @@ reg[2:0] 	contador_DLC;
 reg[5:0]		contador_DATA;
 reg[3:0]		contador_CRC;
 reg[2:0]		contador_EOF;
-reg[1:0]		contador_INTERFRAME	;
+reg[1:0]		contador_INTERFRAME;
 
-reg 			IDE_value;
-reg[3:0] 	DLC_value;
+// == CAN Frame fields ==
+reg 			field_start_bit;
+reg[10:0]	field_identificador_a;
+reg			field_ide;
+reg			field_rtr;
+reg			field_reserved_1;
+reg			field_reserved_0;
+reg[17:0]	field_identificador_b;
+reg[3:0]		field_dlc;
+reg[63:0]	field_data;
+reg[14:0]	field_crc;
+reg			field_ack;
+
+reg[14:0]	calculated_crc;
+reg			crc_enable;
+
+can_crc can_crc_rx
+(
+	.clk(clock),
+	.data(rx_bit),
+	.enable(crc_enable & rx_clk), //	.enable(crc_enable & rx_clk & (~bit_de_stuff)),
+	.initialize(state == IDLE),
+	.crc(calculated_crc)
+);
 
 
 // == Behaviour == 
 
 initial
 begin
-	rx_frame = 128'b0; 	
-	rx_index = 0;
-	
-	state = IDLE;
-	next_state = IDLE;
-	
-	contador_IDENTIFIER_A	= 4'd0; 
-	contador_IDENTIFIER_B	= 5'd0;
-	contador_DLC 				= 3'd0;
-	contador_DATA				= 6'd0;
-	contador_CRC				= 4'd0;
-	contador_EOF				= 3'd0;
-	contador_INTERFRAME		= 2'd0;
-	
-	IDE_value 					= 1'bx;
-	DLC_value					= 4'bx;
+	resetAll();
 end
 
+task resetAll;
+	begin
+	
+		rx_frame = 128'b0; 	
+		rx_index = 0;
+		
+		state = IDLE;
+		next_state = IDLE;
+		
+		contador_IDENTIFIER_A	= 4'd0; 
+		contador_IDENTIFIER_B	= 5'd0;
+		contador_DLC 				= 3'd0;
+		contador_DATA				= 6'd0;
+		contador_CRC				= 4'd0;
+		contador_EOF				= 3'd0;
+		contador_INTERFRAME		= 2'd0;
+	
+		field_start_bit 			= 1'b0;
+		field_identificador_a	= 11'b0;
+		field_ide					= 1'b0;
+		field_rtr					= 1'b0;
+		field_reserved_1			= 1'b0;
+		field_reserved_0			= 1'b0;
+		field_identificador_b 	= 18'b0;
+		field_dlc					= 4'b0;
+		field_data					= 64'b0;
+		field_crc					= 15'b0;
+		field_ack					= 1'b0;
 
-always @(posedge rx_clk)
+		calculated_crc				= 15'h0;
+		crc_enable					= 1'b0;
+	
+	end
+endtask
+
+
+always @(posedge rx_clk) //TODO: verificar o momento da passagem de estado de acordo com os bits recebidos e o clock
 begin
 	case(state)
 		IDLE: 
@@ -99,6 +143,11 @@ begin
 			
 		START_FRAME:
 			begin
+				crc_enable <= 1'b1;
+				
+				field_start_bit <= rx_bit;
+				rx_index = rx_index + 1;
+				
 				next_state <= IDENTIFIER_A;
 				contador_IDENTIFIER_A <= 4'd1;
 			end	
@@ -106,6 +155,9 @@ begin
 		IDENTIFIER_A:
 			if (contador_IDENTIFIER_A < 4'd11)
 			begin
+				rx_frame[rx_index] <= rx_bit;
+				rx_index = rx_index + 1;
+			
 				contador_IDENTIFIER_A <= contador_IDENTIFIER_A + 4'd1;
 			end
 			else
@@ -118,12 +170,12 @@ begin
 			next_state <= IDE;
 			
 		IDE:
-			if(IDE_value == 1'b1)
+			if(field_ide == 1'b1)
 			begin
 				next_state <= IDENTIFIER_B;
 				contador_IDENTIFIER_B <= 1;
 			end
-			else if(IDE_value == 1'b0)
+			else if(field_ide == 1'b0)
 			begin
 				next_state <= RESERVED_0;
 			end
@@ -162,12 +214,14 @@ begin
 			end
 			
 		DATA:  
-			if(contador_DATA < 8*DLC_value) // Talvez seja melhor usar deslocamento para esquerda 3x
+			if(contador_DATA < 8*field_dlc) // Talvez seja melhor usar deslocamento para esquerda 3x
 			begin
 				contador_DATA = contador_DATA + 1;
 			end
 			else
 			begin
+				crc_enable <= 1'b0;
+			
 				next_state <= CRC;
 				contador_CRC <= 1;
 			end	
@@ -179,6 +233,11 @@ begin
 			end
 			else
 			begin
+				if (field_crc != calculated_crc)
+				begin
+						next_state <= ERROR; //Erro de CRC
+				end
+			
 				next_state <= CRC_DELIMITER;
 			end
 			

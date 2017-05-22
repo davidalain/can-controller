@@ -1,7 +1,9 @@
-|bit_stuffing_framer
-rx_bit => ~NO_FANOUT~
+|framer_FSM
 clock => ~NO_FANOUT~
-tx_bit << <GND>
 reset => ~NO_FANOUT~
+rx_bit => ~NO_FANOUT~
+rx_clk => ~NO_FANOUT~
+error_in => ~NO_FANOUT~
+error_out <= <GND>
 
 
