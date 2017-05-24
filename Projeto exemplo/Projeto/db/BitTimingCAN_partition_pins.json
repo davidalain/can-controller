@@ -2,7 +2,84 @@
 	"partitions" : [
 		{
 			"name" : "Top",
-			"pins" : []
+			"pins" : [
+				{
+					"name" : "crc[0]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[1]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[2]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[3]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[4]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[5]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[6]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[7]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[8]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[9]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[10]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[11]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[12]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[13]",
+					"strict" : false
+				},
+				{
+					"name" : "crc[14]",
+					"strict" : false
+				},
+				{
+					"name" : "clk",
+					"strict" : false
+				},
+				{
+					"name" : "data",
+					"strict" : false
+				},
+				{
+					"name" : "reset",
+					"strict" : false
+				},
+				{
+					"name" : "enable",
+					"strict" : false
+				}
+			]
 		}
 	]
 }
