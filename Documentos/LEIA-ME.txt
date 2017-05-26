@@ -1,0 +1,1 @@
+Os arquivos .graphml são criados com uma ferramenta gratuita de desenhos de fluxos e blocos chamada yED: https://www.yworks.com/products/yed
