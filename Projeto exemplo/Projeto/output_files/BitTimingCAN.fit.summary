@@ -1,15 +1,15 @@
-Fitter Status : Successful - Wed May 03 17:17:08 2017
+Fitter Status : Successful - Fri May 26 20:31:42 2017
 Quartus Prime Version : 16.1.0 Build 196 10/24/2016 SJ Lite Edition
 Revision Name : BitTimingCAN
-Top-level Entity Name : first_counter
+Top-level Entity Name : can_decoder
 Family : Cyclone IV GX
 Device : EP4CGX150DF31C7
 Timing Models : Final
-Total logic elements : 6 / 149,760 ( < 1 % )
-    Total combinational functions : 6 / 149,760 ( < 1 % )
-    Dedicated logic registers : 4 / 149,760 ( < 1 % )
-Total registers : 4
-Total pins : 7 / 508 ( 1 % )
+Total logic elements : 0 / 149,760 ( 0 % )
+    Total combinational functions : 0 / 149,760 ( 0 % )
+    Dedicated logic registers : 0 / 149,760 ( 0 % )
+Total registers : 0
+Total pins : 125 / 508 ( 25 % )
 Total virtual pins : 0
 Total memory bits : 0 / 6,635,520 ( 0 % )
 Embedded Multiplier 9-bit elements : 0 / 720 ( 0 % )

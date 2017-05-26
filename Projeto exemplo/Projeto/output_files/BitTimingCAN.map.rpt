@@ -1,6 +1,6 @@
 Analysis & Synthesis report for BitTimingCAN
-Wed May 24 09:25:05 2017
-Quartus Prime Version 16.1.2 Build 203 01/18/2017 SJ Lite Edition
+Fri May 26 20:31:27 2017
+Quartus Prime Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
 
 
 ---------------------
@@ -13,20 +13,22 @@ Quartus Prime Version 16.1.2 Build 203 01/18/2017 SJ Lite Edition
   5. Analysis & Synthesis Source Files Read
   6. Analysis & Synthesis Resource Usage Summary
   7. Analysis & Synthesis Resource Utilization by Entity
-  8. General Register Statistics
-  9. Multiplexer Restructuring Statistics (Restructuring Performed)
- 10. Parameter Settings for User Entity Instance: Top-level Entity: |can_crc
- 11. Post-Synthesis Netlist Statistics for Top Partition
- 12. Elapsed Time Per Partition
- 13. Analysis & Synthesis Messages
- 14. Analysis & Synthesis Suppressed Messages
+  8. Registers Removed During Synthesis
+  9. Removed Registers Triggering Further Register Optimizations
+ 10. General Register Statistics
+ 11. Parameter Settings for User Entity Instance: Top-level Entity: |can_decoder
+ 12. Parameter Settings for User Entity Instance: can_crc:i_can_crc
+ 13. Port Connectivity Checks: "can_crc:i_can_crc"
+ 14. Post-Synthesis Netlist Statistics for Top Partition
+ 15. Elapsed Time Per Partition
+ 16. Analysis & Synthesis Messages
 
 
 
 ----------------
 ; Legal Notice ;
 ----------------
-Copyright (C) 2017  Intel Corporation. All rights reserved.
+Copyright (C) 2016  Intel Corporation. All rights reserved.
 Your use of Intel Corporation's design tools, logic functions 
 and other software and tools, and its AMPP partner logic 
 functions, and any output files from any of the foregoing 
@@ -46,16 +48,16 @@ agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Wed May 24 09:25:05 2017       ;
-; Quartus Prime Version              ; 16.1.2 Build 203 01/18/2017 SJ Lite Edition ;
+; Analysis & Synthesis Status        ; Successful - Fri May 26 20:31:27 2017       ;
+; Quartus Prime Version              ; 16.1.0 Build 196 10/24/2016 SJ Lite Edition ;
 ; Revision Name                      ; BitTimingCAN                                ;
-; Top-level Entity Name              ; can_crc                                     ;
+; Top-level Entity Name              ; can_decoder                                 ;
 ; Family                             ; Cyclone IV GX                               ;
-; Total logic elements               ; 16                                          ;
-;     Total combinational functions  ; 16                                          ;
-;     Dedicated logic registers      ; 15                                          ;
-; Total registers                    ; 15                                          ;
-; Total pins                         ; 19                                          ;
+; Total logic elements               ; 0                                           ;
+;     Total combinational functions  ; 0                                           ;
+;     Dedicated logic registers      ; 0                                           ;
+; Total registers                    ; 0                                           ;
+; Total pins                         ; 125                                         ;
 ; Total virtual pins                 ; 0                                           ;
 ; Total memory bits                  ; 0                                           ;
 ; Embedded Multiplier 9-bit elements ; 0                                           ;
@@ -73,7 +75,7 @@ agreement for further details.
 ; Option                                                                     ; Setting            ; Default Value      ;
 +----------------------------------------------------------------------------+--------------------+--------------------+
 ; Device                                                                     ; EP4CGX150DF31C7    ;                    ;
-; Top-level entity name                                                      ; can_crc            ; BitTimingCAN       ;
+; Top-level entity name                                                      ; can_decoder        ; BitTimingCAN       ;
 ; Family name                                                                ; Cyclone IV GX      ; Cyclone V          ;
 ; Maximum processors allowed for parallel compilation                        ; 3                  ;                    ;
 ; Use smart compilation                                                      ; Off                ; Off                ;
@@ -163,21 +165,21 @@ agreement for further details.
 ; Maximum allowed            ; 3           ;
 ;                            ;             ;
 ; Average used               ; 1.00        ;
-; Maximum used               ; 3           ;
+; Maximum used               ; 1           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processors 2-3         ;   0.0%      ;
 +----------------------------+-------------+
 
 
-+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Analysis & Synthesis Source Files Read                                                                                                                                                                                                               ;
-+----------------------------------+-----------------+------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+
-; File Name with User-Entered Path ; Used in Netlist ; File Type              ; File Name with Absolute Path                                                                                                                                 ; Library ;
-+----------------------------------+-----------------+------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+
-; can_crc.v                        ; yes             ; User Verilog HDL File  ; D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v ;         ;
-+----------------------------------+-----------------+------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                      ;
++----------------------------------+-----------------+------------------------------+-------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                                  ; Library ;
++----------------------------------+-----------------+------------------------------+-------------------------------------------------------------------------------+---------+
+; can_decoder.v                    ; yes             ; User Verilog HDL File        ; C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v ;         ;
+; can_crc.v                        ; yes             ; Auto-Found Verilog HDL File  ; C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_crc.v     ;         ;
++----------------------------------+-----------------+------------------------------+-------------------------------------------------------------------------------+---------+
 
 
 +---------------------------------------------+
@@ -185,14 +187,14 @@ agreement for further details.
 +--------------------------+------------------+
 ; Resource                 ; Usage            ;
 +--------------------------+------------------+
-; I/O pins                 ; 19               ;
+; I/O pins                 ; 125              ;
 ;                          ;                  ;
 ; DSP block 9-bit elements ; 0                ;
 ;                          ;                  ;
-; Maximum fan-out node     ; reset~input      ;
-; Maximum fan-out          ; 16               ;
-; Total fan-out            ; 124              ;
-; Average fan-out          ; 1.80             ;
+; Maximum fan-out node     ; clock            ;
+; Maximum fan-out          ; 1                ;
+; Total fan-out            ; 125              ;
+; Average fan-out          ; 0.50             ;
 +--------------------------+------------------+
 
 
@@ -201,9 +203,194 @@ agreement for further details.
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
 ; Compilation Hierarchy Node ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; DSP 36x36 ; Pins ; Virtual Pins ; Full Hierarchy Name ; Entity Name ; Library Name ;
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
-; |can_crc                   ; 16 (16)             ; 15 (15)                   ; 0           ; 0            ; 0       ; 0         ; 0         ; 19   ; 0            ; |can_crc            ; can_crc     ; work         ;
+; |can_decoder               ; 0 (0)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0         ; 125  ; 0            ; |can_decoder        ; can_decoder ; work         ;
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++---------------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                                    ;
++-----------------------------------------+---------------------------------------------+
+; Register name                           ; Reason for Removal                          ;
++-----------------------------------------+---------------------------------------------+
+; last_rx_bits[5]                         ; Stuck at GND due to stuck port data_in      ;
+; state_idle                              ; Stuck at GND due to stuck port data_in      ;
+; state_ide                               ; Stuck at GND due to stuck port data_in      ;
+; state_rtr                               ; Stuck at GND due to stuck port data_in      ;
+; state_data                              ; Stuck at GND due to stuck port data_in      ;
+; state_crc_delimiter                     ; Stuck at GND due to stuck port data_in      ;
+; state_inter_frame                       ; Stuck at GND due to stuck port data_in      ;
+; field_ide~reg0                          ; Stuck at GND due to stuck port clock_enable ;
+; field_rtr~reg0                          ; Stuck at GND due to stuck port clock_enable ;
+; field_data[63]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[62]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[61]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[60]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[59]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[58]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[57]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[56]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[55]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[54]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[53]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[52]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[51]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[50]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[49]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[48]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[47]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[46]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[45]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[44]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[43]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[42]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[41]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[40]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[39]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[38]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[37]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[36]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[35]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[34]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[33]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[32]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[31]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[30]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[29]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[28]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[27]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[26]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[25]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[24]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[23]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[22]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[21]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[20]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[19]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[18]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[17]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[16]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[15]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[14]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[13]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[12]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[11]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[10]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_data[9]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[8]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[7]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[6]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[5]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[4]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[3]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[2]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[1]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_data[0]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; can_crc:i_can_crc|crc[0..14]            ; Lost fanout                                 ;
+; state_id_a                              ; Stuck at GND due to stuck port data_in      ;
+; state_id_b                              ; Stuck at GND due to stuck port data_in      ;
+; state_reserved1                         ; Stuck at GND due to stuck port data_in      ;
+; state_crc                               ; Stuck at GND due to stuck port data_in      ;
+; state_ack_slot                          ; Stuck at GND due to stuck port data_in      ;
+; field_id_a[10]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[9]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[8]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[7]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[6]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[5]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[4]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[3]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[2]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[1]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_a[0]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[17]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[16]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[15]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[14]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[13]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[12]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[11]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[10]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[9]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[8]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[7]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[6]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[5]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[4]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[3]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[2]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[1]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_id_b[0]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[14]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[13]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[12]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[11]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[10]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[9]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[8]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[7]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[6]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[5]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[4]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[3]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[2]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[1]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_crc[0]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_ack~reg0                          ; Stuck at GND due to stuck port clock_enable ;
+; state_reserved0                         ; Stuck at GND due to stuck port data_in      ;
+; state_ack_delimiter                     ; Stuck at GND due to stuck port data_in      ;
+; state_dlc                               ; Stuck at GND due to stuck port data_in      ;
+; state_eof                               ; Stuck at GND due to stuck port data_in      ;
+; field_dlc[3]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_dlc[2]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_dlc[1]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; field_dlc[0]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
+; Total Number of Removed Registers = 146 ;                                             ;
++-----------------------------------------+---------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                                                         ;
++-----------------+---------------------------+---------------------------------------------------------------------------------------+
+; Register name   ; Reason for Removal        ; Registers Removed due to This Register                                                ;
++-----------------+---------------------------+---------------------------------------------------------------------------------------+
+; last_rx_bits[5] ; Stuck at GND              ; state_idle, state_ide, state_rtr, state_data, state_crc_delimiter, state_inter_frame, ;
+;                 ; due to stuck port data_in ; field_ide~reg0, field_rtr~reg0, field_data[63]~reg0, field_data[62]~reg0,             ;
+;                 ;                           ; field_data[61]~reg0, field_data[60]~reg0, field_data[59]~reg0, field_data[58]~reg0,   ;
+;                 ;                           ; field_data[57]~reg0, field_data[56]~reg0, field_data[55]~reg0, field_data[54]~reg0,   ;
+;                 ;                           ; field_data[53]~reg0, field_data[52]~reg0, field_data[51]~reg0, field_data[50]~reg0,   ;
+;                 ;                           ; field_data[49]~reg0, field_data[48]~reg0, field_data[47]~reg0, field_data[46]~reg0,   ;
+;                 ;                           ; field_data[45]~reg0, field_data[44]~reg0, field_data[43]~reg0, field_data[42]~reg0,   ;
+;                 ;                           ; field_data[41]~reg0, field_data[40]~reg0, field_data[39]~reg0, field_data[38]~reg0,   ;
+;                 ;                           ; field_data[37]~reg0, field_data[36]~reg0, field_data[35]~reg0, field_data[34]~reg0,   ;
+;                 ;                           ; field_data[33]~reg0, field_data[32]~reg0, field_data[31]~reg0, field_data[30]~reg0,   ;
+;                 ;                           ; field_data[29]~reg0, field_data[28]~reg0, field_data[27]~reg0, field_data[26]~reg0,   ;
+;                 ;                           ; field_data[25]~reg0, field_data[24]~reg0, field_data[23]~reg0, field_data[22]~reg0,   ;
+;                 ;                           ; field_data[21]~reg0, field_data[20]~reg0, field_data[19]~reg0, field_data[18]~reg0,   ;
+;                 ;                           ; field_data[17]~reg0, field_data[16]~reg0, field_data[15]~reg0, field_data[14]~reg0,   ;
+;                 ;                           ; field_data[13]~reg0, field_data[12]~reg0, field_data[11]~reg0, field_data[10]~reg0,   ;
+;                 ;                           ; field_data[9]~reg0, field_data[8]~reg0, field_data[7]~reg0, field_data[6]~reg0,       ;
+;                 ;                           ; field_data[5]~reg0, field_data[4]~reg0, field_data[3]~reg0, field_data[2]~reg0,       ;
+;                 ;                           ; field_data[1]~reg0, field_data[0]~reg0, can_crc:i_can_crc|crc[0],                     ;
+;                 ;                           ; can_crc:i_can_crc|crc[1], can_crc:i_can_crc|crc[2], can_crc:i_can_crc|crc[3],         ;
+;                 ;                           ; can_crc:i_can_crc|crc[4], can_crc:i_can_crc|crc[5], can_crc:i_can_crc|crc[6],         ;
+;                 ;                           ; can_crc:i_can_crc|crc[7], can_crc:i_can_crc|crc[8], can_crc:i_can_crc|crc[9],         ;
+;                 ;                           ; can_crc:i_can_crc|crc[10], can_crc:i_can_crc|crc[11], can_crc:i_can_crc|crc[12],      ;
+;                 ;                           ; can_crc:i_can_crc|crc[13], state_id_a, state_id_b, state_reserved1, state_crc,        ;
+;                 ;                           ; state_ack_slot, field_id_a[10]~reg0, field_id_a[9]~reg0, field_id_a[8]~reg0,          ;
+;                 ;                           ; field_id_a[7]~reg0, field_id_a[6]~reg0, field_id_a[5]~reg0, field_id_a[4]~reg0,       ;
+;                 ;                           ; field_id_a[3]~reg0, field_id_a[2]~reg0, field_id_a[1]~reg0, field_id_a[0]~reg0,       ;
+;                 ;                           ; field_id_b[17]~reg0, field_id_b[16]~reg0, field_id_b[15]~reg0, field_id_b[14]~reg0,   ;
+;                 ;                           ; field_id_b[13]~reg0, field_id_b[12]~reg0, field_id_b[11]~reg0, field_id_b[10]~reg0,   ;
+;                 ;                           ; field_id_b[9]~reg0, field_id_b[8]~reg0, field_id_b[7]~reg0, field_id_b[6]~reg0,       ;
+;                 ;                           ; field_id_b[5]~reg0, field_id_b[4]~reg0, field_id_b[3]~reg0, field_id_b[2]~reg0,       ;
+;                 ;                           ; field_id_b[1]~reg0, field_id_b[0]~reg0, field_crc[14]~reg0, field_crc[13]~reg0,       ;
+;                 ;                           ; field_crc[12]~reg0, field_crc[11]~reg0, field_crc[10]~reg0, field_crc[9]~reg0,        ;
+;                 ;                           ; field_crc[8]~reg0, field_crc[7]~reg0, field_crc[6]~reg0, field_crc[5]~reg0,           ;
+;                 ;                           ; field_crc[4]~reg0, field_crc[3]~reg0, field_crc[2]~reg0, field_crc[1]~reg0,           ;
+;                 ;                           ; field_crc[0]~reg0, field_ack~reg0, state_reserved0, state_ack_delimiter, state_dlc,   ;
+;                 ;                           ; state_eof, field_dlc[3]~reg0, field_dlc[2]~reg0, field_dlc[1]~reg0, field_dlc[0]~reg0 ;
++-----------------+---------------------------+---------------------------------------------------------------------------------------+
 
 
 +------------------------------------------------------+
@@ -211,33 +398,48 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 15    ;
-; Number of registers using Synchronous Clear  ; 7     ;
+; Total registers                              ; 0     ;
+; Number of registers using Synchronous Clear  ; 0     ;
 ; Number of registers using Synchronous Load   ; 0     ;
 ; Number of registers using Asynchronous Clear ; 0     ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 15    ;
+; Number of registers using Clock Enable       ; 0     ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
 
-+------------------------------------------------------------------------------------------------------------------------------------------+
-; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                           ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
-; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
-; 3:1                ; 15 bits   ; 30 LEs        ; 15 LEs               ; 15 LEs                 ; Yes        ; |can_crc|crc[0]~reg0       ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
-
-
-+-------------------------------------------------------------------------+
-; Parameter Settings for User Entity Instance: Top-level Entity: |can_crc ;
-+----------------+-------+------------------------------------------------+
-; Parameter Name ; Value ; Type                                           ;
-+----------------+-------+------------------------------------------------+
-; Tp             ; 1     ; Signed Integer                                 ;
-+----------------+-------+------------------------------------------------+
++-----------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |can_decoder ;
++----------------+-------+----------------------------------------------------+
+; Parameter Name ; Value ; Type                                               ;
++----------------+-------+----------------------------------------------------+
+; LEN_ID_A       ; 1011  ; Unsigned Binary                                    ;
+; LEN_ID_B       ; 10010 ; Unsigned Binary                                    ;
+; LEN_DLC        ; 100   ; Unsigned Binary                                    ;
+; LEN_CRC        ; 1111  ; Unsigned Binary                                    ;
+; LEN_INTERFRAME ; 11    ; Unsigned Binary                                    ;
+; LEN_EOF        ; 111   ; Unsigned Binary                                    ;
++----------------+-------+----------------------------------------------------+
 Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: can_crc:i_can_crc ;
++----------------+-------+---------------------------------------+
+; Parameter Name ; Value ; Type                                  ;
++----------------+-------+---------------------------------------+
+; Tp             ; 1     ; Signed Integer                        ;
++----------------+-------+---------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------+
+; Port Connectivity Checks: "can_crc:i_can_crc" ;
++-------+-------+----------+--------------------+
+; Port  ; Type  ; Severity ; Details            ;
++-------+-------+----------+--------------------+
+; reset ; Input ; Info     ; Stuck at GND       ;
++-------+-------+----------+--------------------+
 
 
 +-----------------------------------------------------+
@@ -245,17 +447,13 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; boundary_port         ; 19                          ;
-; cycloneiii_ff         ; 15                          ;
-;     ENA               ; 8                           ;
-;     ENA SCLR          ; 7                           ;
-; cycloneiii_lcell_comb ; 16                          ;
-;     normal            ; 16                          ;
-;         2 data inputs ; 10                          ;
-;         3 data inputs ; 6                           ;
+; boundary_port         ; 125                         ;
+; cycloneiii_lcell_comb ; 1                           ;
+;     normal            ; 1                           ;
+;         0 data inputs ; 1                           ;
 ;                       ;                             ;
-; Max LUT depth         ; 1.00                        ;
-; Average LUT depth     ; 0.97                        ;
+; Max LUT depth         ; 0.00                        ;
+; Average LUT depth     ; 0.00                        ;
 +-----------------------+-----------------------------+
 
 
@@ -273,34 +471,186 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-------------------------------+
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
-    Info: Version 16.1.2 Build 203 01/18/2017 SJ Lite Edition
-    Info: Processing started: Wed May 24 09:24:45 2017
+    Info: Version 16.1.0 Build 196 10/24/2016 SJ Lite Edition
+    Info: Processing started: Fri May 26 20:31:13 2017
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off BitTimingCAN -c BitTimingCAN
 Info (20032): Parallel compilation is enabled and will use up to 3 processors
-Warning (20031): Parallel compilation is enabled for 3 processors, but there are only 2 processors in the system. Runtime may increase due to over usage of the processor space.
-Info (12021): Found 1 design units, including 1 entities, in source file framer_fsm.v
-    Info (12023): Found entity 1: framer_FSM File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/framer_FSM.v Line: 3
-Info (12021): Found 1 design units, including 1 entities, in source file can_crc.v
-    Info (12023): Found entity 1: can_crc File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v Line: 1
-Info (12127): Elaborating entity "can_crc" for the top level hierarchy
-Info (286030): Timing-Driven Synthesis is running
-Info (144001): Generated suppressed messages file D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/output_files/BitTimingCAN.map.smsg
+Info (12021): Found 2 design units, including 2 entities, in source file can_decoder.v
+    Info (12023): Found entity 1: can_crc File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_crc.v Line: 1
+    Info (12023): Found entity 2: can_decoder File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 3
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(126): created implicit net for "bit_de_stuff" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 126
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(127): created implicit net for "crc_initialize" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 127
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(174): created implicit net for "last_bit_interframe" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 174
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(176): created implicit net for "go_state_idle" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 176
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(177): created implicit net for "go_state_id_a" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 177
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(178): created implicit net for "go_state_rtr_srr_temp" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 178
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(179): created implicit net for "go_state_ide" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 179
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(180): created implicit net for "go_state_id_b" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 180
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(181): created implicit net for "go_state_rtr" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 181
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(182): created implicit net for "go_state_reserved1" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 182
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(183): created implicit net for "go_state_reserved0" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 183
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(184): created implicit net for "go_state_dlc" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 184
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(185): created implicit net for "go_state_data" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 185
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(186): created implicit net for "go_state_crc" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 186
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(187): created implicit net for "go_state_crc_delimiter" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 187
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(188): created implicit net for "go_state_ack_slot" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 188
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(189): created implicit net for "go_state_ack_delimiter" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 189
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(190): created implicit net for "go_state_eof" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 190
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(191): created implicit net for "go_state_inter_frame" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 191
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(193): created implicit net for "bit_error_srr" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 193
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(194): created implicit net for "bit_error_crc_delimiter" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 194
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(195): created implicit net for "bit_error_ack_slot" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 195
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(196): created implicit net for "bit_error_ack_delimiter" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 196
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(197): created implicit net for "bit_error_eof" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 197
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(198): created implicit net for "bit_error_inter_frame" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 198
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(199): created implicit net for "bit_error_bit_stuffing" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 199
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(201): created implicit net for "crc_error" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 201
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(203): created implicit net for "go_state_error" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 203
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(205): created implicit net for "enable_bitstuffing" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 205
+Info (12127): Elaborating entity "can_decoder" for the top level hierarchy
+Warning (10036): Verilog HDL or VHDL warning at can_decoder.v(193): object "bit_error_srr" assigned a value but never read File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 193
+Warning (10858): Verilog HDL warning at can_decoder.v(107): object state_rtr_srr_temp used but never assigned File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 107
+Warning (10030): Net "bit_de_stuff" at can_decoder.v(126) has no driver or initial value, using a default initial value '0' File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 126
+Warning (10030): Net "state_rtr_srr_temp" at can_decoder.v(107) has no driver or initial value, using a default initial value '0' File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 107
+Warning (10034): Output port "error_out" at can_decoder.v(41) has no driver File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 41
+Info (12128): Elaborating entity "can_crc" for hierarchy "can_crc:i_can_crc" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 129
+Warning (13024): Output pins are stuck at VCC or GND
+    Warning (13410): Pin "error_out" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 41
+    Warning (13410): Pin "field_start_of_frame" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 88
+    Warning (13410): Pin "field_id_a[0]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[1]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[2]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[3]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[4]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[5]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[6]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[7]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[8]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[9]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_id_a[10]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 396
+    Warning (13410): Pin "field_ide" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 90
+    Warning (13410): Pin "field_rtr" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 91
+    Warning (13410): Pin "field_reserved_1" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 92
+    Warning (13410): Pin "field_reserved_0" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 93
+    Warning (13410): Pin "field_id_b[0]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[1]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[2]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[3]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[4]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[5]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[6]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[7]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[8]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[9]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[10]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[11]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[12]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[13]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[14]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[15]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[16]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_id_b[17]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 424
+    Warning (13410): Pin "field_dlc[0]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 444
+    Warning (13410): Pin "field_dlc[1]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 444
+    Warning (13410): Pin "field_dlc[2]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 444
+    Warning (13410): Pin "field_dlc[3]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 444
+    Warning (13410): Pin "field_data[0]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[1]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[2]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[3]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[4]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[5]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[6]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[7]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[8]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[9]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[10]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[11]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[12]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[13]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[14]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[15]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[16]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[17]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[18]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[19]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[20]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[21]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[22]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[23]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[24]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[25]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[26]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[27]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[28]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[29]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[30]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[31]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[32]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[33]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[34]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[35]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[36]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[37]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[38]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[39]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[40]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[41]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[42]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[43]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[44]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[45]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[46]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[47]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[48]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[49]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[50]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[51]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[52]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[53]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[54]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[55]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[56]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[57]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[58]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[59]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[60]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[61]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[62]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_data[63]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 454
+    Warning (13410): Pin "field_crc[0]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[1]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[2]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[3]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[4]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[5]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[6]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[7]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[8]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[9]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[10]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[11]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[12]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[13]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc[14]" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 463
+    Warning (13410): Pin "field_crc_delimiter" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 98
+    Warning (13410): Pin "field_ack" is stuck at GND File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 99
+Info (17049): 15 registers lost all their fanouts during netlist optimizations.
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 35 device resources after synthesis - the final resource count might be different
-    Info (21058): Implemented 4 input pins
-    Info (21059): Implemented 15 output pins
-    Info (21061): Implemented 16 logic cells
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 687 megabytes
-    Info: Processing ended: Wed May 24 09:25:05 2017
-    Info: Elapsed time: 00:00:20
-    Info: Total CPU time (on all processors): 00:00:41
-
-
-+------------------------------------------+
-; Analysis & Synthesis Suppressed Messages ;
-+------------------------------------------+
-The suppressed messages can be found in D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/output_files/BitTimingCAN.map.smsg.
+Warning (21074): Design contains 5 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "clock" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 35
+    Warning (15610): No output dependent on input pin "reset" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 36
+    Warning (15610): No output dependent on input pin "rx_bit" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 32
+    Warning (15610): No output dependent on input pin "sample_point" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 33
+    Warning (15610): No output dependent on input pin "error_in" File: C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 38
+Info (21057): Implemented 125 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 5 input pins
+    Info (21059): Implemented 120 output pins
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 161 warnings
+    Info: Peak virtual memory: 677 megabytes
+    Info: Processing ended: Fri May 26 20:31:27 2017
+    Info: Elapsed time: 00:00:14
+    Info: Total CPU time (on all processors): 00:00:23
 
 

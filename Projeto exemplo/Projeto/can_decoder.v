@@ -1,6 +1,6 @@
-//`include "can_crc.v"
+`include "can_crc.v"
 
-module framer_FSM(
+module can_decoder(
 	clock,
 	reset,
 
@@ -9,6 +9,22 @@ module framer_FSM(
 
 	error_in,	// Sinal de erro (O modulo pode ser avisado por outros que houve um erro)
 	error_out	// Sinal de erro (O modulo pode avisar aos outros que houve um erro)
+	
+	// Deixar os campos como saida do modulo para ver a saída nos testes
+	,
+	
+	field_start_of_frame,
+	field_id_a,
+	field_ide,
+	field_rtr,
+	field_reserved_1,
+	field_reserved_0,
+	field_id_b,
+	field_dlc,
+	field_data,
+	field_crc,
+	field_crc_delimiter,
+	field_ack
 );
 
 
@@ -56,7 +72,7 @@ parameter LEN_EOF			= 3'd7;
 
 reg[4:0] 	state;
 reg[5:0]	last_rx_bits; //Usado para verificação do bit stuffing
-reg			bit_de_stuffing;	//Flag que indica se o bit atual é um bit stuffing
+wire			bit_de_stuffing;	//Flag que indica se o bit atual é um bit stuffing
 
 reg[3:0] 	contador_id_a;
 reg[4:0] 	contador_id_b;
@@ -66,23 +82,25 @@ reg[3:0]	contador_CRC;
 reg[2:0]	contador_EOF;
 reg[1:0]	contador_INTERFRAME;
 
+
+
 // = = CAN Frame fields ==
-reg 		field_start_of_frame;
-reg[10:0]	field_id_a;
-reg			field_ide;
-reg			field_rtr;
-reg			field_reserved_1;
-reg			field_reserved_0;
-reg[17:0]	field_id_b;
-reg[3:0]	field_dlc;
-reg[63:0]	field_data;
-reg[14:0]	field_crc;
-reg			field_crc_delimiter;
-reg			field_ack;
+output	reg 			field_start_of_frame;
+output	reg[10:0]	field_id_a;
+output	reg			field_ide;
+output	reg			field_rtr;
+output	reg			field_reserved_1;
+output	reg			field_reserved_0;
+output	reg[17:0]	field_id_b;
+output	reg[3:0]		field_dlc;
+output	reg[63:0]	field_data;
+output	reg[14:0]	field_crc;
+output	reg			field_crc_delimiter;
+output	reg			field_ack;
 
 reg			rtr_srr_temp;
-reg[14:0]	calculated_crc;
-reg			crc_enable;
+wire[14:0]	calculated_crc;
+wire			crc_enable;
 
 reg 	state_idle;
 reg 	state_id_a;				
@@ -101,14 +119,14 @@ reg 	state_ack_delimiter;
 reg 	state_eof;
 reg 	state_inter_frame;
 
-//can_crc i_can_crc
-//(
-//	.clk(clock),
-//	.data(rx_bit),
-//	.enable(crc_enable & sample_point & (~bit_de_stuff)),
-//	.initialize(crc_initialize),
-//	.crc(calculated_crc)
-//);
+can_crc i_can_crc
+(
+	.clk(clock),
+	.data(rx_bit),
+	.enable(crc_enable & sample_point & (~bit_de_stuff)),
+	.reset(crc_initialize),
+	.crc(calculated_crc)
+);
 
 // == Behaviour == 
 
@@ -123,7 +141,7 @@ task resetAll;
 //		rx_frame = 128'b0; 	
 //		rx_index = 0;
 		
-		state = IDLE;
+//		state = IDLE;
 		
 		contador_id_a				= 4'd0; 
 		contador_id_b				= 5'd0;
@@ -147,8 +165,8 @@ task resetAll;
 		field_ack					= 1'b0;
 
 		rtr_srr_temp				= 1'b0;
-		calculated_crc				= 15'h0;
-		crc_enable					= 1'b0;
+		//calculated_crc				= 15'h0;
+		//crc_enable					= 1'b0;
 	
 	end
 endtask
@@ -179,14 +197,25 @@ assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit		& state_ack_delimiter;
 assign	bit_error_eof				=	sample_point	& ~rx_bit		& state_eof;
 assign	bit_error_inter_frame		=	sample_point	& ~rx_bit		& state_inter_frame;
 assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
+//verifica o erro de crc (crc_lido != crc_calculado) no estado do crc delimiter
+assign	crc_error						= sample_point		& state_crc_delimiter 	& (calculated_crc != field_crc);
 
-assign	go_state_error 		=	bit_error_crc_delimiter | bit_error_ack_slot | bit_error_ack_delimiter | bit_error_eof | bit_error_inter_frame | bit_error_bit_stuffing;
+assign	go_state_error 		=	bit_error_crc_delimiter | bit_error_ack_slot | bit_error_ack_delimiter | bit_error_eof | bit_error_inter_frame | bit_error_bit_stuffing | crc_error;
 
 assign	enable_bitstuffing	=	(state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr | state_reserved1 | state_reserved0 | state_dlc | state_data | state_crc );
 assign	bit_de_stuffing		=	enable_bitstuffing & ((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit);
 
 assign	crc_initialize		=	go_state_idle | (state_inter_frame && contador_INTERFRAME == LEN_INTERFRAME);
-assign	crc_enable			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_inter_frame & last_bit_interframe)
+assign	crc_enable			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_inter_frame & last_bit_interframe);
+
+// Salva os últimos 5 bits lidos para o bit stuffing
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+  last_rx_bits <= 5'b11011;
+else if (sample_point)
+  last_rx_bits <= {last_rx_bits[3:0],rx_bit};
+end
 
 
 // Estado idle (start of frame)
@@ -279,6 +308,171 @@ else if(go_state_dlc)
 	state_dlc <= 1'b1; //Vai para o estado!
 end
 
+// Estado data
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_data <= 1'b0;
+else if(go_state_crc | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+	state_data <= 1'b0;
+else if(go_state_data)
+	state_data <= 1'b1; //Vai para o estado!
+end
+
+// Estado crc
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_crc <= 1'b0;
+else if(go_state_crc_delimiter | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+	state_crc <= 1'b0;
+else if(go_state_crc)
+	state_crc <= 1'b1; //Vai para o estado!
+end
+
+// Estado crc_delimiter
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_crc_delimiter <= 1'b0;
+else if(go_state_ack_slot | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+	state_crc_delimiter <= 1'b0;
+else if(go_state_crc_delimiter)
+	state_crc_delimiter <= 1'b1; //Vai para o estado!
+end
+
+// Estado ACK slot
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_ack_slot <= 1'b0;
+else if(go_state_ack_delimiter | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+	state_ack_slot <= 1'b0;
+else if(go_state_ack_slot)
+	state_ack_slot <= 1'b1; //Vai para o estado!
+end
+
+// Estado ACK delimiter
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_ack_delimiter <= 1'b0;
+else if(go_state_eof | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+	state_ack_delimiter <= 1'b0;
+else if(go_state_ack_delimiter)
+	state_ack_delimiter <= 1'b1; //Vai para o estado!
+end
+
+
+// Estado EOF 
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_eof <= 1'b0;
+else if(go_state_eof | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+	state_eof <= 1'b0;
+else if(go_state_eof)
+	state_eof <= 1'b1; //Vai para o estado!
+end
+
+
+// Estado inter_frame 
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_inter_frame <= 1'b0;
+else if(go_state_idle | go_state_id_a  | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+	state_inter_frame <= 1'b0;
+else if(go_state_inter_frame)
+	state_inter_frame <= 1'b1; //Vai para o estado!
+end
+
+
+// Registrador ID_A 
+always @ (posedge clock or posedge reset)
+begin
+if (reset)
+	field_id_a <= 11'h0;
+else if (sample_point & state_id_a & (~bit_de_stuffing))
+	field_id_a <= {field_id_a[9:0], rx_bit};
+end
+
+
+// rtr_srr_temp bit
+always @ (posedge clock or posedge reset)
+begin
+if (reset)
+	rtr_srr_temp <= 1'b0;
+else if (sample_point & state_rtr_srr_temp & (~bit_de_stuffing))
+	rtr_srr_temp <= rx_bit;
+end
+
+// ide bit
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+    field_ide <= 1'b0;
+  else if (sample_point & state_ide & (~bit_de_stuffing))
+    field_ide <= rx_bit;
+end
+
+// Registrador IB_B
+always @ (posedge clock or posedge reset)
+begin
+if (reset)
+	field_id_b <= 11'h0;
+else if (sample_point & state_id_b & (~bit_de_stuffing))
+	field_id_b <= {field_id_b[16:0], rx_bit};
+end
+
+
+// rtr bit
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+    field_rtr <= 1'b0;
+  else if (sample_point & state_rtr & (~bit_de_stuffing)) 
+	 field_rtr <= rx_bit;
+end
+
+
+// Data length
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+    field_dlc <= 4'b0;
+  else if (sample_point & state_dlc & (~bit_de_stuffing))
+    field_dlc <= {field_dlc[2:0], rx_bit};
+end
+
+
+// Data
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+    field_data <= 64'h0;
+  else if (sample_point & state_data & (~bit_de_stuffing))
+    field_data <= {field_data[62:0], rx_bit};
+end
+
+// CRC
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+    field_crc <= 15'h0;
+  else if (sample_point & state_crc & (~bit_de_stuffing))
+    field_crc <= {field_crc[13:0], rx_bit};
+end
+
+
+// ACK
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+    field_ack <= 1'b0;
+  else if (sample_point & state_ack_slot & (~bit_de_stuffing))
+    field_ack <= rx_bit;
+end
 
 
 //always @(posedge sample_point) /*TODO: verificar o momento da passagem de estado de acordo com os bits recebidos e o clock*/
