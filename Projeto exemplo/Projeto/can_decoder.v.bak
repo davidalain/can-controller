@@ -40,31 +40,51 @@ input wire error_in;
 // == Output pins/ports == 
 output wire error_out;
 
-parameter len_id_a 			= 4'd11;
-parameter len_id_b 			= 5'd18;
-parameter len_dlc 			= 3'd4;
-parameter len_crc			= 4'd15;
-parameter len_eof			= 3'd7;
-parameter len_interframe	= 2'd2; //De acordo com a especificação são 3 bits recessivos. Mas na prática pode acontecer a transmissão de frames em sequência em que o terceiro bit do Intermission já pode ser o Start of Frame do próximo frame, então são 2. Vide documento can2spec.pdf, seção 9.1, item 2.
+// == Internal Constants == 
+//parameter IDLE  			= 5'd1;
+//parameter START_OF_FRAME  	= 5'd2;
+//parameter id_a  			= 5'd3;
+//parameter RTR_SRR  			= 5'd4;
+//parameter IDE  				= 5'd5;
+//parameter id_b  			= 5'd6;
+//parameter RTR  				= 5'd7;
+//parameter RESERVED_1  		= 5'd8;
+//parameter RESERVED_0  		= 5'd9;
+//parameter DLC  				= 5'd10;
+//parameter DATA  			= 5'd11;
+//parameter CRC  				= 5'd12;
+//parameter CRC_DELIMITER 	= 5'd13;
+//parameter ACK_SLOT  		= 5'd14;
+//parameter ACK_DELIMITER 	= 5'd15;
+//parameter END_OF_FRAME  	= 5'd16;
+//parameter INTERFRAME  		= 5'd17;
+//parameter ERROR  			= 5'd18;
+
+
+parameter LEN_ID_A 			= 4'd11;
+parameter LEN_ID_B 			= 5'd18;
+parameter LEN_DLC 			= 3'd4;
+parameter LEN_CRC			= 4'd15;
+parameter LEN_INTERFRAME	= 2'd3;
+parameter LEN_EOF			= 3'd7;
 
 // == Internal Variables == 
 
-reg[4:0]	last_rx_bits; 		//Usado para verificação do bit stuffing (5 bits).
-wire		bit_de_stuffing;	//Flag que indica se o bit recebido atual é um bit stuffing
-
-reg			busy;				//Flag que indica se o controlador está ocupado processando algo e não tem tempo de receber/enviar nos frames. Usada na condição do Overload Frame.
+reg[4:0] 	state;
+reg[5:0]	last_rx_bits; //Usado para verificação do bit stuffing
+wire		bit_de_stuffing;	//Flag que indica se o bit atual é um bit stuffing
 
 reg[3:0] 	contador_id_a;
 reg[4:0] 	contador_id_b;
-reg[2:0] 	contador_dlc;
-reg[5:0]	contador_data;
-reg[3:0]	contador_crc;
-reg[2:0]	contador_eof;
-reg[1:0]	contador_interframe;
+reg[2:0] 	contador_DLC;
+reg[5:0]	contador_DATA;
+reg[3:0]	contador_CRC;
+reg[2:0]	contador_EOF;
+reg[1:0]	contador_INTERFRAME;
 
 
 
-// == CAN Frame fields ==
+// = = CAN Frame fields ==
 output	reg 		field_start_of_frame;
 output	reg[10:0]	field_id_a;
 output	reg			field_ide;
@@ -97,7 +117,7 @@ reg 	state_crc_delimiter;
 reg 	state_ack_slot;
 reg 	state_ack_delimiter;
 reg 	state_eof;
-reg 	state_interframe;
+reg 	state_inter_frame;
 
 can_crc i_can_crc
 (
@@ -117,15 +137,19 @@ end
 
 task resetAll;
 	begin
-		busy						= 1'b0;
+	
+//		rx_frame = 128'b0; 	
+//		rx_index = 0;
+		
+//		state = IDLE;
 		
 		contador_id_a				= 4'd0; 
 		contador_id_b				= 5'd0;
-		contador_dlc 				= 3'd0;
-		contador_data				= 6'd0;
-		contador_crc				= 4'd0;
-		contador_eof				= 3'd0;
-		contador_interframe			= 2'd0;
+		contador_DLC 				= 3'd0;
+		contador_DATA				= 6'd0;
+		contador_CRC				= 4'd0;
+		contador_EOF				= 3'd0;
+		contador_INTERFRAME			= 2'd0;
 	
 		field_start_of_frame 		= 1'b0;
 		field_id_a					= 11'b0;
@@ -141,53 +165,55 @@ task resetAll;
 		field_ack					= 1'b0;
 
 		rtr_srr_temp				= 1'b0;
+		calculated_crc				= 15'h0;
+		crc_enable					= 1'b0;
 	
 	end
 endtask
 
-assign	last_bit_interframe		= 	state_interframe	& (contador_interframe == len_interframe);
+assign	last_bit_interframe		= 	state_inter_frame	& (contador_INTERFRAME == LEN_INTERFRAME);
 
 assign 	go_state_idle			= 	sample_point	& rx_bit 		& last_bit_interframe;
 assign 	go_state_id_a			= 	sample_point	& ~rx_bit		& (state_idle 			| last_bit_interframe);
-assign 	go_state_rtr_srr_temp	= 	sample_point					& state_id_a  			& contador_id_a == len_id_a;
+assign 	go_state_rtr_srr_temp	= 	sample_point					& state_id_a  			& contador_id_a == LEN_ID_A;
 assign 	go_state_ide			=	sample_point					& state_rtr_srr_temp;
 assign 	go_state_id_b			=	sample_point	& rx_bit		& state_ide;
-assign 	go_state_rtr			=	sample_point	 				& state_id_b			& contador_id_b == len_id_b;
+assign 	go_state_rtr			=	sample_point	 				& state_id_b			& contador_id_b == LEN_ID_B;
 assign 	go_state_reserved1		=	sample_point					& state_rtr;
 assign 	go_state_reserved0		=	sample_point					& state_reserved1;
 assign 	go_state_dlc			=	sample_point					& state_reserved0;
-assign 	go_state_data			=	sample_point					& state_dlc				& contador_dlc == len_dlc;
-assign 	go_state_crc			=	sample_point					& (state_dlc			&((contador_dlc == len_dlc & field_dlc == 0) | field_rtr)) | ((state_data			& (contador_data == (8 * field_dlc))));
-assign 	go_state_crc_delimiter	=	sample_point					& state_crc				& contador_crc == len_crc;
+assign 	go_state_data			=	sample_point					& state_dlc				& contador_DLC == LEN_DLC;
+assign 	go_state_crc			=	sample_point					& (state_dlc			&((contador_DLC == LEN_DLC & field_dlc == 0) | field_rtr)) | ((state_data			& (contador_DATA == (8 * field_dlc))));
+assign 	go_state_crc_delimiter	=	sample_point					& state_crc				& contador_CRC == LEN_CRC;
 assign 	go_state_ack_slot		=	sample_point	& rx_bit		& state_crc_delimiter;
 assign 	go_state_ack_delimiter	=	sample_point	& ~rx_bit		& state_ack_slot;
 assign 	go_state_eof			=	sample_point	& rx_bit		& state_ack_delimiter;
-assign 	go_state_interframe		=	sample_point					& state_eof				& contador_eof == len_eof;
-
-assign	go_state_overload		=	sample_point					& state_interframe 		& last_bit_interframe	& 	busy;
+assign 	go_state_inter_frame	=	sample_point					& state_eof				& contador_EOF == LEN_EOF;
 
 assign	bit_error_srr				=	sample_point	& rx_bit		& state_ide				& ~rtr_srr_temp;
 assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit		& state_crc_delimiter;
 assign	bit_error_ack_slot			=	sample_point	& rx_bit		& state_ack_slot;
 assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit		& state_ack_delimiter;
 assign	bit_error_eof				=	sample_point	& ~rx_bit		& state_eof;
-assign	bit_error_interframe		=	sample_point	& ~rx_bit		& state_interframe;
-assign	bit_crc_error				= 	sample_point					& state_crc_delimiter 	& (calculated_crc != field_crc);
+assign	bit_error_inter_frame		=	sample_point	& ~rx_bit		& state_inter_frame;
 assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
 
-assign	go_state_error 		=	bit_error_srr | bit_error_crc_delimiter | bit_error_ack_slot | bit_error_ack_delimiter | bit_error_eof | bit_error_interframe | bit_error_bit_stuffing | bit_crc_error;
+//verifica o erro de crc (crc_lido != crc_calculado) no estado do crc delimiter
+assign	crc_error						= sample_point		& state_crc_delimiter 	& (calculated_crc != field_crc);
+
+assign	go_state_error 		=	bit_error_crc_delimiter | bit_error_ack_slot | bit_error_ack_delimiter | bit_error_eof | bit_error_inter_frame | bit_error_bit_stuffing | crc_error;
 
 assign	enable_bitstuffing	=	(state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr | state_reserved1 | state_reserved0 | state_dlc | state_data | state_crc );
 assign	bit_de_stuffing		=	enable_bitstuffing & ((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit);
 
-assign	crc_initialize		=	go_state_idle | (state_interframe && contador_interframe == len_interframe);
-assign	crc_enable			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_interframe & last_bit_interframe);
+assign	crc_initialize		=	go_state_idle | (state_inter_frame && contador_INTERFRAME == LEN_INTERFRAME);
+assign	crc_enable			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_inter_frame & last_bit_interframe);
 
 // Salva os últimos 5 bits lidos para o bit stuffing
 always @(posedge clock or posedge reset)
 begin
 if(reset)
-  last_rx_bits <= 5'b10101; //Inicia com valores alternados só pra não facilitar a condição do bit stuffing.
+  last_rx_bits <= 5'b10101;
 else if (sample_point)
   last_rx_bits <= {last_rx_bits[3:0],rx_bit};
 end
@@ -351,26 +377,25 @@ else if(go_state_eof)
 end
 
 
-// Estado interframe 
+// Estado inter_frame 
 always @(posedge clock or posedge reset)
 begin
 if(reset)
-	state_interframe <= 1'b0;
+	state_inter_frame <= 1'b0;
 else if(go_state_idle | go_state_id_a  | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
-	state_interframe <= 1'b0;
-else if(go_state_interframe)
-	state_interframe <= 1'b1; //Vai para o estado!
+	state_inter_frame <= 1'b0;
+else if(go_state_inter_frame)
+	state_inter_frame <= 1'b1; //Vai para o estado!
 end
 
 
-// Registrador id_a 
+// Registrador ID_A 
 always @ (posedge clock or posedge reset)
 begin
 if (reset)
 	field_id_a <= 11'h0;
 else if (sample_point & state_id_a & (~bit_de_stuffing))
 	field_id_a <= {field_id_a[9:0], rx_bit};
-	contador_id_a <= contador_id_a + 1;
 end
 
 
@@ -399,7 +424,6 @@ if (reset)
 	field_id_b <= 11'h0;
 else if (sample_point & state_id_b & (~bit_de_stuffing))
 	field_id_b <= {field_id_b[16:0], rx_bit};
-	contador_id_b <= contador_id_b + 1;
 end
 
 
@@ -413,14 +437,13 @@ begin
 end
 
 
-// Data length (DLC)
+// Data length
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
     field_dlc <= 4'b0;
   else if (sample_point & state_dlc & (~bit_de_stuffing))
     field_dlc <= {field_dlc[2:0], rx_bit};
-	contador_dlc <= contador_dlc + 1;
 end
 
 
@@ -541,37 +564,37 @@ end
 //		RESERVED_0: 
 //			begin
 //				state <= DLC;
-//				contador_dlc = 3'd1;
+//				contador_DLC = 3'd1;
 //			end
 //			
 //		DLC:
-//			if(contador_dlc < 3'd4)
+//			if(contador_DLC < 3'd4)
 //			begin
-//				contador_dlc = contador_dlc + 1;
+//				contador_DLC = contador_DLC + 1;
 //			end
 //			else
 //			begin
 //				state <= DATA;
-//				contador_data <= 1;
+//				contador_DATA <= 1;
 //			end
 //			
 //		DATA:  
-//			if(contador_data < 8*field_dlc) // Talvez seja melhor usar deslocamento para esquerda 3x
+//			if(contador_DATA < 8*field_dlc) // Talvez seja melhor usar deslocamento para esquerda 3x
 //			begin
-//				contador_data = contador_data + 1;
+//				contador_DATA = contador_DATA + 1;
 //			end
 //			else
 //			begin
 //				crc_enable <= 1'b0;
 //			
 //				state <= CRC;
-//				contador_crc <= 1;
+//				contador_CRC <= 1;
 //			end	
 //			
 //		CRC: 
-//			if(contador_crc < 4'd15)
+//			if(contador_CRC < 4'd15)
 //			begin
-//				contador_crc <= contador_crc + 1;
+//				contador_CRC <= contador_CRC + 1;
 //			end
 //			else
 //			begin
@@ -590,23 +613,23 @@ end
 //		ACK_DELIMITER:
 //			begin
 //				state <= END_OF_FRAME;
-//				contador_eof <= 1;
+//				contador_EOF <= 1;
 //			end
 //		END_OF_FRAME: 
-//			if(contador_eof < 3'd7)
+//			if(contador_EOF < 3'd7)
 //			begin
-//				contador_eof = contador_eof + 1;
+//				contador_EOF = contador_EOF + 1;
 //			end
 //			else
 //			begin
 //				state <= INTERFRAME;
-//				contador_interframe = 1;
+//				contador_INTERFRAME = 1;
 //			end
 //			
 //		INTERFRAME:  
-//			if(contador_interframe < 2'd3)
+//			if(contador_INTERFRAME < 2'd3)
 //			begin
-//				contador_interframe = contador_interframe + 1;
+//				contador_INTERFRAME = contador_INTERFRAME + 1;
 //			end
 //			else
 //			begin	
