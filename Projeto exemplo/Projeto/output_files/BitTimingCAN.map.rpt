@@ -1,5 +1,5 @@
 Analysis & Synthesis report for BitTimingCAN
-Fri Jun 02 01:30:17 2017
+Sat Jun 03 08:42:30 2017
 Quartus Prime Version 16.1.2 Build 203 01/18/2017 SJ Lite Edition
 
 
@@ -48,7 +48,7 @@ agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                     ;
 +------------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Fri Jun 02 01:30:17 2017       ;
+; Analysis & Synthesis Status        ; Successful - Sat Jun 03 08:42:30 2017       ;
 ; Quartus Prime Version              ; 16.1.2 Build 203 01/18/2017 SJ Lite Edition ;
 ; Revision Name                      ; BitTimingCAN                                ;
 ; Top-level Entity Name              ; can_decoder                                 ;
@@ -57,7 +57,7 @@ agreement for further details.
 ;     Total combinational functions  ; 0                                           ;
 ;     Dedicated logic registers      ; 0                                           ;
 ; Total registers                    ; 0                                           ;
-; Total pins                         ; 125                                         ;
+; Total pins                         ; 126                                         ;
 ; Total virtual pins                 ; 0                                           ;
 ; Total memory bits                  ; 0                                           ;
 ; Embedded Multiplier 9-bit elements ; 0                                           ;
@@ -187,14 +187,14 @@ agreement for further details.
 +--------------------------+------------------+
 ; Resource                 ; Usage            ;
 +--------------------------+------------------+
-; I/O pins                 ; 125              ;
+; I/O pins                 ; 126              ;
 ;                          ;                  ;
 ; DSP block 9-bit elements ; 0                ;
 ;                          ;                  ;
-; Maximum fan-out node     ; clock            ;
-; Maximum fan-out          ; 1                ;
-; Total fan-out            ; 125              ;
-; Average fan-out          ; 0.50             ;
+; Maximum fan-out node     ; rx_bit~input     ;
+; Maximum fan-out          ; 18               ;
+; Total fan-out            ; 144              ;
+; Average fan-out          ; 0.57             ;
 +--------------------------+------------------+
 
 
@@ -203,7 +203,7 @@ agreement for further details.
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
 ; Compilation Hierarchy Node ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; DSP 36x36 ; Pins ; Virtual Pins ; Full Hierarchy Name ; Entity Name ; Library Name ;
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
-; |can_decoder               ; 0 (0)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0         ; 125  ; 0            ; |can_decoder        ; can_decoder ; work         ;
+; |can_decoder               ; 0 (0)               ; 0 (0)                     ; 0           ; 0            ; 0       ; 0         ; 0         ; 126  ; 0            ; |can_decoder        ; can_decoder ; work         ;
 +----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
@@ -218,7 +218,6 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 ; state_crc_delimiter                     ; Stuck at GND due to stuck port data_in      ;
 ; state_interframe                        ; Stuck at GND due to stuck port data_in      ;
 ; field_ide~reg0                          ; Stuck at GND due to stuck port clock_enable ;
-; rtr_srr_temp                            ; Lost fanout                                 ;
 ; can_crc:i_can_crc|crc[0..14]            ; Lost fanout                                 ;
 ; state_id_a                              ; Stuck at GND due to stuck port data_in      ;
 ; state_id_b                              ; Stuck at GND due to stuck port data_in      ;
@@ -234,31 +233,17 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 ; field_id_a[2]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
 ; field_id_a[1]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
 ; field_id_a[0]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[17]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[16]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[15]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[14]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[13]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[12]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[11]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[10]~reg0                     ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[9]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[8]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[7]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[6]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[5]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[4]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[3]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[2]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[1]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
-; field_id_b[0]~reg0                      ; Stuck at GND due to stuck port clock_enable ;
 ; field_ack~reg0                          ; Stuck at GND due to stuck port clock_enable ;
+; field_srr~reg0                          ; Stuck at GND due to stuck port clock_enable ;
 ; state_rtr                               ; Stuck at GND due to stuck port data_in      ;
 ; state_ack_delimiter                     ; Stuck at GND due to stuck port data_in      ;
-; field_rtr~reg0                          ; Stuck at GND due to stuck port clock_enable ;
+; rtr_srr_temp                            ; Stuck at GND due to stuck port data_in      ;
+; field_rtr~reg0                          ; Stuck at GND due to stuck port data_in      ;
 ; state_reserved1                         ; Stuck at GND due to stuck port data_in      ;
 ; state_eof                               ; Stuck at GND due to stuck port data_in      ;
+; field_reserved1~reg0                    ; Stuck at GND due to stuck port clock_enable ;
 ; state_reserved0                         ; Stuck at GND due to stuck port data_in      ;
+; field_reserved0~reg0                    ; Stuck at GND due to stuck port clock_enable ;
 ; state_dlc                               ; Stuck at GND due to stuck port data_in      ;
 ; field_dlc[3]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
 ; field_dlc[2]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
@@ -345,49 +330,48 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 ; field_crc[2]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
 ; field_crc[1]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
 ; field_crc[0]~reg0                       ; Stuck at GND due to stuck port clock_enable ;
-; Total Number of Removed Registers = 146 ;                                             ;
+; Total Number of Removed Registers = 131 ;                                             ;
 +-----------------------------------------+---------------------------------------------+
 
 
-+---------------------------------------------------------------------------------------------------------------------------------------------+
-; Removed Registers Triggering Further Register Optimizations                                                                                 ;
-+---------------------+---------------------------+-------------------------------------------------------------------------------------------+
-; Register name       ; Reason for Removal        ; Registers Removed due to This Register                                                    ;
-+---------------------+---------------------------+-------------------------------------------------------------------------------------------+
-; state_rtr           ; Stuck at GND              ; field_rtr~reg0, state_reserved1, state_reserved0, state_dlc, field_dlc[3]~reg0,           ;
-;                     ; due to stuck port data_in ; field_dlc[2]~reg0, field_dlc[1]~reg0, field_dlc[0]~reg0, state_data, field_data[63]~reg0, ;
-;                     ;                           ; field_data[62]~reg0, field_data[61]~reg0, field_data[60]~reg0, field_data[59]~reg0,       ;
-;                     ;                           ; field_data[58]~reg0, field_data[57]~reg0, field_data[56]~reg0, field_data[55]~reg0,       ;
-;                     ;                           ; field_data[54]~reg0, field_data[53]~reg0, field_data[52]~reg0, field_data[51]~reg0,       ;
-;                     ;                           ; field_data[50]~reg0, field_data[49]~reg0, field_data[48]~reg0, field_data[47]~reg0,       ;
-;                     ;                           ; field_data[46]~reg0, field_data[45]~reg0, field_data[44]~reg0, field_data[43]~reg0,       ;
-;                     ;                           ; field_data[42]~reg0, field_data[41]~reg0, field_data[40]~reg0, field_data[39]~reg0,       ;
-;                     ;                           ; field_data[38]~reg0, field_data[37]~reg0, field_data[36]~reg0, field_data[35]~reg0,       ;
-;                     ;                           ; field_data[34]~reg0, field_data[33]~reg0, field_data[32]~reg0, field_data[31]~reg0,       ;
-;                     ;                           ; field_data[30]~reg0, field_data[29]~reg0, field_data[28]~reg0, field_data[27]~reg0,       ;
-;                     ;                           ; field_data[26]~reg0, field_data[25]~reg0, field_data[24]~reg0, field_data[23]~reg0,       ;
-;                     ;                           ; field_data[22]~reg0, field_data[21]~reg0, field_data[20]~reg0, field_data[19]~reg0,       ;
-;                     ;                           ; field_data[18]~reg0, field_data[17]~reg0, field_data[16]~reg0, field_data[15]~reg0,       ;
-;                     ;                           ; field_data[14]~reg0, field_data[13]~reg0, field_data[12]~reg0, field_data[11]~reg0,       ;
-;                     ;                           ; field_data[10]~reg0, field_data[9]~reg0, field_data[8]~reg0, field_data[7]~reg0,          ;
-;                     ;                           ; field_data[6]~reg0, field_data[5]~reg0, field_data[4]~reg0, field_data[3]~reg0,           ;
-;                     ;                           ; field_data[2]~reg0, field_data[1]~reg0, field_data[0]~reg0, state_crc,                    ;
-;                     ;                           ; field_crc[14]~reg0, field_crc[13]~reg0, field_crc[12]~reg0, field_crc[11]~reg0,           ;
-;                     ;                           ; field_crc[10]~reg0, field_crc[9]~reg0, field_crc[8]~reg0, field_crc[7]~reg0,              ;
-;                     ;                           ; field_crc[6]~reg0, field_crc[5]~reg0, field_crc[4]~reg0, field_crc[3]~reg0,               ;
-;                     ;                           ; field_crc[2]~reg0, field_crc[1]~reg0, field_crc[0]~reg0                                   ;
-; state_ide           ; Stuck at GND              ; field_ide~reg0, can_crc:i_can_crc|crc[0], can_crc:i_can_crc|crc[1],                       ;
-;                     ; due to stuck port data_in ; can_crc:i_can_crc|crc[2], can_crc:i_can_crc|crc[3], can_crc:i_can_crc|crc[4],             ;
-;                     ;                           ; can_crc:i_can_crc|crc[5], can_crc:i_can_crc|crc[6], can_crc:i_can_crc|crc[7],             ;
-;                     ;                           ; can_crc:i_can_crc|crc[8], can_crc:i_can_crc|crc[9], can_crc:i_can_crc|crc[10],            ;
-;                     ;                           ; can_crc:i_can_crc|crc[11], can_crc:i_can_crc|crc[12], can_crc:i_can_crc|crc[13]           ;
-; state_crc_delimiter ; Stuck at GND              ; rtr_srr_temp                                                                              ;
-;                     ; due to stuck port data_in ;                                                                                           ;
-; state_ack_slot      ; Stuck at GND              ; field_ack~reg0                                                                            ;
-;                     ; due to stuck port data_in ;                                                                                           ;
-; state_ack_delimiter ; Stuck at GND              ; state_eof                                                                                 ;
-;                     ; due to stuck port data_in ;                                                                                           ;
-+---------------------+---------------------------+-------------------------------------------------------------------------------------------+
++---------------------------------------------------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                                                           ;
++---------------------+---------------------------+-------------------------------------------------------------------------------------+
+; Register name       ; Reason for Removal        ; Registers Removed due to This Register                                              ;
++---------------------+---------------------------+-------------------------------------------------------------------------------------+
+; state_ack_delimiter ; Stuck at GND              ; state_eof, state_dlc, field_dlc[3]~reg0, field_dlc[2]~reg0, field_dlc[1]~reg0,      ;
+;                     ; due to stuck port data_in ; field_dlc[0]~reg0, state_data, field_data[63]~reg0, field_data[62]~reg0,            ;
+;                     ;                           ; field_data[61]~reg0, field_data[60]~reg0, field_data[59]~reg0, field_data[58]~reg0, ;
+;                     ;                           ; field_data[57]~reg0, field_data[56]~reg0, field_data[55]~reg0, field_data[54]~reg0, ;
+;                     ;                           ; field_data[53]~reg0, field_data[52]~reg0, field_data[51]~reg0, field_data[50]~reg0, ;
+;                     ;                           ; field_data[49]~reg0, field_data[48]~reg0, field_data[47]~reg0, field_data[46]~reg0, ;
+;                     ;                           ; field_data[45]~reg0, field_data[44]~reg0, field_data[43]~reg0, field_data[42]~reg0, ;
+;                     ;                           ; field_data[41]~reg0, field_data[40]~reg0, field_data[39]~reg0, field_data[38]~reg0, ;
+;                     ;                           ; field_data[37]~reg0, field_data[36]~reg0, field_data[35]~reg0, field_data[34]~reg0, ;
+;                     ;                           ; field_data[33]~reg0, field_data[32]~reg0, field_data[31]~reg0, field_data[30]~reg0, ;
+;                     ;                           ; field_data[29]~reg0, field_data[28]~reg0, field_data[27]~reg0, field_data[26]~reg0, ;
+;                     ;                           ; field_data[25]~reg0, field_data[24]~reg0, field_data[23]~reg0, field_data[22]~reg0, ;
+;                     ;                           ; field_data[21]~reg0, field_data[20]~reg0, field_data[19]~reg0, field_data[18]~reg0, ;
+;                     ;                           ; field_data[17]~reg0, field_data[16]~reg0, field_data[15]~reg0, field_data[14]~reg0, ;
+;                     ;                           ; field_data[13]~reg0, field_data[12]~reg0, field_data[11]~reg0, field_data[10]~reg0, ;
+;                     ;                           ; field_data[9]~reg0, field_data[8]~reg0, field_data[7]~reg0, field_data[6]~reg0,     ;
+;                     ;                           ; field_data[5]~reg0, field_data[4]~reg0, field_data[3]~reg0, field_data[2]~reg0,     ;
+;                     ;                           ; field_data[1]~reg0, field_data[0]~reg0, state_crc, field_crc[14]~reg0,              ;
+;                     ;                           ; field_crc[13]~reg0, field_crc[12]~reg0, field_crc[11]~reg0, field_crc[10]~reg0,     ;
+;                     ;                           ; field_crc[9]~reg0, field_crc[8]~reg0, field_crc[7]~reg0, field_crc[6]~reg0,         ;
+;                     ;                           ; field_crc[5]~reg0, field_crc[4]~reg0, field_crc[3]~reg0, field_crc[2]~reg0,         ;
+;                     ;                           ; field_crc[1]~reg0, field_crc[0]~reg0                                                ;
+; state_ide           ; Stuck at GND              ; field_ide~reg0, can_crc:i_can_crc|crc[0], can_crc:i_can_crc|crc[1],                 ;
+;                     ; due to stuck port data_in ; can_crc:i_can_crc|crc[2], can_crc:i_can_crc|crc[3], can_crc:i_can_crc|crc[4],       ;
+;                     ;                           ; can_crc:i_can_crc|crc[5], can_crc:i_can_crc|crc[6], can_crc:i_can_crc|crc[7],       ;
+;                     ;                           ; can_crc:i_can_crc|crc[8], can_crc:i_can_crc|crc[9], can_crc:i_can_crc|crc[10],      ;
+;                     ;                           ; can_crc:i_can_crc|crc[11], can_crc:i_can_crc|crc[12], can_crc:i_can_crc|crc[13],    ;
+;                     ;                           ; field_rtr~reg0                                                                      ;
+; state_rtr           ; Stuck at GND              ; state_reserved1, field_reserved1~reg0, state_reserved0, field_reserved0~reg0        ;
+;                     ; due to stuck port data_in ;                                                                                     ;
+; state_ack_slot      ; Stuck at GND              ; field_ack~reg0                                                                      ;
+;                     ; due to stuck port data_in ;                                                                                     ;
++---------------------+---------------------------+-------------------------------------------------------------------------------------+
 
 
 +------------------------------------------------------+
@@ -444,7 +428,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; boundary_port         ; 125                         ;
+; boundary_port         ; 126                         ;
 ; cycloneiii_lcell_comb ; 1                           ;
 ;     normal            ; 1                           ;
 ;         0 data inputs ; 1                           ;
@@ -469,193 +453,176 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 16.1.2 Build 203 01/18/2017 SJ Lite Edition
-    Info: Processing started: Fri Jun 02 01:30:00 2017
+    Info: Processing started: Sat Jun 03 08:42:12 2017
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off BitTimingCAN -c BitTimingCAN
 Info (20032): Parallel compilation is enabled and will use up to 3 processors
 Warning (20031): Parallel compilation is enabled for 3 processors, but there are only 2 processors in the system. Runtime may increase due to over usage of the processor space.
 Info (12021): Found 2 design units, including 2 entities, in source file can_decoder.v
     Info (12023): Found entity 1: can_crc File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v Line: 1
     Info (12023): Found entity 2: can_decoder File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 3
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(106): created implicit net for "bit_de_stuff" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 106
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(107): created implicit net for "crc_initialize" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 107
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(148): created implicit net for "last_bit_interframe" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 148
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(150): created implicit net for "go_state_idle" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 150
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(151): created implicit net for "go_state_id_a" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 151
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(152): created implicit net for "go_state_rtr_srr_temp" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 152
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(153): created implicit net for "go_state_ide" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 153
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(154): created implicit net for "go_state_id_b" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 154
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(155): created implicit net for "go_state_rtr" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 155
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(156): created implicit net for "go_state_reserved1" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 156
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(157): created implicit net for "go_state_reserved0" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 157
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(158): created implicit net for "go_state_dlc" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 158
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(159): created implicit net for "go_state_data" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 159
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(160): created implicit net for "go_state_crc" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 160
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(161): created implicit net for "go_state_crc_delimiter" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 161
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(162): created implicit net for "go_state_ack_slot" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 162
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(163): created implicit net for "go_state_ack_delimiter" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 163
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(164): created implicit net for "go_state_eof" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 164
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(165): created implicit net for "go_state_interframe" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 165
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(167): created implicit net for "go_state_overload" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 167
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(169): created implicit net for "bit_error_srr" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 169
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(170): created implicit net for "bit_error_crc_delimiter" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 170
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(171): created implicit net for "bit_error_ack_slot" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 171
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(172): created implicit net for "bit_error_ack_delimiter" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 172
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(173): created implicit net for "bit_error_eof" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 173
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(174): created implicit net for "bit_error_interframe" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 174
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(175): created implicit net for "bit_crc_error" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 175
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(176): created implicit net for "bit_error_bit_stuffing" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 176
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(178): created implicit net for "go_state_error" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 178
-Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(180): created implicit net for "enable_bitstuffing" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 180
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(114): created implicit net for "bit_de_stuff" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 114
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(115): created implicit net for "crc_initialize" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 115
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(161): created implicit net for "last_bit_interframe" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 161
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(163): created implicit net for "go_state_idle" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 163
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(164): created implicit net for "go_state_id_a" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 164
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(165): created implicit net for "go_state_rtr_srr_temp" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 165
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(166): created implicit net for "go_state_ide" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 166
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(167): created implicit net for "go_state_id_b" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 167
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(168): created implicit net for "go_state_rtr" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 168
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(169): created implicit net for "go_state_reserved1" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 169
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(170): created implicit net for "go_state_reserved0" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 170
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(171): created implicit net for "go_state_dlc" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 171
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(172): created implicit net for "go_state_data" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 172
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(173): created implicit net for "go_state_crc" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 173
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(176): created implicit net for "go_state_crc_delimiter" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 176
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(177): created implicit net for "go_state_ack_slot" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 177
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(178): created implicit net for "go_state_ack_delimiter" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 178
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(179): created implicit net for "go_state_eof" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 179
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(180): created implicit net for "go_state_interframe" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 180
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(181): created implicit net for "go_state_overload" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 181
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(183): created implicit net for "bit_error_srr" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 183
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(184): created implicit net for "bit_error_crc_delimiter" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 184
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(185): created implicit net for "bit_error_ack_slot" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 185
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(186): created implicit net for "bit_error_ack_delimiter" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 186
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(187): created implicit net for "bit_error_eof" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 187
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(188): created implicit net for "bit_error_interframe" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 188
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(189): created implicit net for "bit_crc_error" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 189
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(190): created implicit net for "bit_error_bit_stuffing" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 190
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(192): created implicit net for "go_state_error" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 192
+Warning (10236): Verilog HDL Implicit Net warning at can_decoder.v(194): created implicit net for "enable_bitstuffing" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 194
 Info (12127): Elaborating entity "can_decoder" for the top level hierarchy
-Warning (10036): Verilog HDL or VHDL warning at can_decoder.v(167): object "go_state_overload" assigned a value but never read File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 167
-Warning (10858): Verilog HDL warning at can_decoder.v(87): object state_rtr_srr_temp used but never assigned File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 87
-Warning (10230): Verilog HDL assignment warning at can_decoder.v(373): truncated value with size 32 to match size of target (4) File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 373
-Critical Warning (10237): Verilog HDL warning at can_decoder.v(373): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 373
-Warning (10230): Verilog HDL assignment warning at can_decoder.v(402): truncated value with size 32 to match size of target (5) File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 402
-Critical Warning (10237): Verilog HDL warning at can_decoder.v(402): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 402
-Warning (10230): Verilog HDL assignment warning at can_decoder.v(423): truncated value with size 32 to match size of target (3) File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 423
-Critical Warning (10237): Verilog HDL warning at can_decoder.v(423): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 423
-Warning (10030): Net "bit_de_stuff" at can_decoder.v(106) has no driver or initial value, using a default initial value '0' File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 106
-Warning (10030): Net "state_rtr_srr_temp" at can_decoder.v(87) has no driver or initial value, using a default initial value '0' File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 87
+Warning (10036): Verilog HDL or VHDL warning at can_decoder.v(181): object "go_state_overload" assigned a value but never read File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 181
+Warning (10858): Verilog HDL warning at can_decoder.v(93): object state_rtr_srr_temp used but never assigned File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 93
+Warning (10230): Verilog HDL assignment warning at can_decoder.v(397): truncated value with size 32 to match size of target (4) File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 397
+Critical Warning (10237): Verilog HDL warning at can_decoder.v(397): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 397
+Critical Warning (10237): Verilog HDL warning at can_decoder.v(428): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 428
+Warning (10230): Verilog HDL assignment warning at can_decoder.v(429): truncated value with size 32 to match size of target (5) File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 429
+Critical Warning (10237): Verilog HDL warning at can_decoder.v(429): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 429
+Warning (10230): Verilog HDL assignment warning at can_decoder.v(468): truncated value with size 32 to match size of target (3) File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 468
+Critical Warning (10237): Verilog HDL warning at can_decoder.v(468): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 468
+Warning (10030): Net "bit_de_stuff" at can_decoder.v(114) has no driver or initial value, using a default initial value '0' File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 114
+Warning (10030): Net "state_rtr_srr_temp" at can_decoder.v(93) has no driver or initial value, using a default initial value '0' File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 93
 Warning (10034): Output port "error_out" at can_decoder.v(41) has no driver File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 41
-Info (12128): Elaborating entity "can_crc" for hierarchy "can_crc:i_can_crc" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 109
+Info (12128): Elaborating entity "can_crc" for hierarchy "can_crc:i_can_crc" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 117
 Warning (13024): Output pins are stuck at VCC or GND
     Warning (13410): Pin "error_out" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 41
-    Warning (13410): Pin "field_start_of_frame" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 68
-    Warning (13410): Pin "field_id_a[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[4]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[5]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[6]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[7]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[8]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[9]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_id_a[10]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 371
-    Warning (13410): Pin "field_ide" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 70
-    Warning (13410): Pin "field_rtr" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 71
-    Warning (13410): Pin "field_reserved_1" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 72
-    Warning (13410): Pin "field_reserved_0" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 73
-    Warning (13410): Pin "field_id_b[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[4]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[5]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[6]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[7]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[8]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[9]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[10]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[11]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[12]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[13]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[14]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[15]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[16]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_id_b[17]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 400
-    Warning (13410): Pin "field_dlc[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 421
-    Warning (13410): Pin "field_dlc[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 421
-    Warning (13410): Pin "field_dlc[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 421
-    Warning (13410): Pin "field_dlc[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 421
-    Warning (13410): Pin "field_data[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[4]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[5]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[6]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[7]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[8]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[9]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[10]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[11]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[12]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[13]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[14]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[15]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[16]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[17]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[18]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[19]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[20]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[21]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[22]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[23]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[24]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[25]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[26]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[27]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[28]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[29]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[30]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[31]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[32]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[33]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[34]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[35]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[36]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[37]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[38]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[39]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[40]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[41]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[42]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[43]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[44]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[45]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[46]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[47]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[48]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[49]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[50]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[51]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[52]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[53]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[54]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[55]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[56]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[57]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[58]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[59]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[60]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[61]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[62]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_data[63]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 432
-    Warning (13410): Pin "field_crc[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[4]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[5]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[6]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[7]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[8]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[9]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[10]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[11]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[12]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[13]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc[14]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 441
-    Warning (13410): Pin "field_crc_delimiter" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 78
-    Warning (13410): Pin "field_ack" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 79
-Info (17049): 16 registers lost all their fanouts during netlist optimizations.
+    Warning (13410): Pin "field_start_of_frame" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 71
+    Warning (13410): Pin "field_id_a[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[4]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[5]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[6]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[7]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[8]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[9]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_id_a[10]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 395
+    Warning (13410): Pin "field_ide" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 74
+    Warning (13410): Pin "field_rtr" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 75
+    Warning (13410): Pin "field_srr" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 73
+    Warning (13410): Pin "field_reserved1" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 76
+    Warning (13410): Pin "field_reserved0" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 77
+    Warning (13410): Pin "field_dlc[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 466
+    Warning (13410): Pin "field_dlc[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 466
+    Warning (13410): Pin "field_dlc[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 466
+    Warning (13410): Pin "field_dlc[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 466
+    Warning (13410): Pin "field_data[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[4]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[5]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[6]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[7]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[8]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[9]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[10]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[11]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[12]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[13]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[14]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[15]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[16]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[17]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[18]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[19]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[20]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[21]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[22]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[23]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[24]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[25]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[26]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[27]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[28]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[29]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[30]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[31]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[32]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[33]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[34]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[35]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[36]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[37]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[38]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[39]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[40]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[41]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[42]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[43]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[44]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[45]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[46]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[47]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[48]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[49]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[50]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[51]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[52]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[53]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[54]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[55]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[56]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[57]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[58]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[59]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[60]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[61]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[62]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_data[63]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 477
+    Warning (13410): Pin "field_crc[0]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[1]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[2]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[3]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[4]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[5]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[6]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[7]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[8]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[9]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[10]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[11]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[12]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[13]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc[14]" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 486
+    Warning (13410): Pin "field_crc_delimiter" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 82
+    Warning (13410): Pin "field_ack" is stuck at GND File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 83
+Info (17049): 15 registers lost all their fanouts during netlist optimizations.
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Warning (21074): Design contains 5 input pin(s) that do not drive logic
+Warning (21074): Design contains 4 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "clock" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 35
     Warning (15610): No output dependent on input pin "reset" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 36
-    Warning (15610): No output dependent on input pin "rx_bit" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 32
     Warning (15610): No output dependent on input pin "sample_point" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 33
     Warning (15610): No output dependent on input pin "error_in" File: D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v Line: 38
-Info (21057): Implemented 125 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 126 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 5 input pins
-    Info (21059): Implemented 120 output pins
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 169 warnings
-    Info: Peak virtual memory: 673 megabytes
-    Info: Processing ended: Fri Jun 02 01:30:17 2017
-    Info: Elapsed time: 00:00:17
-    Info: Total CPU time (on all processors): 00:00:40
+    Info (21059): Implemented 121 output pins
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 152 warnings
+    Info: Peak virtual memory: 671 megabytes
+    Info: Processing ended: Sat Jun 03 08:42:30 2017
+    Info: Elapsed time: 00:00:18
+    Info: Total CPU time (on all processors): 00:00:38
 
 

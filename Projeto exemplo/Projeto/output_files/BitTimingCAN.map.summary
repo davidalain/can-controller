@@ -1,4 +1,4 @@
-Analysis & Synthesis Status : Successful - Fri Jun 02 01:30:17 2017
+Analysis & Synthesis Status : Successful - Sat Jun 03 08:42:30 2017
 Quartus Prime Version : 16.1.2 Build 203 01/18/2017 SJ Lite Edition
 Revision Name : BitTimingCAN
 Top-level Entity Name : can_decoder
@@ -7,7 +7,7 @@ Total logic elements : 0
     Total combinational functions : 0
     Dedicated logic registers : 0
 Total registers : 0
-Total pins : 125
+Total pins : 126
 Total virtual pins : 0
 Total memory bits : 0
 Embedded Multiplier 9-bit elements : 0

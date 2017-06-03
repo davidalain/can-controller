@@ -2,7 +2,84 @@
 	"partitions" : [
 		{
 			"name" : "Top",
-			"pins" : []
+			"pins" : [
+				{
+					"name" : "field_id_b[0]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[1]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[2]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[3]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[4]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[5]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[6]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[7]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[8]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[9]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[10]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[11]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[12]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[13]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[14]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[15]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[16]",
+					"strict" : false
+				},
+				{
+					"name" : "field_id_b[17]",
+					"strict" : false
+				},
+				{
+					"name" : "rx_bit",
+					"strict" : false
+				}
+			]
 		}
 	]
 }

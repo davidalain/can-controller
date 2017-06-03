@@ -1,25 +1,25 @@
 `include "can_crc.v"
 
 module can_decoder(
-	clock,
-	reset,
+	clock,			// Clock do circuito
+	reset,			// Reset (em nível lógico 1)
 
-	rx_bit,  		// Sinal com o bit a ser lido
-	sample_point,  // Indica quando o bit deve ser lido (na transicao deste sinal de 0 para 1)
+	rx_bit,  		// Sinal com o bit lido no barramento
+	sample_point,  	// Indica quando o bit deve ser lido (na transicao deste sinal de 0 para 1)
 
-	error_in,	// Sinal de erro (O modulo pode ser avisado por outros que houve um erro)
-	error_out	// Sinal de erro (O modulo pode avisar aos outros que houve um erro)
+	error_in,		// Sinal de erro (O modulo pode ser avisado por outros que houve um erro)
+	error_out,		// Sinal de erro (O modulo pode avisar aos outros que houve um erro)
 	
 	// Deixar os campos como saida do modulo para ver a saída nos testes
-	,
 	
 	field_start_of_frame,
 	field_id_a,
 	field_ide,
 	field_rtr,
-	field_reserved_1,
-	field_reserved_0,
-	field_id_b,
+	field_srr,		// Campo do frame CAN extendido (rtr_srr_temp)
+	field_reserved1,
+	field_reserved0,
+	field_id_b,		// Campo do frame CAN extendido
 	field_dlc,
 	field_data,
 	field_crc,
@@ -47,7 +47,11 @@ parameter len_crc			= 4'd15;
 parameter len_eof			= 3'd7;
 parameter len_interframe	= 2'd2; //De acordo com a especificação são 3 bits recessivos. Mas na prática pode acontecer a transmissão de frames em sequência em que o terceiro bit do Intermission já pode ser o Start of Frame do próximo frame, então são 2. Vide documento can2spec.pdf, seção 9.1, item 2.
 
-// == Internal Variables == 
+//====================================================================
+//===================== Variáveis ====================================
+//====================================================================
+
+//== Variáveis para Lógica de controle do decoder ==
 
 reg[4:0]	last_rx_bits; 		//Usado para verificação do bit stuffing (5 bits).
 wire		bit_de_stuffing;	//Flag que indica se o bit recebido atual é um bit stuffing
@@ -60,17 +64,17 @@ reg[2:0] 	contador_dlc;
 reg[5:0]	contador_data;
 reg[3:0]	contador_crc;
 reg[2:0]	contador_eof;
-reg[1:0]	contador_interframe;
+reg[1:0]	contador_interframe; //CHECK: Dois bits ou três bits.
 
+//== Campos do frame ==
 
-
-// == CAN Frame fields ==
 output	reg 		field_start_of_frame;
 output	reg[10:0]	field_id_a;
+output	reg			field_srr;
 output	reg			field_ide;
 output	reg			field_rtr;
-output	reg			field_reserved_1;
-output	reg			field_reserved_0;
+output	reg			field_reserved1;
+output	reg			field_reserved0;
 output	reg[17:0]	field_id_b;
 output	reg[3:0]	field_dlc;
 output	reg[63:0]	field_data;
@@ -81,6 +85,8 @@ output	reg			field_ack;
 reg			rtr_srr_temp;
 wire[14:0]	calculated_crc;
 wire		crc_enable;
+
+//== Estados ==
 
 reg 	state_idle;
 reg 	state_id_a;				
@@ -98,6 +104,8 @@ reg 	state_ack_slot;
 reg 	state_ack_delimiter;
 reg 	state_eof;
 reg 	state_interframe;
+
+//== Módulo CRC ==
 
 can_crc i_can_crc
 (
@@ -129,10 +137,11 @@ task resetAll;
 	
 		field_start_of_frame 		= 1'b0;
 		field_id_a					= 11'b0;
+		field_srr					= 1'b0;
 		field_ide					= 1'b0;
 		field_rtr					= 1'b0;
-		field_reserved_1			= 1'b0;
-		field_reserved_0			= 1'b0;
+		field_reserved1				= 1'b0;
+		field_reserved0				= 1'b0;
 		field_id_b 					= 18'b0;
 		field_dlc					= 4'b0;
 		field_data					= 64'b0;
@@ -145,35 +154,40 @@ task resetAll;
 	end
 endtask
 
+//====================================================================
+//== Lógica combinacional para gerenciamento da máquina de estados ===
+//====================================================================
+
 assign	last_bit_interframe		= 	state_interframe	& (contador_interframe == len_interframe);
 
-assign 	go_state_idle			= 	sample_point	& rx_bit 		& last_bit_interframe;
-assign 	go_state_id_a			= 	sample_point	& ~rx_bit		& (state_idle 			| last_bit_interframe);
-assign 	go_state_rtr_srr_temp	= 	sample_point					& state_id_a  			& contador_id_a == len_id_a;
-assign 	go_state_ide			=	sample_point					& state_rtr_srr_temp;
-assign 	go_state_id_b			=	sample_point	& rx_bit		& state_ide;
-assign 	go_state_rtr			=	sample_point	 				& state_id_b			& contador_id_b == len_id_b;
-assign 	go_state_reserved1		=	sample_point					& state_rtr;
-assign 	go_state_reserved0		=	sample_point					& state_reserved1;
-assign 	go_state_dlc			=	sample_point					& state_reserved0;
-assign 	go_state_data			=	sample_point					& state_dlc				& contador_dlc == len_dlc;
-assign 	go_state_crc			=	sample_point					& (state_dlc			&((contador_dlc == len_dlc & field_dlc == 0) | field_rtr)) | ((state_data			& (contador_data == (8 * field_dlc))));
-assign 	go_state_crc_delimiter	=	sample_point					& state_crc				& contador_crc == len_crc;
-assign 	go_state_ack_slot		=	sample_point	& rx_bit		& state_crc_delimiter;
-assign 	go_state_ack_delimiter	=	sample_point	& ~rx_bit		& state_ack_slot;
-assign 	go_state_eof			=	sample_point	& rx_bit		& state_ack_delimiter;
-assign 	go_state_interframe		=	sample_point					& state_eof				& contador_eof == len_eof;
+assign 	go_state_idle			= 	sample_point	& rx_bit 	& last_bit_interframe;
+assign 	go_state_id_a			= 	sample_point	& ~rx_bit	& (state_idle 			| last_bit_interframe);
+assign 	go_state_rtr_srr_temp	= 	sample_point				& state_id_a  			& contador_id_a == len_id_a;
+assign 	go_state_ide			=	sample_point				& state_rtr_srr_temp;
+assign 	go_state_id_b			=	sample_point	& rx_bit	& state_ide;
+assign 	go_state_rtr			=	sample_point	 			& state_id_b			& contador_id_b == len_id_b;
+assign 	go_state_reserved1		=	sample_point				& state_rtr;
+assign 	go_state_reserved0		=	sample_point				& state_reserved1;
+assign 	go_state_dlc			=	sample_point				& state_reserved0;
+assign 	go_state_data			=	sample_point				& state_dlc				& contador_dlc == len_dlc;
+assign 	go_state_crc			=	sample_point				& state_dlc				&
+													((contador_dlc == len_dlc & field_dlc == 0) | field_rtr) | /**/
+													(state_data		& (contador_data == (8 * field_dlc)));
+assign 	go_state_crc_delimiter	=	sample_point				& state_crc				& contador_crc == len_crc;
+assign 	go_state_ack_slot		=	sample_point	& rx_bit	& state_crc_delimiter;
+assign 	go_state_ack_delimiter	=	sample_point	& ~rx_bit	& state_ack_slot;
+assign 	go_state_eof			=	sample_point	& rx_bit	& state_ack_delimiter;
+assign 	go_state_interframe		=	sample_point				& state_eof				& contador_eof == len_eof;
+assign	go_state_overload		=	sample_point				& state_interframe 		& last_bit_interframe	& 	busy;
 
-assign	go_state_overload		=	sample_point					& state_interframe 		& last_bit_interframe	& 	busy;
-
-assign	bit_error_srr				=	sample_point	& rx_bit		& state_ide				& ~rtr_srr_temp;
-assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit		& state_crc_delimiter;
-assign	bit_error_ack_slot			=	sample_point	& rx_bit		& state_ack_slot;
-assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit		& state_ack_delimiter;
-assign	bit_error_eof				=	sample_point	& ~rx_bit		& state_eof;
-assign	bit_error_interframe		=	sample_point	& ~rx_bit		& state_interframe;
-assign	bit_crc_error				= 	sample_point					& state_crc_delimiter 	& (calculated_crc != field_crc);
-assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
+assign	bit_error_srr			=	sample_point	& rx_bit	& state_ide				& ~rtr_srr_temp;
+assign	bit_error_crc_delimiter	=	sample_point	& ~rx_bit	& state_crc_delimiter;
+assign	bit_error_ack_slot		=	sample_point	& rx_bit	& state_ack_slot;
+assign	bit_error_ack_delimiter	=	sample_point	& ~rx_bit	& state_ack_delimiter;
+assign	bit_error_eof			=	sample_point	& ~rx_bit	& state_eof;
+assign	bit_error_interframe	=	sample_point	& ~rx_bit	& state_interframe;
+assign	bit_crc_error			= 	sample_point				& state_crc_delimiter 	& (calculated_crc != field_crc);
+assign	bit_error_bit_stuffing	= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
 
 assign	go_state_error 		=	bit_error_srr | bit_error_crc_delimiter | bit_error_ack_slot | bit_error_ack_delimiter | bit_error_eof | bit_error_interframe | bit_error_bit_stuffing | bit_crc_error;
 
@@ -182,6 +196,10 @@ assign	bit_de_stuffing		=	enable_bitstuffing & ((last_rx_bits == 5'h00) & rx_bit
 
 assign	crc_initialize		=	go_state_idle | (state_interframe && contador_interframe == len_interframe);
 assign	crc_enable			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_interframe & last_bit_interframe);
+
+//====================================================================
+//===================== Gerenciamento do bit stuffing ================
+//====================================================================
 
 // Salva os últimos 5 bits lidos para o bit stuffing
 always @(posedge clock or posedge reset)
@@ -192,6 +210,9 @@ else if (sample_point)
   last_rx_bits <= {last_rx_bits[3:0],rx_bit};
 end
 
+//====================================================================
+//===================== Gerenciamento dos estados ====================
+//====================================================================
 
 // Estado idle (start of frame)
 always @(posedge clock or posedge reset)
@@ -362,8 +383,11 @@ else if(go_state_interframe)
 	state_interframe <= 1'b1; //Vai para o estado!
 end
 
+//====================================================================
+//============= Preenchimento dos campos do frame ====================
+//====================================================================
 
-// Registrador id_a 
+// Campo id_a 
 always @ (posedge clock or posedge reset)
 begin
 if (reset)
@@ -374,7 +398,7 @@ else if (sample_point & state_id_a & (~bit_de_stuffing))
 end
 
 
-// rtr_srr_temp bit
+// Campo rtr_srr_temp bit
 always @ (posedge clock or posedge reset)
 begin
 if (reset)
@@ -383,7 +407,7 @@ else if (sample_point & state_rtr_srr_temp & (~bit_de_stuffing))
 	rtr_srr_temp <= rx_bit;
 end
 
-// ide bit
+// Campo ide bit
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
@@ -392,28 +416,49 @@ begin
     field_ide <= rx_bit;
 end
 
-// Registrador IB_B
+// Campo id_b
 always @ (posedge clock or posedge reset)
 begin
 if (reset)
 	field_id_b <= 11'h0;
 else if (sample_point & state_id_b & (~bit_de_stuffing))
+	if(contador_id_b == 1)
+		field_srr <= rtr_srr_temp;
+	
 	field_id_b <= {field_id_b[16:0], rx_bit};
 	contador_id_b <= contador_id_b + 1;
 end
 
-
-// rtr bit
+// Campo rtr bit
 always @ (posedge clock or posedge reset)
 begin
-  if (reset)
-    field_rtr <= 1'b0;
-  else if (sample_point & state_rtr & (~bit_de_stuffing)) 
-	 field_rtr <= rx_bit;
+if (reset)
+	field_rtr <= 1'b0;
+else if (sample_point & state_rtr 		& (~bit_de_stuffing) & field_ide)	// Frame extendido
+	field_rtr <= rx_bit;	
+else if (sample_point & state_reserved0 & (~bit_de_stuffing) & ~field_ide)	// Frame normal
+	field_rtr <= rtr_srr_temp;
 end
 
+// Campo reserved1
+always @ (posedge clock or posedge reset)
+begin
+if (reset)
+	field_reserved1 <= 1'b0;
+else if (sample_point & state_reserved1 & (~bit_de_stuffing))
+	field_reserved1 <= rx_bit;
+end
 
-// Data length (DLC)
+// Campo reserved0 
+always @ (posedge clock or posedge reset)
+begin
+if (reset)
+	field_reserved0 <= 1'b0;
+else if (sample_point & state_reserved0 & (~bit_de_stuffing))
+	field_reserved0 <= rx_bit;
+end
+
+// Campo Data Length Count (DLC)
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
@@ -424,7 +469,7 @@ begin
 end
 
 
-// Data
+// Campo Data
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
@@ -433,7 +478,7 @@ begin
     field_data <= {field_data[62:0], rx_bit};
 end
 
-// CRC
+// Campo CRC
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
@@ -443,7 +488,7 @@ begin
 end
 
 
-// ACK
+// Campo ACK
 always @ (posedge clock or posedge reset)
 begin
   if (reset)

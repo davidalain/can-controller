@@ -1,5 +1,5 @@
 Flow report for BitTimingCAN
-Fri Jun 02 01:30:17 2017
+Sat Jun 03 08:42:30 2017
 Quartus Prime Version 16.1.2 Build 203 01/18/2017 SJ Lite Edition
 
 
@@ -41,7 +41,7 @@ agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Flow Summary                                                                     ;
 +------------------------------------+---------------------------------------------+
-; Flow Status                        ; Successful - Fri Jun 02 01:30:17 2017       ;
+; Flow Status                        ; Successful - Sat Jun 03 08:42:30 2017       ;
 ; Quartus Prime Version              ; 16.1.2 Build 203 01/18/2017 SJ Lite Edition ;
 ; Revision Name                      ; BitTimingCAN                                ;
 ; Top-level Entity Name              ; can_decoder                                 ;
@@ -52,7 +52,7 @@ agreement for further details.
 ;     Total combinational functions  ; 0                                           ;
 ;     Dedicated logic registers      ; 0                                           ;
 ; Total registers                    ; 0                                           ;
-; Total pins                         ; 125                                         ;
+; Total pins                         ; 126                                         ;
 ; Total virtual pins                 ; 0                                           ;
 ; Total memory bits                  ; 0                                           ;
 ; Embedded Multiplier 9-bit elements ; 0                                           ;
@@ -69,7 +69,7 @@ agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 06/02/2017 01:30:00 ;
+; Start date & time ; 06/03/2017 08:42:13 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; BitTimingCAN        ;
 +-------------------+---------------------+
@@ -80,7 +80,7 @@ agreement for further details.
 +-------------------------------------+----------------------------------------+---------------+-------------+-----------------------------------+
 ; Assignment Name                     ; Value                                  ; Default Value ; Entity Name ; Section Id                        ;
 +-------------------------------------+----------------------------------------+---------------+-------------+-----------------------------------+
-; COMPILER_SIGNATURE_ID               ; 145751489233263.149637780009168        ; --            ; --          ; --                                ;
+; COMPILER_SIGNATURE_ID               ; 145751489233263.149649013311468        ; --            ; --          ; --                                ;
 ; EDA_OUTPUT_DATA_FORMAT              ; None                                   ; --            ; --          ; eda_board_design_timing           ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Verilog Hdl                            ; --            ; --          ; eda_simulation                    ;
 ; EDA_OUTPUT_DATA_FORMAT              ; None                                   ; --            ; --          ; eda_board_design_boundary_scan    ;
@@ -107,8 +107,8 @@ agreement for further details.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:17     ; 1.0                     ; 659 MB              ; 00:00:40                           ;
-; Total                ; 00:00:17     ; --                      ; --                  ; 00:00:40                           ;
+; Analysis & Synthesis ; 00:00:18     ; 1.0                     ; 659 MB              ; 00:00:38                           ;
+; Total                ; 00:00:18     ; --                      ; --                  ; 00:00:38                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
