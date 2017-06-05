@@ -8,25 +8,45 @@ z2
 !i10f 100
 cModel Technology
 Z0 dD:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/simulation/modelsim
-vbit_stuffing_framer
-!s110 1494881051
+vcan_crc
+Z1 !s110 1496689866
 !i10b 1
-!s100 D9QCb=9]9RSUDehhj:FY32
-IQPnh9PoA0`[<P40WQ166i0
-VDg1SIo80bB@j0V0VzS_@n1
+!s100 QlHDDKX5Bo4_e2J0Q7fMS2
+IGG=@1ea1PkRacgcE9[LjQ2
+Z2 VDg1SIo80bB@j0V0VzS_@n1
 R0
-w1494880874
-8D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/bit_stuffing_framer.v
-FD:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/bit_stuffing_framer.v
-L0 3
-OV;L;10.5b;63
+w1495486579
+8D:\Repositorio_de_Projetos\6-DOUTORADO\Automotive Networking\CAN Controller - Projeto Automotive Networking\can-controller\Projeto exemplo\Projeto\can_crc.v
+FD:\Repositorio_de_Projetos\6-DOUTORADO\Automotive Networking\CAN Controller - Projeto Automotive Networking\can-controller\Projeto exemplo\Projeto\can_crc.v
+L0 1
+Z3 OV;L;10.5b;63
 r1
 !s85 0
 31
-!s108 1494881051.000000
-!s107 D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/bit_stuffing_framer.v|
-!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto|D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/bit_stuffing_framer.v|
+Z4 !s108 1496689866.000000
+Z5 !s107 D:\Repositorio_de_Projetos\6-DOUTORADO\Automotive Networking\CAN Controller - Projeto Automotive Networking\can-controller\Projeto exemplo\Projeto\can_crc.v|D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v|
+Z6 !s90 -reportprogress|300|-work|work|D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v|
 !i113 1
-o-vlog01compat -work work
-!s92 -vlog01compat -work work {+incdir+D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto}
-tCvgOpt 0
+Z7 o-work work
+Z8 tCvgOpt 0
+vcan_decoder
+R1
+!i10b 1
+!s100 `gGe62A>]0zRPhlMA632V1
+IiNPo=641N?cSECbhbN8c20
+R2
+R0
+w1496542677
+8D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v
+FD:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v
+L0 3
+R3
+r1
+!s85 0
+31
+R4
+R5
+R6
+!i113 1
+R7
+R8

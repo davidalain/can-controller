@@ -187,12 +187,15 @@ assign	bit_error_ack_delimiter	=	sample_point	& ~rx_bit	& state_ack_delimiter;
 assign	bit_error_eof			=	sample_point	& ~rx_bit	& state_eof;
 assign	bit_error_interframe	=	sample_point	& ~rx_bit	& state_interframe;
 assign	bit_crc_error			= 	sample_point				& state_crc_delimiter 	& (calculated_crc != field_crc);
-assign	bit_error_bit_stuffing	= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
-
-assign	go_state_error 		=	bit_error_srr | bit_error_crc_delimiter | bit_error_ack_slot | bit_error_ack_delimiter | bit_error_eof | bit_error_interframe | bit_error_bit_stuffing | bit_crc_error;
 
 assign	enable_bitstuffing	=	(state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr | state_reserved1 | state_reserved0 | state_dlc | state_data | state_crc );
 assign	bit_de_stuffing		=	enable_bitstuffing & ((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit);
+
+assign	bit_error_bit_stuffing	= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
+
+assign	go_state_error 		=	bit_error_srr | bit_error_crc_delimiter | bit_error_ack_slot |
+								bit_error_ack_delimiter | bit_error_eof | bit_error_interframe |
+								bit_error_bit_stuffing | bit_crc_error;
 
 assign	crc_initialize		=	go_state_idle | (state_interframe && contador_interframe == len_interframe);
 assign	crc_enable			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_interframe & last_bit_interframe);
@@ -208,6 +211,25 @@ if(reset)
   last_rx_bits <= 5'b10101; //Inicia com valores alternados só pra não facilitar a condição do bit stuffing.
 else if (sample_point)
   last_rx_bits <= {last_rx_bits[3:0],rx_bit};
+end
+
+//====================================================================
+//===================== Gerenciamento de impressão erros =============
+//====================================================================
+
+// Impressão dos erros
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+  
+else if (go_state_error)	
+	if(bit_error_srr)			$display("Erro de SRR");
+	if(bit_error_crc_delimiter)	$display("Erro de CRC delimiter");
+	if(bit_error_ack_slot)		$display("Erro de ACK slot");
+	if(bit_error_ack_delimiter)	$display("Erro de ACK delimiter");
+	if(bit_error_eof)			$display("Erro de EOF");
+	if(bit_error_interframe)	$display("Erro de interframe");
+	if(bit_crc_error)			$display("Erro de CRC");
 end
 
 //====================================================================
