@@ -63,8 +63,8 @@ reg[7:0] 	index;
 
 reg			reset;
 reg			rx_bit;
-reg			sample_point;
-reg			error_in;
+wire			sample_point;
+wire			error_in;
 
 //====================================================================
 //============ Lógica combinacional  =================================
@@ -178,6 +178,10 @@ begin
 			begin
 				rx_bit <= frame[frame_len - index];
 				index <= index + 1;
+				if(index == frame_len)
+					index <= 0;
+					frame_id <= 1;
+					reset <= 1;
 			end
 		
 		1: 
