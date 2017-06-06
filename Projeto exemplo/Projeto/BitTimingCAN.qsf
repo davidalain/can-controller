@@ -39,7 +39,7 @@
 
 set_global_assignment -name FAMILY "Cyclone IV GX"
 set_global_assignment -name DEVICE EP4CGX150DF31C7
-set_global_assignment -name TOP_LEVEL_ENTITY main_teste
+set_global_assignment -name TOP_LEVEL_ENTITY tester
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 16.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "21:39:58  APRIL 27, 2017"
 set_global_assignment -name LAST_QUARTUS_VERSION "16.1.2 Lite Edition"
@@ -66,6 +66,7 @@ set_global_assignment -name NUM_PARALLEL_PROCESSORS 3
 set_global_assignment -name VERILOG_FILE can_decoder.v
 set_global_assignment -name VERILOG_FILE can_crc.v
 set_global_assignment -name VERILOG_FILE main_teste.v
+set_global_assignment -name VERILOG_FILE tester.v
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
