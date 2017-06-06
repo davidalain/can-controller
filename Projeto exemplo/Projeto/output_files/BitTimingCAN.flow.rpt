@@ -1,5 +1,5 @@
 Flow report for BitTimingCAN
-Mon Jun 05 16:06:23 2017
+Tue Jun 06 00:26:03 2017
 Quartus Prime Version 16.1.2 Build 203 01/18/2017 SJ Lite Edition
 
 
@@ -41,26 +41,26 @@ agreement for further details.
 +----------------------------------------------------------------------------------+
 ; Flow Summary                                                                     ;
 +------------------------------------+---------------------------------------------+
-; Flow Status                        ; Successful - Mon Jun 05 16:06:23 2017       ;
+; Flow Status                        ; Flow Failed - Tue Jun 06 00:26:03 2017      ;
 ; Quartus Prime Version              ; 16.1.2 Build 203 01/18/2017 SJ Lite Edition ;
 ; Revision Name                      ; BitTimingCAN                                ;
-; Top-level Entity Name              ; can_decoder                                 ;
+; Top-level Entity Name              ; main_teste                                  ;
 ; Family                             ; Cyclone IV GX                               ;
 ; Device                             ; EP4CGX150DF31C7                             ;
 ; Timing Models                      ; Final                                       ;
-; Total logic elements               ; 0                                           ;
-;     Total combinational functions  ; 0                                           ;
-;     Dedicated logic registers      ; 0                                           ;
-; Total registers                    ; 0                                           ;
-; Total pins                         ; 126                                         ;
-; Total virtual pins                 ; 0                                           ;
-; Total memory bits                  ; 0                                           ;
-; Embedded Multiplier 9-bit elements ; 0                                           ;
-; Total GXB Receiver Channel PCS     ; 0                                           ;
-; Total GXB Receiver Channel PMA     ; 0                                           ;
-; Total GXB Transmitter Channel PCS  ; 0                                           ;
-; Total GXB Transmitter Channel PMA  ; 0                                           ;
-; Total PLLs                         ; 0                                           ;
+; Total logic elements               ; N/A until Partition Merge                   ;
+;     Total combinational functions  ; N/A until Partition Merge                   ;
+;     Dedicated logic registers      ; N/A until Partition Merge                   ;
+; Total registers                    ; N/A until Partition Merge                   ;
+; Total pins                         ; N/A until Partition Merge                   ;
+; Total virtual pins                 ; N/A until Partition Merge                   ;
+; Total memory bits                  ; N/A until Partition Merge                   ;
+; Embedded Multiplier 9-bit elements ; N/A until Partition Merge                   ;
+; Total GXB Receiver Channel PCS     ; N/A until Partition Merge                   ;
+; Total GXB Receiver Channel PMA     ; N/A until Partition Merge                   ;
+; Total GXB Transmitter Channel PCS  ; N/A until Partition Merge                   ;
+; Total GXB Transmitter Channel PMA  ; N/A until Partition Merge                   ;
+; Total PLLs                         ; N/A until Partition Merge                   ;
 +------------------------------------+---------------------------------------------+
 
 
@@ -69,7 +69,7 @@ agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 06/05/2017 16:06:04 ;
+; Start date & time ; 06/06/2017 00:25:48 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; BitTimingCAN        ;
 +-------------------+---------------------+
@@ -80,7 +80,7 @@ agreement for further details.
 +-------------------------------------+----------------------------------------+---------------+-------------+-----------------------------------+
 ; Assignment Name                     ; Value                                  ; Default Value ; Entity Name ; Section Id                        ;
 +-------------------------------------+----------------------------------------+---------------+-------------+-----------------------------------+
-; COMPILER_SIGNATURE_ID               ; 145751489233263.149668956301160        ; --            ; --          ; --                                ;
+; COMPILER_SIGNATURE_ID               ; 145751489233263.149671954801620        ; --            ; --          ; --                                ;
 ; EDA_OUTPUT_DATA_FORMAT              ; None                                   ; --            ; --          ; eda_board_design_timing           ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Verilog Hdl                            ; --            ; --          ; eda_simulation                    ;
 ; EDA_OUTPUT_DATA_FORMAT              ; None                                   ; --            ; --          ; eda_board_design_boundary_scan    ;
@@ -92,13 +92,13 @@ agreement for further details.
 ; MIN_CORE_JUNCTION_TEMP              ; 0                                      ; --            ; --          ; --                                ;
 ; NOMINAL_CORE_SUPPLY_VOLTAGE         ; 1.2V                                   ; --            ; --          ; --                                ;
 ; NUM_PARALLEL_PROCESSORS             ; 3                                      ; --            ; --          ; --                                ;
-; PARTITION_COLOR                     ; -- (Not supported for targeted family) ; --            ; can_decoder ; Top                               ;
-; PARTITION_FITTER_PRESERVATION_LEVEL ; -- (Not supported for targeted family) ; --            ; can_decoder ; Top                               ;
-; PARTITION_NETLIST_TYPE              ; -- (Not supported for targeted family) ; --            ; can_decoder ; Top                               ;
+; PARTITION_COLOR                     ; -- (Not supported for targeted family) ; --            ; main_teste  ; Top                               ;
+; PARTITION_FITTER_PRESERVATION_LEVEL ; -- (Not supported for targeted family) ; --            ; main_teste  ; Top                               ;
+; PARTITION_NETLIST_TYPE              ; -- (Not supported for targeted family) ; --            ; main_teste  ; Top                               ;
 ; POWER_BOARD_THERMAL_MODEL           ; None (CONSERVATIVE)                    ; --            ; --          ; --                                ;
 ; POWER_PRESET_COOLING_SOLUTION       ; 23 MM HEAT SINK WITH 200 LFPM AIRFLOW  ; --            ; --          ; --                                ;
 ; PROJECT_OUTPUT_DIRECTORY            ; output_files                           ; --            ; --          ; --                                ;
-; TOP_LEVEL_ENTITY                    ; can_decoder                            ; BitTimingCAN  ; --          ; --                                ;
+; TOP_LEVEL_ENTITY                    ; main_teste                             ; BitTimingCAN  ; --          ; --                                ;
 +-------------------------------------+----------------------------------------+---------------+-------------+-----------------------------------+
 
 
@@ -107,8 +107,8 @@ agreement for further details.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:19     ; 1.0                     ; 662 MB              ; 00:00:40                           ;
-; Total                ; 00:00:19     ; --                      ; --                  ; 00:00:40                           ;
+; Analysis & Synthesis ; 00:00:16     ; 1.0                     ; 643 MB              ; 00:00:37                           ;
+; Total                ; 00:00:16     ; --                      ; --                  ; 00:00:37                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 

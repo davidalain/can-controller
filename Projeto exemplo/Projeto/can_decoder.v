@@ -1,4 +1,12 @@
+//====================================================================
+//====================== Includes ====================================
+//====================================================================
+
 `include "can_crc.v"
+
+//====================================================================
+//============== Declaração do módulo ================================
+//====================================================================
 
 module can_decoder(
 	clock,			// Clock do circuito
@@ -24,7 +32,7 @@ module can_decoder(
 	field_data,
 	field_crc,
 	field_crc_delimiter,
-	field_ack
+	field_ack_slot
 );
 
 
@@ -39,6 +47,10 @@ input wire error_in;
 
 // == Output pins/ports == 
 output wire error_out;
+
+//====================================================================
+//===================== Constantes ===================================
+//====================================================================
 
 parameter len_id_a 			= 4'd11;
 parameter len_id_b 			= 5'd18;
@@ -58,7 +70,8 @@ wire		bit_de_stuffing;	//Flag que indica se o bit recebido atual é um bit stuff
 
 reg			busy;				//Flag que indica se o controlador está ocupado processando algo e não tem tempo de receber/enviar nos frames. Usada na condição do Overload Frame.
 
-reg[3:0] 	contador_id_a;
+/** Contador dos bits já recebidos nos estados relacionados **/
+reg[3:0] 	contador_id_a;		
 reg[4:0] 	contador_id_b;
 reg[2:0] 	contador_dlc;
 reg[5:0]	contador_data;
@@ -80,7 +93,7 @@ output	reg[3:0]	field_dlc;
 output	reg[63:0]	field_data;
 output	reg[14:0]	field_crc;
 output	reg			field_crc_delimiter;
-output	reg			field_ack;
+output	reg			field_ack_slot;
 
 reg			rtr_srr_temp;
 wire[14:0]	calculated_crc;
@@ -105,9 +118,11 @@ reg 	state_ack_delimiter;
 reg 	state_eof;
 reg 	state_interframe;
 
+reg		state_error;
+
 //== Módulo CRC ==
 
-can_crc i_can_crc
+can_crc can_crc_inst
 (
 	.clk(clock),
 	.data(rx_bit),
@@ -147,7 +162,7 @@ task resetAll;
 		field_data					= 64'b0;
 		field_crc					= 15'h0;
 		field_crc_delimiter			= 1'b0;
-		field_ack					= 1'b0;
+		field_ack_slot					= 1'b0;
 
 		rtr_srr_temp				= 1'b0;
 	
@@ -221,8 +236,10 @@ end
 always @(posedge clock or posedge reset)
 begin
 if(reset)
-  
-else if (go_state_error)	
+  ;
+else if (state_error)
+
+	//Casos dos erros de forma
 	if(bit_error_srr)			$display("Erro de SRR");
 	if(bit_error_crc_delimiter)	$display("Erro de CRC delimiter");
 	if(bit_error_ack_slot)		$display("Erro de ACK slot");
@@ -230,11 +247,21 @@ else if (go_state_error)
 	if(bit_error_eof)			$display("Erro de EOF");
 	if(bit_error_interframe)	$display("Erro de interframe");
 	if(bit_crc_error)			$display("Erro de CRC");
+	
 end
 
 //====================================================================
 //===================== Gerenciamento dos estados ====================
 //====================================================================
+
+// Estado error (quando for detectado algum erro no frame durante o processo de decodificação)
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_error <= 1'b0;
+else if(go_state_error)
+	state_error <= 1'b1; //Vai para o estado!
+end
 
 // Estado idle (start of frame)
 always @(posedge clock or posedge reset)
@@ -488,6 +515,9 @@ begin
   else if (sample_point & state_dlc & (~bit_de_stuffing))
     field_dlc <= {field_dlc[2:0], rx_bit};
 	contador_dlc <= contador_dlc + 1;
+	
+	if(field_dlc > 8)
+		field_dlc <= 8; //https://en.wikipedia.org/wiki/CAN_bus#cite_note-9
 end
 
 
@@ -514,9 +544,9 @@ end
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
-    field_ack <= 1'b0;
+    field_ack_slot <= 1'b0;
   else if (sample_point & state_ack_slot & (~bit_de_stuffing))
-    field_ack <= rx_bit;
+    field_ack_slot <= rx_bit;
 end
 
 

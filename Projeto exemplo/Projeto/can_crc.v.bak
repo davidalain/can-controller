@@ -1,26 +1,49 @@
-module can_crc (clk, data, enable, initialize, crc);
+//====================================================================
+//====================== Includes ====================================
+//====================================================================
 
-parameter Tp = 1;
+//====================================================================
+//============== Declaração do módulo ================================
+//====================================================================
 
-input         clk;
-input         data;
-input         enable;
-input         initialize;
+module can_crc (
+	clock, 
+	data_in, 
+	enable, 
+	reset, 
+	crc
+);
 
+/** Inputs **/
+input				clock;
+input				data_in;
+input				enable;
+input				reset;
+
+/** Outputs **/
 output [14:0] crc;
-
 reg    [14:0] crc;
 
+/** Variáveis **/
 wire          crc_next;
 wire   [14:0] crc_tmp;
 
+//====================================================================
+//====================== Constantes ==================================
+//====================================================================
 
-assign crc_next = data ^ crc[14];
+parameter Tp = 1;
+
+//====================================================================
+//====================== Funcionamento ===============================
+//====================================================================
+
+assign crc_next = data_in ^ crc[14];
 assign crc_tmp = {crc[13:0], 1'b0};
 
-always @ (posedge clk)
+always @ (posedge clock)
 begin
-  if(initialize)
+  if(reset)
     crc <= #Tp 15'h0;
   else if (enable)
     begin
@@ -30,6 +53,4 @@ begin
         crc <= #Tp crc_tmp;
     end    
 end
-
-
 endmodule
