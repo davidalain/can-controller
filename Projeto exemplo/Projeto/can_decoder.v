@@ -122,7 +122,7 @@ reg		state_error;
 
 //== Módulo CRC ==
 
-can_crc can_crc_inst
+can_crc i_can_crc
 (
 	.clk(clock),
 	.data(rx_bit),
@@ -133,41 +133,7 @@ can_crc can_crc_inst
 
 // == Behaviour == 
 
-initial
-begin
-	resetAll();
-end
 
-task resetAll;
-	begin
-		busy						= 1'b0;
-		
-		contador_id_a				= 4'd0; 
-		contador_id_b				= 5'd0;
-		contador_dlc 				= 3'd0;
-		contador_data				= 6'd0;
-		contador_crc				= 4'd0;
-		contador_eof				= 3'd0;
-		contador_interframe			= 2'd0;
-	
-		field_start_of_frame 		= 1'b0;
-		field_id_a					= 11'b0;
-		field_srr					= 1'b0;
-		field_ide					= 1'b0;
-		field_rtr					= 1'b0;
-		field_reserved1				= 1'b0;
-		field_reserved0				= 1'b0;
-		field_id_b 					= 18'b0;
-		field_dlc					= 4'b0;
-		field_data					= 64'b0;
-		field_crc					= 15'h0;
-		field_crc_delimiter			= 1'b0;
-		field_ack_slot					= 1'b0;
-
-		rtr_srr_temp				= 1'b0;
-	
-	end
-endtask
 
 //====================================================================
 //== Lógica combinacional para gerenciamento da máquina de estados ===
@@ -175,12 +141,12 @@ endtask
 
 assign	last_bit_interframe		= 	state_interframe	& (contador_interframe == len_interframe);
 
-assign 	go_state_idle			= 	sample_point	& rx_bit 	& last_bit_interframe;
+assign 	go_state_idle			= 	(sample_point	& rx_bit 	& last_bit_interframe) | reset;
 assign 	go_state_id_a			= 	sample_point	& ~rx_bit	& (state_idle 			| last_bit_interframe);
 assign 	go_state_rtr_srr_temp	= 	sample_point				& state_id_a  			& contador_id_a == len_id_a;
 assign 	go_state_ide			=	sample_point				& state_rtr_srr_temp;
 assign 	go_state_id_b			=	sample_point	& rx_bit	& state_ide;
-assign 	go_state_rtr			=	sample_point	 			& state_id_b			& contador_id_b == len_id_b;
+assign 	go_state_rtr			=	sample_point				& state_id_b			& contador_id_b == len_id_b;
 assign 	go_state_reserved1		=	sample_point				& state_rtr;
 assign 	go_state_reserved0		=	sample_point				& state_reserved1;
 assign 	go_state_dlc			=	sample_point				& state_reserved0;
@@ -233,6 +199,7 @@ end
 //====================================================================
 
 // Impressão dos erros
+/*
 always @(posedge clock or posedge reset)
 begin
 if(reset)
@@ -247,9 +214,8 @@ else if (state_error)
 	if(bit_error_eof)			$display("Erro de EOF");
 	if(bit_error_interframe)	$display("Erro de interframe");
 	if(bit_crc_error)			$display("Erro de CRC");
-	
 end
-
+*/
 //====================================================================
 //===================== Gerenciamento dos estados ====================
 //====================================================================
@@ -267,10 +233,10 @@ end
 always @(posedge clock or posedge reset)
 begin
 if(reset)
-	state_idle <= 1'b0;
+	state_idle <= 1'b1;
 else if(go_state_id_a | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
 	state_idle <= 1'b0;
-else if(go_state_ide)
+else if(go_state_idle)
 	state_idle <= 1'b1; //Vai para o estado!
 end
 
@@ -284,6 +250,18 @@ else if(go_state_rtr_srr_temp | go_state_error) //Sai do estado se a flag do pr�
 else if(go_state_id_a)
 	state_id_a <= 1'b1; //Vai para o estado!
 end
+
+// Estado rtr_srr_temp
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_rtr_srr_temp <= 1'b0;
+else if(go_state_ide | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+	state_rtr_srr_temp <= 1'b0;
+else if(go_state_id_a)
+	state_rtr_srr_temp <= 1'b1; //Vai para o estado!
+end
+
 
 // Estado ide
 always @(posedge clock or posedge reset)
@@ -435,15 +413,22 @@ end
 //====================================================================
 //============= Preenchimento dos campos do frame ====================
 //====================================================================
+/* TODO - Zerar os contadores em um else final, ou seja, manter sempre zero quando não está contando*/
+/* Preencher field_start_of_frame e field_crc_delimiter*/
+/* Criar Campo ack_delimiter */
 
-// Campo id_a 
 always @ (posedge clock or posedge reset)
 begin
 if (reset)
+begin
 	field_id_a <= 11'h0;
+	contador_id_a <= 4'd0;
+end
 else if (sample_point & state_id_a & (~bit_de_stuffing))
+begin
 	field_id_a <= {field_id_a[9:0], rx_bit};
 	contador_id_a <= contador_id_a + 1;
+end
 end
 
 
@@ -469,13 +454,19 @@ end
 always @ (posedge clock or posedge reset)
 begin
 if (reset)
+begin
 	field_id_b <= 11'h0;
+	contador_id_b <= 5'd0;
+	field_srr <= 1'b0;
+end
 else if (sample_point & state_id_b & (~bit_de_stuffing))
+begin
 	if(contador_id_b == 1)
 		field_srr <= rtr_srr_temp;
 	
 	field_id_b <= {field_id_b[16:0], rx_bit};
 	contador_id_b <= contador_id_b + 1;
+end
 end
 
 // Campo rtr bit
@@ -511,13 +502,15 @@ end
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
+  begin
     field_dlc <= 4'b0;
+	contador_dlc <= 3'd0;
+  end
   else if (sample_point & state_dlc & (~bit_de_stuffing))
+  begin
     field_dlc <= {field_dlc[2:0], rx_bit};
-	contador_dlc <= contador_dlc + 1;
-	
-	if(field_dlc > 8)
-		field_dlc <= 8; //https://en.wikipedia.org/wiki/CAN_bus#cite_note-9
+    contador_dlc <= contador_dlc + 1;
+  end
 end
 
 
@@ -525,18 +518,30 @@ end
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
+  begin
     field_data <= 64'h0;
+	contador_data <= 6'd0;
+  end
   else if (sample_point & state_data & (~bit_de_stuffing))
+  begin
     field_data <= {field_data[62:0], rx_bit};
+	contador_data <= contador_data + 1;
+  end
 end
 
 // Campo CRC
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
+  begin
     field_crc <= 15'h0;
+	contador_crc <= 0;
+  end
   else if (sample_point & state_crc & (~bit_de_stuffing))
+  begin
     field_crc <= {field_crc[13:0], rx_bit};
+	contador_crc <= contador_crc + 1;
+  end
 end
 
 
@@ -547,6 +552,24 @@ begin
     field_ack_slot <= 1'b0;
   else if (sample_point & state_ack_slot & (~bit_de_stuffing))
     field_ack_slot <= rx_bit;
+end
+
+// Campo EOF
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+	contador_eof <= 0;
+  else if (sample_point & state_eof & (~bit_de_stuffing))
+    contador_eof <= contador_eof + 1;
+end
+
+// Campo intermission
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+	contador_interframe <= 0;
+  else if (sample_point & state_interframe & (~bit_de_stuffing))
+    contador_interframe <= contador_interframe + 1;
 end
 
 
