@@ -262,7 +262,7 @@ if(reset)
 	state_rtr_srr_temp <= 1'b0;
 else if(go_state_ide | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
 	state_rtr_srr_temp <= 1'b0;
-else if(go_state_id_a)
+else if(go_state_rtr_srr_temp)
 	state_rtr_srr_temp <= 1'b1; //Vai para o estado!
 end
 
@@ -421,6 +421,7 @@ end
 /* Preencher field_start_of_frame e field_crc_delimiter*/
 /* Criar Campo ack_delimiter */
 
+// Campo id_a
 always @ (posedge clock or posedge reset)
 begin
 if (reset)
