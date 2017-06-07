@@ -133,7 +133,6 @@ task configTeste0;
 			field_ide, 
 			field_reserved0, 
 			field_dlc, 
-			field_data[field_dlc*8-1:0], 
 			field_crc, 
 			field_crc_delimiter, 
 			field_ack_slot,

@@ -1,3 +1,7 @@
+
+`ifndef CAN_DECODER
+`define CAN_DECODER
+
 //====================================================================
 //====================== Includes ====================================
 //====================================================================
@@ -124,8 +128,8 @@ reg		state_error;
 
 can_crc i_can_crc
 (
-	.clk(clock),
-	.data(rx_bit),
+	.clock(clock),
+	.data_in(rx_bit),
 	.enable(crc_enable & sample_point & (~bit_de_stuff)),
 	.reset(crc_initialize),
 	.crc(calculated_crc)
@@ -788,3 +792,6 @@ end
 //	*/
 	
 endmodule	
+
+
+`endif

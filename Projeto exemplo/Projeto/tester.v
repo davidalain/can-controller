@@ -1,6 +1,24 @@
 `timescale 1ns/1ps
 
-module tester();
+//====================================================================
+//====================== Includes ====================================
+//====================================================================
+
+`include "can_decoder.v"
+
+//====================================================================
+//============== Declaração do módulo ================================
+//====================================================================
+
+module tester(
+	finish
+);
+	
+output wire finish;
+
+//====================================================================
+//===================== Variáveis ====================================
+//====================================================================
 
 reg clk,rst,sample_point;
 reg [90:0] data_bits;
@@ -20,9 +38,8 @@ wire [3:0]field_dlc;
 wire [63:0]field_data; 
 wire [14:0]field_crc;
 wire field_crc_delimiter;
-wire field_ack;
+wire field_ack_slot;
 wire error_in, error_out;
-
 
 
 can_decoder i_can_decoder
@@ -49,8 +66,14 @@ can_decoder i_can_decoder
 	.field_data           (field_data),
 	.field_crc            (field_crc),
 	.field_crc_delimiter  (field_crc_delimiter),
-	.field_ack            (field_ack)
+	.field_ack_slot       (field_ack_slot)
 );
+
+//====================================================================
+//====================== Comportamento ===============================
+//====================================================================
+
+assign finish = rst;
 
 // inicia
 initial
@@ -98,7 +121,9 @@ end
 
 //generate clock
 always
+begin
 	#5 clk = !clk;
+end
 	
 //generate sample_point
 always @(posedge clk)
@@ -113,10 +138,10 @@ always @(posedge clk)
 		sample_point <= 1;
 	end
 
-always @(negedge clk)
-begin
-	sample_point <= 0;
-end
+//always @(negedge clk)
+//begin
+//	sample_point <= 0;
+//end
 	
 
 	
