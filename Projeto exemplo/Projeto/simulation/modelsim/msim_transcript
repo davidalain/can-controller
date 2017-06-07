@@ -588,3 +588,125 @@ vsim work.tester
 run -all
 restart -f
 run 3000000
+restart -f
+run 3000000
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+vlog -reportprogress 300 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:13:19 on Jun 07,2017
+# vlog -reportprogress 300 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v 
+# -- Compiling module can_crc
+# 
+# Top level modules:
+# 	can_crc
+# End time: 13:13:19 on Jun 07,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -reportprogress 300 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:13:20 on Jun 07,2017
+# vlog -reportprogress 300 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v 
+# -- Compiling module can_crc
+# -- Compiling module can_decoder
+# 
+# Top level modules:
+# 	can_decoder
+# End time: 13:13:20 on Jun 07,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -reportprogress 30 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/main_teste.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:13:21 on Jun 07,2017
+# vlog -reportprogress 30 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/main_teste.v 
+# -- Compiling module main_teste
+# ** Error: (vlog-13069) D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/main_teste.v(141): near "}": syntax error, unexpected '}'.
+# End time: 13:13:21 on Jun 07,2017, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+vlog -reportprogress 30 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/tester.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 13:13:21 on Jun 07,2017
+# vlog -reportprogress 30 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/tester.v 
+# -- Compiling module can_crc
+# -- Compiling module can_decoder
+# -- Compiling module tester
+# 
+# Top level modules:
+# 	tester
+# End time: 13:13:22 on Jun 07,2017, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+restart -f
+# Loading work.tester
+# Loading work.can_decoder
+# Loading work.can_crc
+run 3000000
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+# GetModuleFileName: Não foi possível encontrar o módulo especificado.
+# 
+# 
+run
+run -all
