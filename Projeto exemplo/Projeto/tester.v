@@ -84,8 +84,8 @@ begin
 	//OBS: Modificar tamanho máximo de data_bits, se necessário.
 	//data_bits <= 60'b010110101010101010000110010101001001010111100001010101010010101010;
 	//data_bits <= {'b0, 'b000010010100, 'b0, 'b001, 'b0001, 'b000001001, 'b0100001100000100, 'b1, 'b0, 'b1, 'b1111111, 'b111};
-	data_bits <= 60'b00000100101000001000100000100101000011000001001011111111111; //https://en.wikipedia.org/wiki/File:CAN-Frame_mit_Pegeln_mit_Stuffbits.svg
-	num_bits_to_send <= 60;
+	data_bits <= 59'b00000100101000001000100000100101000011000001001011111111111; //https://en.wikipedia.org/wiki/File:CAN-Frame_mit_Pegeln_mit_Stuffbits.svg
+	num_bits_to_send <= 59;
 	
 	/* ---------------------------------- */
 	/* ---------------------------------- */
