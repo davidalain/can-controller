@@ -36,7 +36,7 @@ wire   [14:0] crc_tmp;
 //====================== Constantes ==================================
 //====================================================================
 
-parameter Tp = 1;
+//parameter Tp = 1;
 
 //====================================================================
 //====================== Comportamento ===============================
@@ -48,13 +48,13 @@ assign crc_tmp = {crc[13:0], 1'b0};
 always @ (posedge clock)
 begin
   if(reset)
-    crc <= #Tp 15'h0;
+    crc <= /*#Tp*/ 15'h0;
   else if (enable)
     begin
       if (crc_next)
-        crc <= #Tp crc_tmp ^ 15'h4599;
+        crc <= /*#Tp*/ crc_tmp ^ 15'h4599;
       else
-        crc <= #Tp crc_tmp;
+        crc <= /*#Tp*/ crc_tmp;
     end    
 end
 endmodule

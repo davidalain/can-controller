@@ -1,4 +1,41 @@
 import sys
+
+hexConst = ['1','0','0','0','1','0','1','1','0','0','1','1','0','0','1']
+
+def maior (x,y):
+  if(x>y):
+    return x
+  else:
+    return y
+	
+def xorStringBinaria(str1,str2):
+  print(''.join(str1) + ' - ' + ''.join(str2))
+  resultado = []
+  for i in range (0,maior(len(str1),len(str2))):
+    if(str1[i] == str2[i]):
+      resultado.append('0')
+    else:
+      resultado.append('1')
+  print(''.join(resultado))
+  return resultado
+  
+def calcCRC(stringBinaria):
+  crcFinal = ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0']
+  index = 0
+  for c in stringBinaria:
+    if(c == crcFinal[0]):
+      crcnxt = '0'	
+    else:
+      crcnxt = '1'
+    crcFinal.pop(0)
+    crcFinal.append('0')
+    if(crcnxt == '1'):
+      crcFinal = xorStringBinaria(crcFinal, hexConst)
+    #    print(c)
+    index = index +1
+    print(str(index) + ' - ' +str(c)+' - ' + (''.join(crcFinal)))
+  return crcFinal
+  
 def allEqual(lastFive):
   lastC = lastFive[0]
   for c in lastFive:
@@ -51,4 +88,4 @@ def stuff (binString):
 def stuffedBin2DestuffedHex(string):
   return (hex( int( ''.join(destuff(string)) , 2 ) ))
 
-print(stuffedBin2DestuffedHex(sys.argv[1]))
+print(calcCRC(sys.argv[1]))
