@@ -130,7 +130,7 @@ can_crc i_can_crc
 (
 	.clock(clock),
 	.data_in(rx_bit),
-	.enable(crc_enable & sample_point & (~bit_de_stuff)),
+	.enable(crc_enable & sample_point & (~bit_de_stuffing)),
 	.reset(crc_initialize),
 	.crc(calculated_crc)
 );
@@ -143,26 +143,26 @@ can_crc i_can_crc
 //== Lógica combinacional para gerenciamento da máquina de estados ===
 //====================================================================
 
-assign	last_bit_interframe		= 	state_interframe	& (contador_interframe == len_interframe);
+assign	last_bit_interframe		= 	state_interframe	& (contador_interframe == len_interframe -1);
 
 assign 	go_state_idle			= 	(sample_point	& rx_bit 	& last_bit_interframe) | reset;
 assign 	go_state_id_a			= 	sample_point	& ~rx_bit	& (state_idle 			| last_bit_interframe);
-assign 	go_state_rtr_srr_temp	= 	sample_point				& state_id_a  			& contador_id_a == len_id_a;
+assign 	go_state_rtr_srr_temp	= 	sample_point				& state_id_a  			& (contador_id_a == len_id_a - 1);
 assign 	go_state_ide			=	sample_point				& state_rtr_srr_temp;
 assign 	go_state_id_b			=	sample_point	& rx_bit	& state_ide;
-assign 	go_state_rtr			=	sample_point				& state_id_b			& contador_id_b == len_id_b;
+assign 	go_state_rtr			=	sample_point				& state_id_b			& (contador_id_b == len_id_b -1);
 assign 	go_state_reserved1		=	sample_point				& state_rtr;
-assign 	go_state_reserved0		=	sample_point				& state_reserved1;
+assign 	go_state_reserved0		=	sample_point				& ( state_reserved1 | (~rx_bit & state_ide));
 assign 	go_state_dlc			=	sample_point				& state_reserved0;
-assign 	go_state_data			=	sample_point				& state_dlc				& contador_dlc == len_dlc;
-assign 	go_state_crc			=	sample_point				& state_dlc				&
-													((contador_dlc == len_dlc & field_dlc == 0) | field_rtr) | /**/
-													(state_data		& (contador_data == (8 * field_dlc)));
-assign 	go_state_crc_delimiter	=	sample_point				& state_crc				& contador_crc == len_crc;
+assign 	go_state_data			=	sample_point				& state_dlc				& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} != 0);
+assign 	go_state_crc			=	sample_point				& 
+																				((state_dlc	&	(((contador_dlc == len_dlc -1) & ({field_dlc[2:0],rx_bit} == 0)) | field_rtr)) | 
+																				(state_data		& ((contador_data == (8 * field_dlc)-1))));
+assign 	go_state_crc_delimiter	=	sample_point				& state_crc				& (contador_crc == len_crc -1);
 assign 	go_state_ack_slot		=	sample_point	& rx_bit	& state_crc_delimiter;
 assign 	go_state_ack_delimiter	=	sample_point	& ~rx_bit	& state_ack_slot;
 assign 	go_state_eof			=	sample_point	& rx_bit	& state_ack_delimiter;
-assign 	go_state_interframe		=	sample_point				& state_eof				& contador_eof == len_eof;
+assign 	go_state_interframe		=	sample_point				& state_eof				& (contador_eof == len_eof-1);
 assign	go_state_overload		=	sample_point				& state_interframe 		& last_bit_interframe	& 	busy;
 
 assign	bit_error_srr			=	sample_point	& rx_bit	& state_ide				& ~rtr_srr_temp;
@@ -182,8 +182,21 @@ assign	go_state_error 		=	bit_error_srr | bit_error_crc_delimiter | bit_error_ac
 								bit_error_ack_delimiter | bit_error_eof | bit_error_interframe |
 								bit_error_bit_stuffing | bit_crc_error;
 
-assign	crc_initialize		=	go_state_idle | (state_interframe && contador_interframe == len_interframe);
-assign	crc_enable			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_interframe & last_bit_interframe);
+assign	crc_initialize		=	//fixme - testarei com outros valores go_state_idle | (state_interframe && contador_interframe == len_interframe -1);
+												state_idle
+												| state_interframe;
+assign	crc_enable			=	// fixme - Testarei com outros valores  state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_interframe & last_bit_interframe) 
+												state_id_a 				
+												| state_rtr_srr_temp 
+												| state_ide 
+												| state_id_b 
+												| state_rtr 
+												| state_reserved1
+												| state_reserved0
+												| state_dlc
+												| state_data;
+											
+
 
 //====================================================================
 //===================== Gerenciamento do bit stuffing ================
