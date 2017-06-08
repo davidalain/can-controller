@@ -9,7 +9,7 @@ z2
 cModel Technology
 Z0 dC:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/simulation/modelsim
 vcan_crc
-Z1 !s110 1496928183
+Z1 !s110 1496934042
 !i10b 1
 !s100 0CMa:jVCi[dS9JWGR<K812
 I]Y6_LAC2P71PXQD;gEIbZ2
@@ -23,7 +23,7 @@ Z4 OV;L;10.5b;63
 r1
 !s85 0
 31
-Z5 !s108 1496928183.000000
+Z5 !s108 1496934042.000000
 Z6 !s107 C:\Users\luisf\Documents\can-controller\Projeto exemplo\Projeto\can_crc.v|C:\Users\luisf\Documents\can-controller\Projeto exemplo\Projeto\can_decoder.v|C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v|
 Z7 !s90 -reportprogress|300|-work|work|C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v|
 !i113 1
@@ -32,11 +32,11 @@ Z9 tCvgOpt 0
 vcan_decoder
 R1
 !i10b 1
-!s100 F`S;ncNFaUO1@Jn;]ZM8I1
-I4YE7Ee9OVcGhNcB18N2@32
+!s100 UJ[gYTk=lkBV9kY<;5S4H1
+Ibc08I8QXjXJ<m:T^mchDM0
 R2
 R0
-w1496892612
+w1496934009
 8C:\Users\luisf\Documents\can-controller\Projeto exemplo\Projeto\can_decoder.v
 FC:\Users\luisf\Documents\can-controller\Projeto exemplo\Projeto\can_decoder.v
 L0 15
@@ -53,11 +53,11 @@ R9
 vtester
 R1
 !i10b 1
-!s100 <UNi_]30TXZk_NlUbBBe70
-I9;hI_]8R^]UXG0cCJIT^K3
+!s100 IhnJ:g`RJh=oG>C`@QI<l3
+Ijg4J9H8CPM=GTF]=iCad]3
 R2
 R0
-w1496889191
+w1496933341
 8C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v
 FC:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v
 R3

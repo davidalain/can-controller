@@ -409,7 +409,7 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_eof <= 1'b0;
-else if(go_state_eof | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_interframe | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
 	state_eof <= 1'b0;
 else if(go_state_eof)
 	state_eof <= 1'b1; //Vai para o estado!

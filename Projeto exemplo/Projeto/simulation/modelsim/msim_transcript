@@ -13,29 +13,41 @@
 # 
 # vlog -vlog01compat -work work +incdir+C:/Users/luisf/Documents/can-controller/Projeto\ exemplo/Projeto {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_crc.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 10:22:51 on Jun 08,2017
+# Start time: 12:00:33 on Jun 08,2017
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto" C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_crc.v 
 # -- Compiling module can_crc
 # 
 # Top level modules:
 # 	can_crc
-# End time: 10:22:51 on Jun 08,2017, Elapsed time: 0:00:00
+# End time: 12:00:33 on Jun 08,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work work +incdir+C:/Users/luisf/Documents/can-controller/Projeto\ exemplo/Projeto {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 10:22:52 on Jun 08,2017
+# Start time: 12:00:33 on Jun 08,2017
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto" C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v 
 # -- Compiling module can_crc
 # -- Compiling module can_decoder
 # 
 # Top level modules:
 # 	can_decoder
-# End time: 10:22:52 on Jun 08,2017, Elapsed time: 0:00:00
+# End time: 12:00:33 on Jun 08,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+# vlog -vlog01compat -work work +incdir+C:/Users/luisf/Documents/can-controller/Projeto\ exemplo/Projeto {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 12:00:33 on Jun 08,2017
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto" C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v 
+# -- Compiling module can_crc
+# -- Compiling module can_decoder
+# -- Compiling module tester
+# 
+# Top level modules:
+# 	tester
+# End time: 12:00:33 on Jun 08,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # 
 vlog -reportprogress 300 -work work {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 10:23:03 on Jun 08,2017
+# Start time: 12:00:42 on Jun 08,2017
 # vlog -reportprogress 300 -work work C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v 
 # -- Compiling module can_crc
 # -- Compiling module can_decoder
@@ -43,104 +55,19 @@ vlog -reportprogress 300 -work work {C:/Users/luisf/Documents/can-controller/Pro
 # 
 # Top level modules:
 # 	tester
-# End time: 10:23:03 on Jun 08,2017, Elapsed time: 0:00:00
+# End time: 12:00:42 on Jun 08,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 vsim work.tester
 # vsim work.tester 
-# Start time: 10:23:08 on Jun 08,2017
+# Start time: 12:00:45 on Jun 08,2017
 # Loading work.tester
 # Loading work.can_decoder
 # Loading work.can_crc
-add wave -position end  sim:/tester/i_can_decoder/rx_bit
-add wave -position end  sim:/tester/i_can_decoder/sample_point
-add wave -position end  sim:/tester/i_can_decoder/clock
-add wave -position end  sim:/tester/i_can_decoder/reset
-add wave -position end  sim:/tester/i_can_decoder/error_in
-add wave -position end  sim:/tester/i_can_decoder/error_out
-add wave -position end  sim:/tester/i_can_decoder/last_rx_bits
-add wave -position end  sim:/tester/i_can_decoder/bit_de_stuffing
-add wave -position end  sim:/tester/i_can_decoder/busy
-add wave -position end  sim:/tester/i_can_decoder/contador_id_a
-add wave -position end  sim:/tester/i_can_decoder/contador_id_b
-add wave -position end  sim:/tester/i_can_decoder/contador_dlc
-add wave -position end  sim:/tester/i_can_decoder/contador_data
-add wave -position end  sim:/tester/i_can_decoder/contador_crc
-add wave -position end  sim:/tester/i_can_decoder/contador_eof
-add wave -position end  sim:/tester/i_can_decoder/contador_interframe
-add wave -position end  sim:/tester/i_can_decoder/field_start_of_frame
-add wave -position end  sim:/tester/i_can_decoder/field_id_a
-add wave -position end  sim:/tester/i_can_decoder/field_srr
-add wave -position end  sim:/tester/i_can_decoder/field_ide
-add wave -position end  sim:/tester/i_can_decoder/field_rtr
-add wave -position end  sim:/tester/i_can_decoder/field_reserved1
-add wave -position end  sim:/tester/i_can_decoder/field_reserved0
-add wave -position end  sim:/tester/i_can_decoder/field_id_b
-add wave -position end  sim:/tester/i_can_decoder/field_dlc
-add wave -position end  sim:/tester/i_can_decoder/field_data
-add wave -position end  sim:/tester/i_can_decoder/field_crc
-add wave -position end  sim:/tester/i_can_decoder/field_crc_delimiter
-add wave -position end  sim:/tester/i_can_decoder/field_ack_slot
-add wave -position end  sim:/tester/i_can_decoder/rtr_srr_temp
-add wave -position end  sim:/tester/i_can_decoder/calculated_crc
-add wave -position end  sim:/tester/i_can_decoder/crc_enable
-add wave -position end  sim:/tester/i_can_decoder/state_idle
-add wave -position end  sim:/tester/i_can_decoder/state_id_a
-add wave -position end  sim:/tester/i_can_decoder/state_rtr_srr_temp
-add wave -position end  sim:/tester/i_can_decoder/state_ide
-add wave -position end  sim:/tester/i_can_decoder/state_id_b
-add wave -position end  sim:/tester/i_can_decoder/state_rtr
-add wave -position end  sim:/tester/i_can_decoder/state_reserved1
-add wave -position end  sim:/tester/i_can_decoder/state_reserved0
-add wave -position end  sim:/tester/i_can_decoder/state_dlc
-add wave -position end  sim:/tester/i_can_decoder/state_data
-add wave -position end  sim:/tester/i_can_decoder/state_crc
-add wave -position end  sim:/tester/i_can_decoder/state_crc_delimiter
-add wave -position end  sim:/tester/i_can_decoder/state_ack_slot
-add wave -position end  sim:/tester/i_can_decoder/state_ack_delimiter
-add wave -position end  sim:/tester/i_can_decoder/state_eof
-add wave -position end  sim:/tester/i_can_decoder/state_interframe
-add wave -position end  sim:/tester/i_can_decoder/state_error
-add wave -position end  sim:/tester/i_can_decoder/crc_initialize
-add wave -position end  sim:/tester/i_can_decoder/last_bit_interframe
-add wave -position end  sim:/tester/i_can_decoder/go_state_idle
-add wave -position end  sim:/tester/i_can_decoder/go_state_id_a
-add wave -position end  sim:/tester/i_can_decoder/go_state_rtr_srr_temp
-add wave -position end  sim:/tester/i_can_decoder/go_state_ide
-add wave -position end  sim:/tester/i_can_decoder/go_state_id_b
-add wave -position end  sim:/tester/i_can_decoder/go_state_rtr
-add wave -position end  sim:/tester/i_can_decoder/go_state_reserved1
-add wave -position end  sim:/tester/i_can_decoder/go_state_reserved0
-add wave -position end  sim:/tester/i_can_decoder/go_state_dlc
-add wave -position end  sim:/tester/i_can_decoder/go_state_data
-add wave -position end  sim:/tester/i_can_decoder/go_state_crc
-add wave -position end  sim:/tester/i_can_decoder/go_state_crc_delimiter
-add wave -position end  sim:/tester/i_can_decoder/go_state_ack_slot
-add wave -position end  sim:/tester/i_can_decoder/go_state_ack_delimiter
-add wave -position end  sim:/tester/i_can_decoder/go_state_eof
-add wave -position end  sim:/tester/i_can_decoder/go_state_interframe
-add wave -position end  sim:/tester/i_can_decoder/go_state_overload
-add wave -position end  sim:/tester/i_can_decoder/bit_error_srr
-add wave -position end  sim:/tester/i_can_decoder/bit_error_crc_delimiter
-add wave -position end  sim:/tester/i_can_decoder/bit_error_ack_slot
-add wave -position end  sim:/tester/i_can_decoder/bit_error_ack_delimiter
-add wave -position end  sim:/tester/i_can_decoder/bit_error_eof
-add wave -position end  sim:/tester/i_can_decoder/bit_error_interframe
-add wave -position end  sim:/tester/i_can_decoder/bit_crc_error
-add wave -position end  sim:/tester/i_can_decoder/enable_bitstuffing
-add wave -position end  sim:/tester/i_can_decoder/bit_error_bit_stuffing
-add wave -position end  sim:/tester/i_can_decoder/go_state_error
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: DavidAlain  Hostname: DAVIDALAIN-XPS  ProcessID: 6956
-#           Attempting to use alternate WLF file "./wlft49a2d1".
+#           Attempting to use alternate WLF file "./wlft1afzbc".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlft49a2d1
-add wave -position 0  sim:/tester/i_can_decoder/i_can_crc/clock
-add wave -position 1  sim:/tester/i_can_decoder/i_can_crc/data_in
-add wave -position 2  sim:/tester/i_can_decoder/i_can_crc/enable
-add wave -position 3  sim:/tester/i_can_decoder/i_can_crc/reset
-add wave -position 4  sim:/tester/i_can_decoder/i_can_crc/crc
-add wave -position 5  sim:/tester/i_can_decoder/i_can_crc/crc_next
-add wave -position 6  sim:/tester/i_can_decoder/i_can_crc/crc_tmp
-run 10000000
-# End time: 11:25:03 on Jun 08,2017, Elapsed time: 1:01:55
+#           Using alternate file: ./wlft1afzbc
+run 100000000
+# End time: 12:02:22 on Jun 08,2017, Elapsed time: 0:01:37
 # Errors: 0, Warnings: 2
