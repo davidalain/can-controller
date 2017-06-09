@@ -9,14 +9,14 @@ def maior (x,y):
     return y
 	
 def xorStringBinaria(str1,str2):
-  print(''.join(str1) + ' - ' + ''.join(str2))
+  #print(''.join(str1) + ' - ' + ''.join(str2))
   resultado = []
   for i in range (0,maior(len(str1),len(str2))):
     if(str1[i] == str2[i]):
       resultado.append('0')
     else:
       resultado.append('1')
-  print(''.join(resultado))
+ # print(''.join(resultado))
   return resultado
   
 def calcCRC(stringBinaria):
@@ -33,7 +33,7 @@ def calcCRC(stringBinaria):
       crcFinal = xorStringBinaria(crcFinal, hexConst)
     #    print(c)
     index = index +1
-    print(str(index) + ' - ' +str(c)+' - ' + (''.join(crcFinal)))
+    print(str(index) + ' - ' +str(c)+' - ' +  hex(int((''.join(crcFinal)),2) ) )
   return crcFinal
   
 def allEqual(lastFive):
@@ -47,7 +47,9 @@ def allEqual(lastFive):
 def destuff (binString):
   lastFive=[]
   stringFinal = []
+  index = 0
   for c in binString:
+    index = index + 1
      # Se nao houve nem 5 bits, nao ha destuff
     if (len(lastFive) < 5):
 	  lastFive.append(c)
@@ -56,12 +58,13 @@ def destuff (binString):
 	# se os ultimos bits forem iguais, nao salvamos o bit atual
       if(allEqual(lastFive)):
         if(c == lastFive[0]):
-		  print('Erro de bit stuffing')
+		  print('Erro de bit stuffing - ' + str(index))
 	# se nao ha destuff, entao salva o bit atual
       else:
         stringFinal.append(c)
 	#independente de salvar ou nao o bit, ele eh adicionado na lista dos ultimos 5	
-      lastFive.append(c)	
+      lastFive.append(c)
+      lastFive.pop(0)	  
   return stringFinal
 		
 
@@ -88,4 +91,6 @@ def stuff (binString):
 def stuffedBin2DestuffedHex(string):
   return (hex( int( ''.join(destuff(string)) , 2 ) ))
 
-print(calcCRC(sys.argv[1]))
+
+print(''.join(destuff(sys.argv[1])))  
+print(''.join(calcCRC(destuff(sys.argv[1]))))

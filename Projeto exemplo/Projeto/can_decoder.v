@@ -505,6 +505,8 @@ end
 
 // ========== Campos sem bit stuffing =============
 
+// Para ser sintetizavel, uma "variavel" só pode estar presente em um always
+
 // Campo Error Flags
 always @(posedge clock or posedge reset)
 begin
@@ -512,7 +514,10 @@ if(reset)
 	contador_flags <= 4'b0;
 else if(sample_point & state_error_flags)
 	contador_flags <= contador_flags + 4'd1;
+else if(sample_point & state_overload_flags)
+	contador_flags <= contador_flags + 1;
 end
+
 
 // Campo Error Delimiter
 always @(posedge clock or posedge reset)
@@ -521,25 +526,27 @@ if(reset)
 	contador_delimiter <= 4'b0;
 else if(sample_point & state_error_delimiter)
 	contador_delimiter <= contador_delimiter + 4'd1;
-end
-
-// Campo Overload Flags
-always @(posedge clock or posedge reset)
-begin
-if(reset)
-	contador_flags <= 4'b0;
-else if(sample_point & state_overload_flags)
-	contador_flags <= contador_flags + 1;
-end
-
-// Campo Overload Delimiter
-always @(posedge clock or posedge reset)
-begin
-if(reset)
-	contador_delimiter <= 4'b0;
 else if(sample_point & state_overload_delimiter)
 	contador_delimiter <= contador_delimiter + 1;
 end
+
+//// Campo Overload Flags
+//always @(posedge clock or posedge reset)
+//begin
+//if(reset)
+//	contador_flags <= 4'b0;
+//else if(sample_point & state_overload_flags)
+//	contador_flags <= contador_flags + 1;
+//end
+
+// Campo Overload Delimiter
+//always @(posedge clock or posedge reset)
+//begin
+//if(reset)
+//	contador_delimiter <= 4'b0;
+//else if(sample_point & state_overload_delimiter)
+//	contador_delimiter <= contador_delimiter + 1;
+//end
 
 // Campo Start of Frame
 always @ (posedge clock or posedge reset)
