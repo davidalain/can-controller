@@ -151,23 +151,25 @@ can_crc i_can_crc
 //====================================================================
 //== Lógica combinacional para gerenciamento da máquina de estados ===
 //====================================================================
-
-assign	last_bit_interframe			= 	state_interframe	& (contador_interframe == len_interframe -1);
 	
-assign 	go_state_idle				= 	(sample_point	& rx_bit 	& last_bit_interframe) | reset;
-assign 	go_state_id_a				= 	sample_point	& ~rx_bit	& (state_idle 			| last_bit_interframe);
-assign 	go_state_rtr_srr_temp		= 	sample_point				& state_id_a  			& (contador_id_a == len_id_a - 1);
+assign 	go_state_idle				= 	reset | (sample_point	& rx_bit 	& 
+																	((state_interframe	& contador_interframe == len_interframe-1) |
+																	(state_error_delimiter & contador_delimiter == len_delimiter-1) |
+																	(state_overload_delimiter & contador_delimiter == len_delimiter-1))	);
+assign 	go_state_id_a				= 	sample_point	& ~rx_bit	& (state_idle 			| 
+																	  (state_interframe	& contador_interframe == len_interframe-1));
+assign 	go_state_rtr_srr_temp		= 	sample_point				& state_id_a  			& (contador_id_a == len_id_a-1);
 assign 	go_state_ide				=	sample_point				& state_rtr_srr_temp;
 assign 	go_state_id_b				=	sample_point	& rx_bit	& state_ide;
-assign 	go_state_rtr				=	sample_point				& state_id_b			& (contador_id_b == len_id_b -1);
+assign 	go_state_rtr				=	sample_point				& state_id_b			& (contador_id_b == len_id_b-1);
 assign 	go_state_reserved1			=	sample_point				& state_rtr;
 assign 	go_state_reserved0			=	sample_point				& ( state_reserved1 | (~rx_bit & state_ide));
 assign 	go_state_dlc				=	sample_point				& state_reserved0;
 assign 	go_state_data				=	sample_point				& state_dlc				& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} != 0);
 assign 	go_state_crc				=	sample_point				& 
-																					((state_dlc	&	(((contador_dlc == len_dlc -1) & ({field_dlc[2:0],rx_bit} == 0)) | field_rtr)) | 
-																					(state_data		& ((contador_data == (8 * field_dlc)-1))));
-assign 	go_state_crc_delimiter		=	sample_point				& state_crc				& (contador_crc == len_crc -1);
+																	((state_dlc		& (((contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} == 0)) | field_rtr)) | 
+																	(state_data		& ((contador_data == (8 * field_dlc)-1))));
+assign 	go_state_crc_delimiter		=	sample_point				& state_crc				& (contador_crc == len_crc-1);
 assign 	go_state_ack_slot			=	sample_point	& rx_bit	& state_crc_delimiter;
 assign 	go_state_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_slot;
 assign 	go_state_eof				=	sample_point	& rx_bit	& state_ack_delimiter;
@@ -181,10 +183,18 @@ assign	bit_error_eof				=	sample_point	& ~rx_bit	& state_eof;
 assign	bit_error_interframe		=	sample_point	& ~rx_bit	& state_interframe;
 assign	bit_crc_error				= 	sample_point				& state_crc_delimiter 	& (calculated_crc != field_crc);
 	
-assign	enable_bitstuffing			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | 
-										state_rtr | state_reserved1 | state_reserved0 | state_dlc | 
-										state_data | state_crc;
-assign	bit_de_stuffing				=	enable_bitstuffing & ((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit);
+assign	enable_bitstuffing			=	state_id_a |
+										state_rtr_srr_temp |
+										state_ide |
+										state_id_b | 
+										state_rtr |
+										state_reserved1 |
+										state_reserved0 |
+										state_dlc | 
+										state_data |
+										state_crc;
+										
+assign	bit_de_stuffing				=	enable_bitstuffing	& ((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit);
 
 assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
 
@@ -205,9 +215,10 @@ assign	go_state_overload_delimiter	=	sample_point	& rx_bit	& state_overload_flag
 
 
 
-assign	crc_initialize		=	//fixme - testarei com outros valores go_state_idle | (state_interframe && contador_interframe == len_interframe -1);
-												state_idle
-												| state_interframe;
+assign	crc_initialize		=	go_state_idle;
+								//fixme - testarei com outros valores go_state_idle | (state_interframe && contador_interframe == len_interframe-1);
+								//				state_idle
+								//				| state_interframe;
 assign	crc_enable			=	// fixme - Testarei com outros valores  state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_interframe & last_bit_interframe) 
 												state_id_a 				
 												| state_rtr_srr_temp 
@@ -530,6 +541,15 @@ else if(sample_point & state_overload_delimiter)
 	contador_delimiter <= contador_delimiter + 1;
 end
 
+// Campo Start of Frame
+always @ (posedge clock or posedge reset)
+begin
+if (reset)
+	field_start_of_frame <= 1'bx;
+else if (sample_point & state_idle & ~rx_bit)
+	field_start_of_frame <= 1'b0;
+end
+
 // ========== Campos com bit stuffing =============
 
 // Campo id_a
@@ -624,7 +644,9 @@ begin
   end
   else if (sample_point & state_dlc & (~bit_de_stuffing))
   begin
-    field_dlc <= {field_dlc[2:0], rx_bit};
+	//Se DLC == 4'b1XXX, aplica máscara 4'b1000 para garantir ser no máximo 8 o valor do DLC.
+	//Nota: field_dlc[2] representará o bit de indice 3 após a execução da linha abaixo.
+    field_dlc <= (field_dlc[2] == 0) ? ({field_dlc[2:0], rx_bit}) : ({field_dlc[2:0], rx_bit} & 4'b1000);
     contador_dlc <= contador_dlc + 1;
   end
 end
@@ -688,220 +710,6 @@ begin
     contador_interframe <= contador_interframe + 1;
 end
 
-
-//always @(posedge sample_point) /*TODO: verificar o momento da passagem de estado de acordo com os bits recebidos e o clock*/
-//begin
-//	case(state)
-//		IDLE: 
-//			if (rx_bit == 1'b0)  //Recebeu dominante, muda de estado!
-//			begin
-//				//Entrou no estado START_OF_FRAME:
-//			
-//				/*TODO: sincronizar os clocks do módulo de CRC e sample_point, porque pode acontecer de o crc ser calculado mais de uma vez no mesmo bit recebido*/
-//			
-//				//Habilita o cálculo do CRC para ser feito pelo módulo do CRC
-//				crc_enable <= 1'b1;
-//			
-//				//Armazena o bit recebido
-//				field_start_of_frame <= rx_bit;
-//				
-//				state <= START_OF_FRAME;
-//			end
-//			
-//		id_a:
-//			begin
-//				//Entrou no estado id_a:
-//				
-//				field_id_a <= {10'b0,rx_bit}; //Shift pra esquerda e rx_bit no lsb
-//				contador_id_a <= 4'd1;
-//			
-//				state <= id_a;
-//			end
-//			
-//		id_a:
-//			if (contador_id_a < 4'd11)
-//			begin
-//			
-//				field_id_a <= {field_id_a[10:0],rx_bit}; //Shift pra esquerda e rx_bit no LSB
-//				contador_id_a <= contador_id_a + 4'd1;
-//				
-//			end
-//			else
-//			begin
-//				//Entrou no estado RTR_SRR:
-//			
-//				contador_id_a <= 4'd0;
-//				rtr_srr_temp <= rx_bit;
-//				
-//				state <= RTR_SRR;
-//			end
-//		
-//		RTR_SRR:
-//			//Entrou no estado IDE:
-//			field_ide <= rx_bit;
-//			state <= IDE;
-//			
-//		IDE:
-//			if(field_ide == 1'b1)
-//			begin
-//				//Entrou do estado contador_id_b
-//			
-//				field_id_a <= {17'b0,rx_bit}; //Shift pra esquerda e rx_bit no lsb
-//				
-//				state <= id_b;
-//				contador_id_b <= 1;
-//			end
-//			else
-//			begin
-//				//
-//			
-//				state <= RESERVED_0;
-//			end
-//			
-//		id_b:
-//			if(contador_id_b < 5'd18)
-//			begin
-//				contador_id_b = contador_id_b + 1;
-//			end
-//			else
-//			begin
-//				state <= RTR;
-//			end
-//						
-//		RTR:
-//			state <= RESERVED_1;
-//			
-//		RESERVED_1:
-//			state <= RESERVED_0;
-//			
-//		RESERVED_0: 
-//			begin
-//				state <= DLC;
-//				contador_dlc = 3'd1;
-//			end
-//			
-//		DLC:
-//			if(contador_dlc < 3'd4)
-//			begin
-//				contador_dlc = contador_dlc + 1;
-//			end
-//			else
-//			begin
-//				state <= DATA;
-//				contador_data <= 1;
-//			end
-//			
-//		DATA:  
-//			if(contador_data < 8*field_dlc) // Talvez seja melhor usar deslocamento para esquerda 3x
-//			begin
-//				contador_data = contador_data + 1;
-//			end
-//			else
-//			begin
-//				crc_enable <= 1'b0;
-//			
-//				state <= CRC;
-//				contador_crc <= 1;
-//			end	
-//			
-//		CRC: 
-//			if(contador_crc < 4'd15)
-//			begin
-//				contador_crc <= contador_crc + 1;
-//			end
-//			else
-//			begin
-//				if (field_crc != calculated_crc)
-//				begin
-//						state <= ERROR; //Erro de CRC
-//				end
-//			
-//				state <= CRC_DELIMITER;
-//			end
-//			
-//		CRC_DELIMITER:
-//			state <= ACK_SLOT;
-//		ACK_SLOT:  	
-//			state <= ACK_DELIMITER;
-//		ACK_DELIMITER:
-//			begin
-//				state <= END_OF_FRAME;
-//				contador_eof <= 1;
-//			end
-//		END_OF_FRAME: 
-//			if(contador_eof < 3'd7)
-//			begin
-//				contador_eof = contador_eof + 1;
-//			end
-//			else
-//			begin
-//				state <= INTERFRAME;
-//				contador_interframe = 1;
-//			end
-//			
-//		INTERFRAME:  
-//			if(contador_interframe < 2'd3)
-//			begin
-//				contador_interframe = contador_interframe + 1;
-//			end
-//			else
-//			begin	
-//				state <= IDLE;
-//			end
-//			
-//		ERROR: /*TODO*/ 			
-//		;	
-//		default:/*TODO*/
-//			state <= IDLE;
-//		
-//	endcase
-//end
-//	
-///*	
-//always @(posedge clock)
-//begin
-//	case(state)
-//		IDLE: 
-//		
-//		START_OF_FRAME:
-//		
-//		id_a:
-//		
-//		RTR_SRR:
-//		
-//		IDE:
-//		
-//		id_b:
-//		
-//		RTR:
-//		
-//		RESERVED_1:
-//		
-//		RESERVED_0: 
-//		
-//		DLC:
-//		
-//		DATA:  
-//		
-//		CRC: 
-//		
-//		CRC_DELIMITER:
-//		
-//		ACK_SLOT:  	
-//		
-//		ACK_DELIMITER:
-//		
-//		END_OF_FRAME: 
-//		
-//		INTERFRAME:  
-//		
-//		ERROR:  		
-//			
-//		default:
-//		
-//	endcase
-//end	
-//	*/
 	
 endmodule	
 
