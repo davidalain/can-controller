@@ -17,11 +17,17 @@ module tester(
 output wire finish;
 
 //====================================================================
+//===================== Constantes ===================================
+//====================================================================
+
+parameter MAX_FRAME_LEN	= 256;
+
+//====================================================================
 //===================== Variáveis ====================================
 //====================================================================
 
 reg clk,rst,sample_point;
-reg [90:0] data_bits;
+reg [MAX_FRAME_LEN-1:0] data_bits;
 integer num_bits_to_send;
 integer bit_index_sent;
 integer clk2sample;
@@ -81,11 +87,14 @@ begin
 	/* ---------------------------------- */
 	/*     PREENCHER ESTAS VARIAVEIS      */
 	/* ---------------------------------- */
-	//OBS: Modificar tamanho máximo de data_bits, se necessário.
-	//data_bits <= 60'b010110101010101010000110010101001001010111100001010101010010101010;
-	//data_bits <= {'b0, 'b000010010100, 'b0, 'b001, 'b0001, 'b000001001, 'b111011101010011, 'b1, 'b0, 'b1, 'b1111111, 'b111};
-	data_bits <= 60'b110000010010100000100010000010011110111010100111011111111111; //https://en.wikipedia.org/wiki/File:CAN-Frame_mit_Pegeln_mit_Stuffbits.svg
-	num_bits_to_send <= 60;
+	
+	/** OBS: Modificar tamanho máximo de data_bits, se necessário. Atualmente é 256**/
+	
+	//data_bits <= 60'b110000010010100000100010000010011110111010100111011111111111;
+	data_bits <= 'b0110011100100001000101010101010101010101010101010101010101010101010101010101010101000001000010100011100000011111111;
+	num_bits_to_send <= 115;
+	
+	/** OBS: Modificar tamanho máximo de data_bits, se necessário. Atualmente é 256**/
 	
 	/* ---------------------------------- */
 	/* ---------------------------------- */
