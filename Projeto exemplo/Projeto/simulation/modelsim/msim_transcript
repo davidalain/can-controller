@@ -1,4 +1,4 @@
-# Reading C:/intelFPGA_lite/16.1/modelsim_ase/tcl/vsim/pref.tcl
+# Reading C:/intelFPGA/16.1/modelsim_ase/tcl/vsim/pref.tcl
 # ERROR: No extended dataflow license exists
 # do BitTimingCAN_run_msim_rtl_verilog.do
 # if {[file exists rtl_work]} {
@@ -8,49 +8,304 @@
 # vmap work rtl_work
 # Model Technology ModelSim - Intel FPGA Edition vmap 10.5b Lib Mapping Utility 2016.10 Oct  5 2016
 # vmap work rtl_work 
-# Copying C:/intelFPGA_lite/16.1/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
+# Copying C:/intelFPGA/16.1/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
 # Modifying modelsim.ini
 # 
-# vlog -vlog01compat -work work +incdir+C:/Users/luisf/Documents/can-controller/Projeto\ exemplo/Projeto {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_crc.v}
+# vlog -vlog01compat -work work +incdir+D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive\ Networking/CAN\ Controller\ -\ Projeto\ Automotive\ Networking/can-controller/Projeto\ exemplo/Projeto {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 00:30:34 on Jun 08,2017
-# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto" C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_crc.v 
+# Start time: 10:44:28 on Jun 08,2017
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto" D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v 
 # -- Compiling module can_crc
 # 
 # Top level modules:
 # 	can_crc
-# End time: 00:30:34 on Jun 08,2017, Elapsed time: 0:00:00
+# End time: 10:44:28 on Jun 08,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# vlog -vlog01compat -work work +incdir+C:/Users/luisf/Documents/can-controller/Projeto\ exemplo/Projeto {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v}
+# vlog -vlog01compat -work work +incdir+D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive\ Networking/CAN\ Controller\ -\ Projeto\ Automotive\ Networking/can-controller/Projeto\ exemplo/Projeto {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 00:30:35 on Jun 08,2017
-# vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto" C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v 
+# Start time: 10:44:28 on Jun 08,2017
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto" D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v 
 # -- Compiling module can_crc
 # -- Compiling module can_decoder
 # 
 # Top level modules:
 # 	can_decoder
-# End time: 00:30:35 on Jun 08,2017, Elapsed time: 0:00:00
+# End time: 10:44:28 on Jun 08,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
-# 
-vlog -reportprogress 300 -work work {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v}
+# vlog -vlog01compat -work work +incdir+D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive\ Networking/CAN\ Controller\ -\ Projeto\ Automotive\ Networking/can-controller/Projeto\ exemplo/Projeto {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/tester.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 00:30:43 on Jun 08,2017
-# vlog -reportprogress 300 -work work C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v 
+# Start time: 10:44:29 on Jun 08,2017
+# vlog -reportprogress 300 -vlog01compat -work work "+incdir+D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto" D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/tester.v 
 # -- Compiling module can_crc
 # -- Compiling module can_decoder
 # -- Compiling module tester
 # 
 # Top level modules:
 # 	tester
-# End time: 00:30:43 on Jun 08,2017, Elapsed time: 0:00:00
+# End time: 10:44:29 on Jun 08,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
+# 
 vsim work.tester
 # vsim work.tester 
-# Start time: 00:30:46 on Jun 08,2017
+# Start time: 10:44:37 on Jun 08,2017
 # Loading work.tester
 # Loading work.can_decoder
 # Loading work.can_crc
+vsim work.tester
+# End time: 10:44:52 on Jun 08,2017, Elapsed time: 0:00:15
+# Errors: 0, Warnings: 0
+# vsim work.tester 
+# Start time: 10:44:52 on Jun 08,2017
+# Loading work.tester
+# Loading work.can_decoder
+# Loading work.can_crc
+# WARNING: No extended dataflow license exists
+run
+run -all
+add wave -position end  sim:/tester/clk
+add wave -position end  sim:/tester/rst
+add wave -position end  sim:/tester/sample_point
+add wave -position end  sim:/tester/bit_index_sent
+add wave -position end  sim:/tester/rx_bit
+add wave -position end  sim:/tester/field_start_of_frame
+add wave -position end  sim:/tester/field_id_a
+add wave -position end  sim:/tester/field_ide
+add wave -position end  sim:/tester/field_rtr
+add wave -position end  sim:/tester/field_srr
+add wave -position end  sim:/tester/field_reserved1
+add wave -position end  sim:/tester/field_reserved0
+add wave -position end  sim:/tester/field_id_b
+add wave -position end  sim:/tester/field_dlc
+add wave -position end  sim:/tester/field_data
+add wave -position end  sim:/tester/field_crc
+add wave -position end  sim:/tester/field_crc_delimiter
+add wave -position end  sim:/tester/field_ack_slot
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: DavidAlain  Hostname: DAVIDALAIN-XPS  ProcessID: 6956
+#           Attempting to use alternate WLF file "./wlftvridmh".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftvridmh
+add wave -position 0  sim:/tester/i_can_decoder/reset
+add wave -position 4  sim:/tester/i_can_decoder/bit_de_stuffing
+add wave -position end  sim:/tester/i_can_decoder/contador_id_a
+add wave -position end  sim:/tester/i_can_decoder/contador_id_b
+add wave -position end  sim:/tester/i_can_decoder/contador_dlc
+add wave -position end  sim:/tester/i_can_decoder/contador_data
+add wave -position end  sim:/tester/i_can_decoder/contador_crc
+add wave -position end  sim:/tester/i_can_decoder/contador_eof
+add wave -position end  sim:/tester/i_can_decoder/contador_interframe
+restart -f
+run -all
+restart -f
+run 3000000
+add wave -position end  sim:/tester/i_can_decoder/state_idle
+add wave -position end  sim:/tester/i_can_decoder/state_id_a
+add wave -position end  sim:/tester/i_can_decoder/state_rtr_srr_temp
+add wave -position end  sim:/tester/i_can_decoder/state_ide
+add wave -position end  sim:/tester/i_can_decoder/state_id_b
+add wave -position end  sim:/tester/i_can_decoder/state_rtr
+add wave -position end  sim:/tester/i_can_decoder/state_reserved1
+add wave -position end  sim:/tester/i_can_decoder/state_reserved0
+add wave -position end  sim:/tester/i_can_decoder/state_dlc
+add wave -position end  sim:/tester/i_can_decoder/state_data
+add wave -position end  sim:/tester/i_can_decoder/state_crc
+add wave -position end  sim:/tester/i_can_decoder/state_crc_delimiter
+add wave -position end  sim:/tester/i_can_decoder/state_ack_slot
+add wave -position end  sim:/tester/i_can_decoder/state_ack_delimiter
+add wave -position end  sim:/tester/i_can_decoder/state_eof
+add wave -position end  sim:/tester/i_can_decoder/state_interframe
+add wave -position end  sim:/tester/i_can_decoder/state_error
+restart -f
+rn 3000000
+# invalid command name "rn"
+run 3000000
+add wave -position end  sim:/tester/i_can_decoder/calculated_crc
+restart -f
+run 3000000
+add wave -position end  sim:/tester/i_can_decoder/bit_error_srr
+add wave -position end  sim:/tester/i_can_decoder/bit_error_crc_delimiter
+add wave -position end  sim:/tester/i_can_decoder/bit_error_ack_slot
+add wave -position end  sim:/tester/i_can_decoder/bit_error_ack_delimiter
+add wave -position end  sim:/tester/i_can_decoder/bit_error_eof
+add wave -position end  sim:/tester/i_can_decoder/bit_error_interframe
+add wave -position end  sim:/tester/i_can_decoder/bit_crc_error
+add wave -position end  sim:/tester/i_can_decoder/bit_error_bit_stuffing
+restart -f
+run 3000000
+restart -f
+run -all
+restart -f
+restart -f
+run -all
+vlog -reportprogress 300 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 23:57:43 on Jun 08,2017
+# vlog -reportprogress 300 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v 
+# -- Compiling module can_crc
+# 
+# Top level modules:
+# 	can_crc
+# End time: 23:57:43 on Jun 08,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -reportprogress 300 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 23:57:44 on Jun 08,2017
+# vlog -reportprogress 300 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v 
+# -- Compiling module can_crc
+# -- Compiling module can_decoder
+# 
+# Top level modules:
+# 	can_decoder
+# End time: 23:57:44 on Jun 08,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -reportprogress 30 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/main_teste.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 23:57:45 on Jun 08,2017
+# vlog -reportprogress 30 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/main_teste.v 
+# -- Compiling module main_teste
+# ** Error: (vlog-13069) D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/main_teste.v(141): near "}": syntax error, unexpected '}'.
+# End time: 23:57:45 on Jun 08,2017, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+vlog -reportprogress 30 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/tester.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 23:57:45 on Jun 08,2017
+# vlog -reportprogress 30 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/tester.v 
+# -- Compiling module can_crc
+# -- Compiling module can_decoder
+# -- Compiling module tester
+# 
+# Top level modules:
+# 	tester
+# End time: 23:57:45 on Jun 08,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -reportprogress 300 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 23:57:51 on Jun 08,2017
+# vlog -reportprogress 300 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_crc.v 
+# -- Compiling module can_crc
+# 
+# Top level modules:
+# 	can_crc
+# End time: 23:57:51 on Jun 08,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -reportprogress 300 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 23:57:51 on Jun 08,2017
+# vlog -reportprogress 300 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/can_decoder.v 
+# -- Compiling module can_crc
+# -- Compiling module can_decoder
+# 
+# Top level modules:
+# 	can_decoder
+# End time: 23:57:51 on Jun 08,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vlog -reportprogress 30 -work work {D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/tester.v}
+# Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+# Start time: 23:57:52 on Jun 08,2017
+# vlog -reportprogress 30 -work work D:/Repositorio_de_Projetos/6-DOUTORADO/Automotive Networking/CAN Controller - Projeto Automotive Networking/can-controller/Projeto exemplo/Projeto/tester.v 
+# -- Compiling module can_crc
+# -- Compiling module can_decoder
+# -- Compiling module tester
+# 
+# Top level modules:
+# 	tester
+# End time: 23:57:52 on Jun 08,2017, Elapsed time: 0:00:00
+# Errors: 0, Warnings: 0
+vsim work.can_decoder work.tester
+# End time: 23:58:08 on Jun 08,2017, Elapsed time: 13:13:16
+# Errors: 2, Warnings: 3
+# vsim work.can_decoder work.tester 
+# Start time: 23:58:09 on Jun 08,2017
+# Loading work.can_decoder
+# Loading work.can_crc
+# Loading work.tester
+# WARNING: No extended dataflow license exists
+add wave -position end  sim:/can_decoder/rx_bit
+add wave -position end  sim:/can_decoder/sample_point
+add wave -position end  sim:/can_decoder/clock
+add wave -position end  sim:/can_decoder/bit_de_stuffing
+add wave -position end  sim:/can_decoder/field_start_of_frame
+add wave -position end  sim:/can_decoder/field_id_a
+add wave -position end  sim:/can_decoder/field_srr
+add wave -position end  sim:/can_decoder/field_ide
+add wave -position end  sim:/can_decoder/field_rtr
+add wave -position end  sim:/can_decoder/field_reserved1
+add wave -position end  sim:/can_decoder/field_reserved0
+add wave -position end  sim:/can_decoder/field_id_b
+add wave -position end  sim:/can_decoder/field_dlc
+add wave -position end  sim:/can_decoder/field_data
+add wave -position end  sim:/can_decoder/field_crc
+add wave -position end  sim:/can_decoder/field_crc_delimiter
+add wave -position end  sim:/can_decoder/field_ack_slot
+add wave -position end  sim:/can_decoder/rtr_srr_temp
+add wave -position end  sim:/can_decoder/calculated_crc
+add wave -position end  sim:/can_decoder/crc_enable
+add wave -position end  sim:/can_decoder/state_idle
+add wave -position end  sim:/can_decoder/state_id_a
+add wave -position end  sim:/can_decoder/state_rtr_srr_temp
+add wave -position end  sim:/can_decoder/state_ide
+add wave -position end  sim:/can_decoder/state_id_b
+add wave -position end  sim:/can_decoder/state_rtr
+add wave -position end  sim:/can_decoder/state_reserved1
+add wave -position end  sim:/can_decoder/state_reserved0
+add wave -position end  sim:/can_decoder/state_dlc
+add wave -position end  sim:/can_decoder/state_data
+add wave -position end  sim:/can_decoder/state_crc
+add wave -position end  sim:/can_decoder/state_crc_delimiter
+add wave -position end  sim:/can_decoder/state_ack_slot
+add wave -position end  sim:/can_decoder/state_ack_delimiter
+add wave -position end  sim:/can_decoder/state_eof
+add wave -position end  sim:/can_decoder/state_interframe
+add wave -position end  sim:/can_decoder/state_error_flags
+add wave -position end  sim:/can_decoder/state_error_delimiter
+add wave -position end  sim:/can_decoder/state_overload_flags
+add wave -position end  sim:/can_decoder/state_overload_delimiter
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: DavidAlain  Hostname: DAVIDALAIN-XPS  ProcessID: 6956
+#           Attempting to use alternate WLF file "./wlftr7rhcc".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftr7rhcc
+add wave -position end  sim:/can_decoder/go_state_idle
+add wave -position end  sim:/can_decoder/go_state_id_a
+add wave -position end  sim:/can_decoder/go_state_rtr_srr_temp
+add wave -position end  sim:/can_decoder/go_state_ide
+add wave -position end  sim:/can_decoder/go_state_id_b
+add wave -position end  sim:/can_decoder/go_state_rtr
+add wave -position end  sim:/can_decoder/go_state_reserved1
+add wave -position end  sim:/can_decoder/go_state_reserved0
+add wave -position end  sim:/can_decoder/go_state_dlc
+add wave -position end  sim:/can_decoder/go_state_data
+add wave -position end  sim:/can_decoder/go_state_crc
+add wave -position end  sim:/can_decoder/go_state_crc_delimiter
+add wave -position end  sim:/can_decoder/go_state_ack_slot
+add wave -position end  sim:/can_decoder/go_state_ack_delimiter
+add wave -position end  sim:/can_decoder/go_state_eof
+add wave -position end  sim:/can_decoder/go_state_interframe
+add wave -position end  sim:/can_decoder/go_state_error_flags
+add wave -position end  sim:/can_decoder/go_state_error_delimiter
+add wave -position end  sim:/can_decoder/go_state_overload_flags
+add wave -position end  sim:/can_decoder/go_state_overload_delimiter
+run -all
+run
+run -all
+vsim work.tester
+# End time: 00:02:14 on Jun 09,2017, Elapsed time: 0:04:05
+# Errors: 0, Warnings: 3
+# vsim work.tester 
+# Start time: 00:02:15 on Jun 09,2017
+# Loading work.tester
+# Loading work.can_decoder
+# Loading work.can_crc
+# WARNING: No extended dataflow license exists
+add wave -position end  sim:/tester/clk
+add wave -position end  sim:/tester/rst
+add wave -position end  sim:/tester/sample_point
+add wave -position end  sim:/tester/rx_bit
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: DavidAlain  Hostname: DAVIDALAIN-XPS  ProcessID: 6956
+#           Attempting to use alternate WLF file "./wlfttyxb93".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlfttyxb93
 add wave -position end  sim:/tester/i_can_decoder/rx_bit
 add wave -position end  sim:/tester/i_can_decoder/sample_point
 add wave -position end  sim:/tester/i_can_decoder/clock
@@ -59,7 +314,6 @@ add wave -position end  sim:/tester/i_can_decoder/error_in
 add wave -position end  sim:/tester/i_can_decoder/error_out
 add wave -position end  sim:/tester/i_can_decoder/last_rx_bits
 add wave -position end  sim:/tester/i_can_decoder/bit_de_stuffing
-add wave -position end  sim:/tester/i_can_decoder/busy
 add wave -position end  sim:/tester/i_can_decoder/contador_id_a
 add wave -position end  sim:/tester/i_can_decoder/contador_id_b
 add wave -position end  sim:/tester/i_can_decoder/contador_dlc
@@ -67,6 +321,8 @@ add wave -position end  sim:/tester/i_can_decoder/contador_data
 add wave -position end  sim:/tester/i_can_decoder/contador_crc
 add wave -position end  sim:/tester/i_can_decoder/contador_eof
 add wave -position end  sim:/tester/i_can_decoder/contador_interframe
+add wave -position end  sim:/tester/i_can_decoder/contador_flags
+add wave -position end  sim:/tester/i_can_decoder/contador_delimiter
 add wave -position end  sim:/tester/i_can_decoder/field_start_of_frame
 add wave -position end  sim:/tester/i_can_decoder/field_id_a
 add wave -position end  sim:/tester/i_can_decoder/field_srr
@@ -99,7 +355,10 @@ add wave -position end  sim:/tester/i_can_decoder/state_ack_slot
 add wave -position end  sim:/tester/i_can_decoder/state_ack_delimiter
 add wave -position end  sim:/tester/i_can_decoder/state_eof
 add wave -position end  sim:/tester/i_can_decoder/state_interframe
-add wave -position end  sim:/tester/i_can_decoder/state_error
+add wave -position end  sim:/tester/i_can_decoder/state_error_flags
+add wave -position end  sim:/tester/i_can_decoder/state_error_delimiter
+add wave -position end  sim:/tester/i_can_decoder/state_overload_flags
+add wave -position end  sim:/tester/i_can_decoder/state_overload_delimiter
 add wave -position end  sim:/tester/i_can_decoder/crc_initialize
 add wave -position end  sim:/tester/i_can_decoder/last_bit_interframe
 add wave -position end  sim:/tester/i_can_decoder/go_state_idle
@@ -118,7 +377,6 @@ add wave -position end  sim:/tester/i_can_decoder/go_state_ack_slot
 add wave -position end  sim:/tester/i_can_decoder/go_state_ack_delimiter
 add wave -position end  sim:/tester/i_can_decoder/go_state_eof
 add wave -position end  sim:/tester/i_can_decoder/go_state_interframe
-add wave -position end  sim:/tester/i_can_decoder/go_state_overload
 add wave -position end  sim:/tester/i_can_decoder/bit_error_srr
 add wave -position end  sim:/tester/i_can_decoder/bit_error_crc_delimiter
 add wave -position end  sim:/tester/i_can_decoder/bit_error_ack_slot
@@ -128,19 +386,8 @@ add wave -position end  sim:/tester/i_can_decoder/bit_error_interframe
 add wave -position end  sim:/tester/i_can_decoder/bit_crc_error
 add wave -position end  sim:/tester/i_can_decoder/enable_bitstuffing
 add wave -position end  sim:/tester/i_can_decoder/bit_error_bit_stuffing
-add wave -position end  sim:/tester/i_can_decoder/go_state_error
-# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
-#           File in use by: DavidAlain  Hostname: DAVIDALAIN-XPS  ProcessID: 6956
-#           Attempting to use alternate WLF file "./wlftggsafh".
-# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftggsafh
-add wave -position 18  sim:/tester/i_can_decoder/i_can_crc/clock
-add wave -position 19  sim:/tester/i_can_decoder/i_can_crc/data_in
-add wave -position 20  sim:/tester/i_can_decoder/i_can_crc/enable
-add wave -position 21  sim:/tester/i_can_decoder/i_can_crc/reset
-add wave -position 22  sim:/tester/i_can_decoder/i_can_crc/crc
-add wave -position 23  sim:/tester/i_can_decoder/i_can_crc/crc_next
-add wave -position 24  sim:/tester/i_can_decoder/i_can_crc/crc_tmp
-run 100000000
-# End time: 00:34:32 on Jun 08,2017, Elapsed time: 0:03:46
-# Errors: 0, Warnings: 2
+add wave -position end  sim:/tester/i_can_decoder/go_state_error_flags
+add wave -position end  sim:/tester/i_can_decoder/go_state_error_delimiter
+add wave -position end  sim:/tester/i_can_decoder/go_state_overload_flags
+add wave -position end  sim:/tester/i_can_decoder/go_state_overload_delimiter
+run -all

@@ -63,6 +63,10 @@ parameter len_crc			= 4'd15;
 parameter len_eof			= 3'd7;
 parameter len_interframe	= 2'd2; //De acordo com a especificação são 3 bits recessivos. Mas na prática pode acontecer a transmissão de frames em sequência em que o terceiro bit do Intermission já pode ser o Start of Frame do próximo frame, então são 2. Vide documento can2spec.pdf, seção 9.1, item 2.
 
+parameter len_flags_min 	= 4'd6;
+parameter len_flags_max 	= 4'd12;
+parameter len_delimiter 	= 4'd8;
+
 //====================================================================
 //===================== Variáveis ====================================
 //====================================================================
@@ -72,8 +76,6 @@ parameter len_interframe	= 2'd2; //De acordo com a especificação são 3 bits r
 reg[4:0]	last_rx_bits; 		//Usado para verificação do bit stuffing (5 bits).
 wire		bit_de_stuffing;	//Flag que indica se o bit recebido atual é um bit stuffing
 
-reg			busy;				//Flag que indica se o controlador está ocupado processando algo e não tem tempo de receber/enviar nos frames. Usada na condição do Overload Frame.
-
 /** Contador dos bits já recebidos nos estados relacionados **/
 reg[3:0] 	contador_id_a;		
 reg[4:0] 	contador_id_b;
@@ -82,6 +84,9 @@ reg[5:0]	contador_data;
 reg[3:0]	contador_crc;
 reg[2:0]	contador_eof;
 reg[1:0]	contador_interframe; //CHECK: Dois bits ou três bits.
+
+reg[3:0]	contador_flags;
+reg[3:0]	contador_delimiter;
 
 //== Campos do frame ==
 
@@ -122,7 +127,11 @@ reg 	state_ack_delimiter;
 reg 	state_eof;
 reg 	state_interframe;
 
-reg		state_error;
+reg		state_error_flags;
+reg		state_error_delimiter;
+
+reg		state_overload_flags;
+reg		state_overload_delimiter;
 
 //== Módulo CRC ==
 
@@ -143,44 +152,58 @@ can_crc i_can_crc
 //== Lógica combinacional para gerenciamento da máquina de estados ===
 //====================================================================
 
-assign	last_bit_interframe		= 	state_interframe	& (contador_interframe == len_interframe -1);
+assign	last_bit_interframe			= 	state_interframe	& (contador_interframe == len_interframe -1);
+	
+assign 	go_state_idle				= 	(sample_point	& rx_bit 	& last_bit_interframe) | reset;
+assign 	go_state_id_a				= 	sample_point	& ~rx_bit	& (state_idle 			| last_bit_interframe);
+assign 	go_state_rtr_srr_temp		= 	sample_point				& state_id_a  			& (contador_id_a == len_id_a - 1);
+assign 	go_state_ide				=	sample_point				& state_rtr_srr_temp;
+assign 	go_state_id_b				=	sample_point	& rx_bit	& state_ide;
+assign 	go_state_rtr				=	sample_point				& state_id_b			& (contador_id_b == len_id_b -1);
+assign 	go_state_reserved1			=	sample_point				& state_rtr;
+assign 	go_state_reserved0			=	sample_point				& ( state_reserved1 | (~rx_bit & state_ide));
+assign 	go_state_dlc				=	sample_point				& state_reserved0;
+assign 	go_state_data				=	sample_point				& state_dlc				& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} != 0);
+assign 	go_state_crc				=	sample_point				& 
+																					((state_dlc	&	(((contador_dlc == len_dlc -1) & ({field_dlc[2:0],rx_bit} == 0)) | field_rtr)) | 
+																					(state_data		& ((contador_data == (8 * field_dlc)-1))));
+assign 	go_state_crc_delimiter		=	sample_point				& state_crc				& (contador_crc == len_crc -1);
+assign 	go_state_ack_slot			=	sample_point	& rx_bit	& state_crc_delimiter;
+assign 	go_state_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_slot;
+assign 	go_state_eof				=	sample_point	& rx_bit	& state_ack_delimiter;
+assign 	go_state_interframe			=	sample_point				& state_eof				& (contador_eof == len_eof-1);
+	
+assign	bit_error_srr				=	sample_point	& rx_bit	& state_ide				& ~rtr_srr_temp;
+assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit	& state_crc_delimiter;
+assign	bit_error_ack_slot			=	sample_point	& rx_bit	& state_ack_slot;
+assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_delimiter;
+assign	bit_error_eof				=	sample_point	& ~rx_bit	& state_eof;
+assign	bit_error_interframe		=	sample_point	& ~rx_bit	& state_interframe;
+assign	bit_crc_error				= 	sample_point				& state_crc_delimiter 	& (calculated_crc != field_crc);
+	
+assign	enable_bitstuffing			=	state_id_a | state_rtr_srr_temp | state_ide | state_id_b | 
+										state_rtr | state_reserved1 | state_reserved0 | state_dlc | 
+										state_data | state_crc;
+assign	bit_de_stuffing				=	enable_bitstuffing & ((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit);
 
-assign 	go_state_idle			= 	(sample_point	& rx_bit 	& last_bit_interframe) | reset;
-assign 	go_state_id_a			= 	sample_point	& ~rx_bit	& (state_idle 			| last_bit_interframe);
-assign 	go_state_rtr_srr_temp	= 	sample_point				& state_id_a  			& (contador_id_a == len_id_a - 1);
-assign 	go_state_ide			=	sample_point				& state_rtr_srr_temp;
-assign 	go_state_id_b			=	sample_point	& rx_bit	& state_ide;
-assign 	go_state_rtr			=	sample_point				& state_id_b			& (contador_id_b == len_id_b -1);
-assign 	go_state_reserved1		=	sample_point				& state_rtr;
-assign 	go_state_reserved0		=	sample_point				& ( state_reserved1 | (~rx_bit & state_ide));
-assign 	go_state_dlc			=	sample_point				& state_reserved0;
-assign 	go_state_data			=	sample_point				& state_dlc				& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} != 0);
-assign 	go_state_crc			=	sample_point				& 
-																				((state_dlc	&	(((contador_dlc == len_dlc -1) & ({field_dlc[2:0],rx_bit} == 0)) | field_rtr)) | 
-																				(state_data		& ((contador_data == (8 * field_dlc)-1))));
-assign 	go_state_crc_delimiter	=	sample_point				& state_crc				& (contador_crc == len_crc -1);
-assign 	go_state_ack_slot		=	sample_point	& rx_bit	& state_crc_delimiter;
-assign 	go_state_ack_delimiter	=	sample_point	& ~rx_bit	& state_ack_slot;
-assign 	go_state_eof			=	sample_point	& rx_bit	& state_ack_delimiter;
-assign 	go_state_interframe		=	sample_point				& state_eof				& (contador_eof == len_eof-1);
-assign	go_state_overload		=	sample_point				& state_interframe 		& last_bit_interframe	& 	busy;
+assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
 
-assign	bit_error_srr			=	sample_point	& rx_bit	& state_ide				& ~rtr_srr_temp;
-assign	bit_error_crc_delimiter	=	sample_point	& ~rx_bit	& state_crc_delimiter;
-assign	bit_error_ack_slot		=	sample_point	& rx_bit	& state_ack_slot;
-assign	bit_error_ack_delimiter	=	sample_point	& ~rx_bit	& state_ack_delimiter;
-assign	bit_error_eof			=	sample_point	& ~rx_bit	& state_eof;
-assign	bit_error_interframe	=	sample_point	& ~rx_bit	& state_interframe;
-assign	bit_crc_error			= 	sample_point				& state_crc_delimiter 	& (calculated_crc != field_crc);
+assign	go_state_error_flags 		=	bit_error_srr | bit_error_crc_delimiter | bit_error_ack_slot |
+										bit_error_ack_delimiter | bit_error_eof | bit_error_interframe |
+										bit_error_bit_stuffing | bit_crc_error;
+								
+assign	go_state_error_delimiter	=	sample_point	& rx_bit	& state_error_flags		& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
 
-assign	enable_bitstuffing	=	(state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr | state_reserved1 | state_reserved0 | state_dlc | state_data | state_crc );
-assign	bit_de_stuffing		=	enable_bitstuffing & ((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit);
+assign	go_state_overload_flags		=	sample_point	& ~rx_bit	& 
+												((state_eof & contador_eof == len_eof-1) |
+												(state_error_delimiter & contador_delimiter == len_delimiter-1) |
+												(state_interframe & contador_interframe < len_interframe) |
+												(state_overload_delimiter & contador_delimiter==len_delimiter-1));
 
-assign	bit_error_bit_stuffing	= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
+assign	go_state_overload_delimiter	=	sample_point	& rx_bit	& state_overload_flags	& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
 
-assign	go_state_error 		=	bit_error_srr | bit_error_crc_delimiter | bit_error_ack_slot |
-								bit_error_ack_delimiter | bit_error_eof | bit_error_interframe |
-								bit_error_bit_stuffing | bit_crc_error;
+
+
 
 assign	crc_initialize		=	//fixme - testarei com outros valores go_state_idle | (state_interframe && contador_interframe == len_interframe -1);
 												state_idle
@@ -221,7 +244,7 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
   ;
-else if (state_error)
+else if (state_error_flags)
 
 	//Casos dos erros de forma
 	if(bit_error_srr)			$display("Erro de SRR");
@@ -237,13 +260,48 @@ end
 //===================== Gerenciamento dos estados ====================
 //====================================================================
 
-// Estado error (quando for detectado algum erro no frame durante o processo de decodificação)
+// Estado Error Flags (quando for detectado algum erro no frame durante o processo de decodificação)
 always @(posedge clock or posedge reset)
 begin
 if(reset)
-	state_error <= 1'b0;
-else if(go_state_error)
-	state_error <= 1'b1; //Vai para o estado!
+	state_error_flags <= 1'b0;
+else if(go_state_error_delimiter)  //Sai do estado se a flag do próximo estiver ativa!
+	state_error_flags <= 1'b0;	
+else if(go_state_error_flags)
+	state_error_flags <= 1'b1; //Entra no estado!
+end
+
+// Estado Error Delimiter
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_error_delimiter <= 1'b0;
+else if(go_state_idle | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
+	state_error_delimiter <= 1'b0;
+else if(go_state_error_delimiter)
+	state_error_delimiter <= 1'b1; //Entra no estado!
+end
+
+// Estado Overload Flags
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_overload_flags <= 1'b0;
+else if(go_state_overload_delimiter)  //Sai do estado se a flag do próximo estiver ativa!
+	state_overload_flags <= 1'b0;
+else if(go_state_overload_flags)
+	state_overload_flags <= 1'b1; //Entra no estado!
+end
+
+// Estado Overload Delimiter
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	state_overload_delimiter <= 1'b0;
+else if(go_state_idle | go_state_overload_flags) //Sai do estado se a flag do próximo estiver ativa!
+	state_overload_delimiter <= 1'b0;
+else if(go_state_overload_delimiter)
+	state_overload_delimiter <= 1'b1; //Entra no estado!
 end
 
 // Estado idle (start of frame)
@@ -251,10 +309,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_idle <= 1'b1;
-else if(go_state_id_a | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_id_a | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_idle <= 1'b0;
 else if(go_state_idle)
-	state_idle <= 1'b1; //Vai para o estado!
+	state_idle <= 1'b1; //Entra no estado!
 end
 
 // Estado id_a
@@ -262,10 +320,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_id_a <= 1'b0;
-else if(go_state_rtr_srr_temp | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_rtr_srr_temp | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_id_a <= 1'b0;
 else if(go_state_id_a)
-	state_id_a <= 1'b1; //Vai para o estado!
+	state_id_a <= 1'b1; //Entra no estado!
 end
 
 // Estado rtr_srr_temp
@@ -273,10 +331,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_rtr_srr_temp <= 1'b0;
-else if(go_state_ide | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_ide | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_rtr_srr_temp <= 1'b0;
 else if(go_state_rtr_srr_temp)
-	state_rtr_srr_temp <= 1'b1; //Vai para o estado!
+	state_rtr_srr_temp <= 1'b1; //Entra no estado!
 end
 
 
@@ -285,10 +343,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_ide <= 1'b0;
-else if(go_state_id_b | go_state_reserved0 | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_id_b | go_state_reserved0 | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_ide <= 1'b0;
 else if(go_state_ide)
-	state_ide <= 1'b1; //Vai para o estado!
+	state_ide <= 1'b1; //Entra no estado!
 end
 
 // Estado id_b
@@ -296,10 +354,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_id_b <= 1'b0;
-else if(go_state_rtr | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_rtr | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_id_b <= 1'b0;
 else if(go_state_id_b)
-	state_id_b <= 1'b1; //Vai para o estado!
+	state_id_b <= 1'b1; //Entra no estado!
 end
 
 
@@ -308,10 +366,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_rtr <= 1'b0;
-else if(go_state_reserved1 | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_reserved1 | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_rtr <= 1'b0;
 else if(go_state_rtr)
-	state_rtr <= 1'b1; //Vai para o estado!
+	state_rtr <= 1'b1; //Entra no estado!
 end
 
 // Estado reserved1
@@ -319,10 +377,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_reserved1 <= 1'b0;
-else if(go_state_reserved0 | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_reserved0 | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_reserved1 <= 1'b0;
 else if(go_state_reserved1)
-	state_reserved1 <= 1'b1; //Vai para o estado!
+	state_reserved1 <= 1'b1; //Entra no estado!
 end
 
 // Estado reserved0
@@ -330,10 +388,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_reserved0 <= 1'b0;
-else if(go_state_dlc | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_dlc | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_reserved0 <= 1'b0;
 else if(go_state_reserved0)
-	state_reserved0 <= 1'b1; //Vai para o estado!
+	state_reserved0 <= 1'b1; //Entra no estado!
 end
 
 
@@ -342,10 +400,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_dlc <= 1'b0;
-else if(go_state_data | go_state_crc | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_data | go_state_crc | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_dlc <= 1'b0;
 else if(go_state_dlc)
-	state_dlc <= 1'b1; //Vai para o estado!
+	state_dlc <= 1'b1; //Entra no estado!
 end
 
 // Estado data
@@ -353,10 +411,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_data <= 1'b0;
-else if(go_state_crc | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_crc | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_data <= 1'b0;
 else if(go_state_data)
-	state_data <= 1'b1; //Vai para o estado!
+	state_data <= 1'b1; //Entra no estado!
 end
 
 // Estado crc
@@ -364,10 +422,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_crc <= 1'b0;
-else if(go_state_crc_delimiter | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_crc_delimiter | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_crc <= 1'b0;
 else if(go_state_crc)
-	state_crc <= 1'b1; //Vai para o estado!
+	state_crc <= 1'b1; //Entra no estado!
 end
 
 // Estado crc_delimiter
@@ -375,10 +433,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_crc_delimiter <= 1'b0;
-else if(go_state_ack_slot | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_ack_slot | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_crc_delimiter <= 1'b0;
 else if(go_state_crc_delimiter)
-	state_crc_delimiter <= 1'b1; //Vai para o estado!
+	state_crc_delimiter <= 1'b1; //Entra no estado!
 end
 
 // Estado ACK slot
@@ -386,10 +444,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_ack_slot <= 1'b0;
-else if(go_state_ack_delimiter | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_ack_delimiter | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_ack_slot <= 1'b0;
 else if(go_state_ack_slot)
-	state_ack_slot <= 1'b1; //Vai para o estado!
+	state_ack_slot <= 1'b1; //Entra no estado!
 end
 
 // Estado ACK delimiter
@@ -397,10 +455,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_ack_delimiter <= 1'b0;
-else if(go_state_eof | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_eof | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_ack_delimiter <= 1'b0;
 else if(go_state_ack_delimiter)
-	state_ack_delimiter <= 1'b1; //Vai para o estado!
+	state_ack_delimiter <= 1'b1; //Entra no estado!
 end
 
 
@@ -409,10 +467,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_eof <= 1'b0;
-else if(go_state_eof | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_eof | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_eof <= 1'b0;
 else if(go_state_eof)
-	state_eof <= 1'b1; //Vai para o estado!
+	state_eof <= 1'b1; //Entra no estado!
 end
 
 
@@ -421,10 +479,10 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_interframe <= 1'b0;
-else if(go_state_idle | go_state_id_a  | go_state_error) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_idle | go_state_id_a  | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_interframe <= 1'b0;
 else if(go_state_interframe)
-	state_interframe <= 1'b1; //Vai para o estado!
+	state_interframe <= 1'b1; //Entra no estado!
 end
 
 //====================================================================
@@ -433,6 +491,46 @@ end
 /* TODO - Zerar os contadores em um else final, ou seja, manter sempre zero quando não está contando*/
 /* Preencher field_start_of_frame e field_crc_delimiter*/
 /* Criar Campo ack_delimiter */
+
+// ========== Campos sem bit stuffing =============
+
+// Campo Error Flags
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	contador_flags <= 4'b0;
+else if(sample_point & state_error_flags)
+	contador_flags <= contador_flags + 4'd1;
+end
+
+// Campo Error Delimiter
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	contador_delimiter <= 4'b0;
+else if(sample_point & state_error_delimiter)
+	contador_delimiter <= contador_delimiter + 4'd1;
+end
+
+// Campo Overload Flags
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	contador_flags <= 4'b0;
+else if(sample_point & state_overload_flags)
+	contador_flags <= contador_flags + 1;
+end
+
+// Campo Overload Delimiter
+always @(posedge clock or posedge reset)
+begin
+if(reset)
+	contador_delimiter <= 4'b0;
+else if(sample_point & state_overload_delimiter)
+	contador_delimiter <= contador_delimiter + 1;
+end
+
+// ========== Campos com bit stuffing =============
 
 // Campo id_a
 always @ (posedge clock or posedge reset)
