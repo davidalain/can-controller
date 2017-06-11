@@ -516,6 +516,8 @@ else if(sample_point & state_error_flags)
 	contador_flags <= contador_flags + 4'd1;
 else if(sample_point & state_overload_flags)
 	contador_flags <= contador_flags + 1;
+else if(sample_point)
+	contador_flags <= 0;
 end
 
 
@@ -528,6 +530,8 @@ else if(sample_point & state_error_delimiter)
 	contador_delimiter <= contador_delimiter + 4'd1;
 else if(sample_point & state_overload_delimiter)
 	contador_delimiter <= contador_delimiter + 1;
+else if (sample_point)
+	contador_delimiter <= 0;
 end
 
 //// Campo Overload Flags
@@ -557,6 +561,39 @@ else if (sample_point & state_idle & ~rx_bit)
 	field_start_of_frame <= 1'b0;
 end
 
+
+// Campo ACK
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+    field_ack_slot <= 1'b0;
+  else if (sample_point & state_ack_slot)
+    field_ack_slot <= rx_bit;
+end
+
+// Campo EOF
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+	contador_eof <= 0;
+  else if (sample_point & state_eof)
+    contador_eof <= contador_eof + 1;
+  else if (sample_point)
+    contador_eof <= 0;
+end
+
+// Campo intermission
+always @ (posedge clock or posedge reset)
+begin
+  if (reset)
+	contador_interframe <= 0;
+  else if (sample_point & state_interframe )
+    contador_interframe <= contador_interframe + 1;
+  else if (sample_point)
+    contador_interframe <= 0;
+end
+
+
 // ========== Campos com bit stuffing =============
 
 // Campo id_a
@@ -572,6 +609,8 @@ begin
 	field_id_a <= {field_id_a[9:0], rx_bit};
 	contador_id_a <= contador_id_a + 1;
 end
+else if (sample_point & ~state_id_a)
+	contador_id_a <= 4'd0;
 end
 
 
@@ -610,6 +649,8 @@ begin
 	field_id_b <= {field_id_b[16:0], rx_bit};
 	contador_id_b <= contador_id_b + 1;
 end
+else if (sample_point & ~state_id_b)
+	contador_id_b <= 5'd0;
 end
 
 // Campo rtr bit
@@ -656,6 +697,8 @@ begin
     field_dlc <= (field_dlc[2] == 0) ? ({field_dlc[2:0], rx_bit}) : ({field_dlc[2:0], rx_bit} & 4'b1000);
     contador_dlc <= contador_dlc + 1;
   end
+  else if (sample_point & ~state_dlc)
+	contador_dlc <= 3'd0;
 end
 
 
@@ -672,6 +715,8 @@ begin
     field_data <= {field_data[62:0], rx_bit};
 	contador_data <= contador_data + 1;
   end
+  else if (sample_point & ~state_data)
+	contador_data <= 6'd0;
 end
 
 // Campo CRC
@@ -687,35 +732,10 @@ begin
     field_crc <= {field_crc[13:0], rx_bit};
 	contador_crc <= contador_crc + 1;
   end
+  else if (sample_point & ~state_crc)
+	contador_crc <= 0;
 end
 
-
-// Campo ACK
-always @ (posedge clock or posedge reset)
-begin
-  if (reset)
-    field_ack_slot <= 1'b0;
-  else if (sample_point & state_ack_slot & (~bit_de_stuffing))
-    field_ack_slot <= rx_bit;
-end
-
-// Campo EOF
-always @ (posedge clock or posedge reset)
-begin
-  if (reset)
-	contador_eof <= 0;
-  else if (sample_point & state_eof & (~bit_de_stuffing))
-    contador_eof <= contador_eof + 1;
-end
-
-// Campo intermission
-always @ (posedge clock or posedge reset)
-begin
-  if (reset)
-	contador_interframe <= 0;
-  else if (sample_point & state_interframe & (~bit_de_stuffing))
-    contador_interframe <= contador_interframe + 1;
-end
 
 	
 endmodule	

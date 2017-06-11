@@ -13,28 +13,28 @@
 # 
 # vlog -vlog01compat -work work +incdir+C:/Users/luisf/Documents/can-controller/Projeto\ exemplo/Projeto {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_crc.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 16:50:08 on Jun 09,2017
+# Start time: 21:52:40 on Jun 10,2017
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto" C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_crc.v 
 # -- Compiling module can_crc
 # 
 # Top level modules:
 # 	can_crc
-# End time: 16:50:08 on Jun 09,2017, Elapsed time: 0:00:00
+# End time: 21:52:40 on Jun 10,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work work +incdir+C:/Users/luisf/Documents/can-controller/Projeto\ exemplo/Projeto {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 16:50:09 on Jun 09,2017
+# Start time: 21:52:40 on Jun 10,2017
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto" C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/can_decoder.v 
 # -- Compiling module can_crc
 # -- Compiling module can_decoder
 # 
 # Top level modules:
 # 	can_decoder
-# End time: 16:50:09 on Jun 09,2017, Elapsed time: 0:00:00
+# End time: 21:52:40 on Jun 10,2017, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 0
 # vlog -vlog01compat -work work +incdir+C:/Users/luisf/Documents/can-controller/Projeto\ exemplo/Projeto {C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v}
 # Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
-# Start time: 16:50:09 on Jun 09,2017
+# Start time: 21:52:40 on Jun 10,2017
 # vlog -reportprogress 300 -vlog01compat -work work "+incdir+C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto" C:/Users/luisf/Documents/can-controller/Projeto exemplo/Projeto/tester.v 
 # -- Compiling module can_crc
 # -- Compiling module can_decoder
@@ -42,40 +42,27 @@
 # 
 # Top level modules:
 # 	tester
-# End time: 16:50:09 on Jun 09,2017, Elapsed time: 0:00:00
+# End time: 21:52:41 on Jun 10,2017, Elapsed time: 0:00:01
 # Errors: 0, Warnings: 0
 # 
 vsim work.tester
 # vsim work.tester 
-# Start time: 16:50:15 on Jun 09,2017
+# Start time: 21:52:44 on Jun 10,2017
 # Loading work.tester
 # Loading work.can_decoder
 # Loading work.can_crc
-# **** Error: LoadCompleteQ cmd: QObjects::LoadCompleted .main_pane.objects sim
-# ****        Bad sequence in.main_pane.objects.interior.cs.body.tree.lwchildsite.clipper.canvas.sfchildsite.tree, aborting query. (1)
-# Bad sequence in.main_pane.objects.interior.cs.body.tree.lwchildsite.clipper.canvas.sfchildsite.tree, aborting query. (1)
-#     while executing
-# "$itk_component(tree) insertquery end """
-#     (object "::.main_pane.objects.interior.cs.body.tree" method "::vsimwidgets::Hierarchy::requery" body line 3)
-#     invoked from within
-# "$winName requery"
-#     (procedure "ObjectsTreeView::setSignalsShowArraySize" line 7)
-#     invoked from within
-# "ObjectsTreeView::setSignalsShowArraySize $tree"
-#     (procedure "QObjects::LoadCompleted" line 5)
-#     invoked from within
-# "QObjects::LoadCompleted .main_pane.objects sim"
-#     ("eval" body line 1)
-#     invoked from within
-# "eval $p $tankNamespace "
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: DavidAlain  Hostname: DAVIDALAIN-XPS  ProcessID: 6956
-#           Attempting to use alternate WLF file "./wlft271dv1".
+#           Attempting to use alternate WLF file "./wlft60qgwz".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlft271dv1
+#           Using alternate file: ./wlft60qgwz
 run 100000
-run 1000000
-run 1000000
 run 10000000
-# End time: 16:51:47 on Jun 09,2017, Elapsed time: 0:01:32
-# Errors: 1, Warnings: 2
+run 10000000
+run 10000000
+run 10000000
+run 10000000
+run 10000000
+run 10000000
+# End time: 22:04:52 on Jun 10,2017, Elapsed time: 0:12:08
+# Errors: 0, Warnings: 2
