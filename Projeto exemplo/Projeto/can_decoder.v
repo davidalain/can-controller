@@ -18,9 +18,6 @@ module can_decoder(
 
 	rx_bit,  		// Sinal com o bit lido no barramento
 	sample_point,  	// Indica quando o bit deve ser lido (na transicao deste sinal de 0 para 1)
-
-	error_in,		// Sinal de erro (O modulo pode ser avisado por outros que houve um erro)
-	error_out,		// Sinal de erro (O modulo pode avisar aos outros que houve um erro)
 	
 	// Deixar os campos como saida do modulo para ver a saída nos testes
 	
@@ -36,7 +33,8 @@ module can_decoder(
 	field_data,
 	field_crc,
 	field_crc_delimiter,
-	field_ack_slot
+	field_ack_slot,
+	field_ack_delimiter
 );
 
 
@@ -46,11 +44,6 @@ input wire	sample_point;
 
 input wire clock;
 input wire reset;
-
-input wire error_in;
-
-// == Output pins/ports == 
-output wire error_out;
 
 //====================================================================
 //===================== Constantes ===================================
@@ -103,6 +96,7 @@ output	reg[63:0]	field_data;
 output	reg[14:0]	field_crc;
 output	reg			field_crc_delimiter;
 output	reg			field_ack_slot;
+output	reg 		field_ack_delimiter;
 
 reg			rtr_srr_temp;
 wire[14:0]	calculated_crc;
@@ -198,9 +192,14 @@ assign	bit_de_stuffing				=	enable_bitstuffing	& ((last_rx_bits == 5'h00) & rx_b
 
 assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
 
-assign	go_state_error_flags 		=	bit_error_srr | bit_error_crc_delimiter | bit_error_ack_slot |
-										bit_error_ack_delimiter | bit_error_eof | bit_error_interframe |
-										bit_error_bit_stuffing | bit_crc_error;
+assign	go_state_error_flags 		=	bit_error_srr |
+										bit_error_crc_delimiter | 
+										bit_error_ack_slot |
+										bit_error_ack_delimiter | 
+										bit_error_eof | 
+										bit_error_interframe |
+										bit_error_bit_stuffing | 
+										bit_crc_error;
 								
 assign	go_state_error_delimiter	=	sample_point	& rx_bit	& state_error_flags		& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
 
@@ -212,25 +211,17 @@ assign	go_state_overload_flags		=	sample_point	& ~rx_bit	&
 
 assign	go_state_overload_delimiter	=	sample_point	& rx_bit	& state_overload_flags	& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
 
-
-
-
 assign	crc_initialize		=	go_state_idle;
-								//fixme - testarei com outros valores go_state_idle | (state_interframe && contador_interframe == len_interframe-1);
-								//				state_idle
-								//				| state_interframe;
-assign	crc_enable			=	// fixme - Testarei com outros valores  state_id_a | state_rtr_srr_temp | state_ide | state_id_b | state_rtr |  (state_interframe & last_bit_interframe) 
-												state_id_a 				
-												| state_rtr_srr_temp 
-												| state_ide 
-												| state_id_b 
-												| state_rtr 
-												| state_reserved1
-												| state_reserved0
-												| state_dlc
-												| state_data;
-											
 
+assign	crc_enable			=	state_id_a |
+								state_rtr_srr_temp |
+								state_ide |
+								state_id_b |
+								state_rtr |
+								state_reserved1 |
+								state_reserved0 |
+								state_dlc |
+								state_data;
 
 //====================================================================
 //===================== Gerenciamento do bit stuffing ================
@@ -499,15 +490,12 @@ end
 //====================================================================
 //============= Preenchimento dos campos do frame ====================
 //====================================================================
-/* TODO - Zerar os contadores em um else final, ou seja, manter sempre zero quando não está contando*/
-/* Preencher field_start_of_frame e field_crc_delimiter*/
-/* Criar Campo ack_delimiter */
 
 // ========== Campos sem bit stuffing =============
 
 // Para ser sintetizavel, uma "variavel" só pode estar presente em um always
 
-// Campo Error Flags
+// Campo Error Flags & Overload Flags
 always @(posedge clock or posedge reset)
 begin
 if(reset)
@@ -515,13 +503,13 @@ if(reset)
 else if(sample_point & state_error_flags)
 	contador_flags <= contador_flags + 4'd1;
 else if(sample_point & state_overload_flags)
-	contador_flags <= contador_flags + 1;
+	contador_flags <= contador_flags + 4'd1;
 else if(sample_point)
-	contador_flags <= 0;
+	contador_flags <= 4'd0;
 end
 
 
-// Campo Error Delimiter
+// Campo Error Delimiter & Overload Delimiter
 always @(posedge clock or posedge reset)
 begin
 if(reset)
@@ -529,28 +517,11 @@ if(reset)
 else if(sample_point & state_error_delimiter)
 	contador_delimiter <= contador_delimiter + 4'd1;
 else if(sample_point & state_overload_delimiter)
-	contador_delimiter <= contador_delimiter + 1;
+	contador_delimiter <= contador_delimiter + 4'd1;
 else if (sample_point)
-	contador_delimiter <= 0;
+	contador_delimiter <= 4'd0;
 end
 
-//// Campo Overload Flags
-//always @(posedge clock or posedge reset)
-//begin
-//if(reset)
-//	contador_flags <= 4'b0;
-//else if(sample_point & state_overload_flags)
-//	contador_flags <= contador_flags + 1;
-//end
-
-// Campo Overload Delimiter
-//always @(posedge clock or posedge reset)
-//begin
-//if(reset)
-//	contador_delimiter <= 4'b0;
-//else if(sample_point & state_overload_delimiter)
-//	contador_delimiter <= contador_delimiter + 1;
-//end
 
 // Campo Start of Frame
 always @ (posedge clock or posedge reset)
@@ -559,6 +530,24 @@ if (reset)
 	field_start_of_frame <= 1'bx;
 else if (sample_point & state_idle & ~rx_bit)
 	field_start_of_frame <= 1'b0;
+end
+
+// Campo Ack Delimiter
+always @ (posedge clock or posedge reset)
+begin
+if (reset)
+	field_ack_delimiter <= 1'bx;
+else if (sample_point & state_ack_delimiter)
+	field_ack_delimiter <= rx_bit;
+end
+
+// Campo CRC delimiter
+always @ (posedge clock or posedge reset)
+begin
+if (reset)
+	field_crc_delimiter <= 1'bx;
+else if (sample_point & state_crc_delimiter)
+	field_crc_delimiter <= rx_bit;
 end
 
 
