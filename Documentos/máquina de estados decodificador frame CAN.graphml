@@ -350,7 +350,7 @@ delimiter<y:LabelModel>
           <y:Geometry height="97.45513944223114" width="103.52572430278872" x="-657.0450247011927" y="877.6422862576352"/>
           <y:Fill color="#99CCFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="38.693359375" x="32.416182463894415" y="32.02639784611563">End of
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="38.693359375" x="32.4161824638943" y="32.02639784611563">End of
 frame<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -368,8 +368,7 @@ frame<y:LabelModel>
           <y:Geometry height="97.45513944223109" width="103.52572430278872" x="-461.5212855245668" y="42.61461499070376"/>
           <y:Fill color="#FF00FF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="58.685546875" x="22.42008871389436" y="32.02639784611554">Interframe
-Spacing<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="68.6875" x="17.41911215139436" y="39.37698378361554">Intermission<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -461,7 +460,7 @@ if(dlc &gt; 8) dlc = 8;<y:LabelModel>
           <y:Geometry height="45.155200000000036" width="196.71120000000008" x="394.44937476759605" y="7.712347792828552"/>
           <y:Fill color="#CCFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="142.05859375" x="27.326303125000095" y="5.876428125000018">RTR, se Frame base
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="142.05859375" x="27.326303125000038" y="5.876428125000018">RTR, se Frame base
 SRR, se Frame extendido<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -534,7 +533,7 @@ Delimiter<y:LabelModel>
           <y:Geometry height="122.31569721115522" width="360.0518725099598" x="-1206.3472329349252" y="662.7476109641416"/>
           <y:Fill color="#CCFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="106.908203125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="354.783203125" x="2.634334692479797" y="7.703747043077669">Condição de entrada 1:
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="106.908203125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="354.783203125" x="2.6343346924800244" y="7.703747043077556">Condição de entrada 1:
 Estado anterior: End of Frame, Error Delimiter, Overload Delimiter
 
 Condição de entrada 2:
@@ -1355,7 +1354,6 @@ contador_bits_delimiter=8<y:LabelModel>
       </data>
     </edge>
     <edge id="e48" source="n26" target="n18">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -1377,7 +1375,6 @@ contador_bits_delimiter=8<y:LabelModel>
       </data>
     </edge>
     <edge id="e49" source="n24" target="n18">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -1397,7 +1394,6 @@ contador_bits_delimiter=8<y:LabelModel>
       </data>
     </edge>
     <edge id="e50" source="n24" target="n14">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -1419,7 +1415,6 @@ contador_bits_delimiter &lt; 8<y:LabelModel>
       </data>
     </edge>
     <edge id="e51" source="n26" target="n14">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -1441,7 +1436,6 @@ contador_bits_delimiter &lt; 8<y:LabelModel>
       </data>
     </edge>
     <edge id="e52" source="n8" target="n10">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -1461,7 +1455,6 @@ dlc=0<y:LabelModel>
       </data>
     </edge>
     <edge id="e53" source="n25" target="n14">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -1481,7 +1474,6 @@ dlc=0<y:LabelModel>
       </data>
     </edge>
     <edge id="e54" source="n14" target="n14">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
