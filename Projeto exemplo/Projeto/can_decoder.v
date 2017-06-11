@@ -34,7 +34,9 @@ module can_decoder(
 	field_crc,
 	field_crc_delimiter,
 	field_ack_slot,
-	field_ack_delimiter
+	field_ack_delimiter,
+	
+	rtr_srr_temp
 );
 
 
@@ -59,6 +61,27 @@ parameter len_interframe	= 2'd2; //De acordo com a especificação são 3 bits r
 parameter len_flags_min 	= 4'd6;
 parameter len_flags_max 	= 4'd12;
 parameter len_delimiter 	= 4'd8;
+
+
+//`define COLOR_BLACK_INI         `"\033[1;30m`"
+//`define COLOR_RED_INI	        `"\033[1;31m`"
+//`define COLOR_GREEN_INI	        `"\033[1;32m`"
+//`define COLOR_YELLOW_INI		`"\033[1;33m`"
+//`define COLOR_BLUE_INI	        `"\033[1;34m`"
+//`define COLOR_MAGENTA_INI       `"\033[1;35m`"
+//`define COLOR_CYAN_INI	        `"\033[1;36m`"
+//`define	COLOR_WHITE_INI	        `"\033[1;37m`"
+//
+//`define COLOR_END               `"\033[m`"
+//
+//`define COLOR_BLACK(str)        `COLOR_BLACK_INI ``str`` `COLOR_END
+//`define COLOR_RED(str)          `COLOR_RED_INI ``str`` `COLOR_END
+//`define COLOR_GREEN(str)		`COLOR_GREEN_INI ``str`` `COLOR_END
+//`define COLOR_YELLOW(str)		`COLOR_YELLOW_INI ``str`` `COLOR_END
+//`define COLOR_BLUE(str)	        `COLOR_BLUE_INI ``str`` `COLOR_END
+//`define COLOR_MAGENTA(str)      `COLOR_MAGENTA_INI ``str`` `COLOR_END
+//`define COLOR_CYAN(str)	        `COLOR_CYAN_INI ``str`` `COLOR_END
+//`define	COLOR_WHITE(str)        `COLOR_WHITE_INI ``str`` `COLOR_END
 
 //====================================================================
 //===================== Variáveis ====================================
@@ -98,13 +121,13 @@ output	reg			field_crc_delimiter;
 output	reg			field_ack_slot;
 output	reg 		field_ack_delimiter;
 
-reg			rtr_srr_temp;
+output	reg			rtr_srr_temp;
 wire[14:0]	calculated_crc;
 wire		crc_enable;
 
 //== Estados ==
 
-reg 	state_idle;
+reg		state_idle;
 reg 	state_id_a;				
 reg 	state_rtr_srr_temp;
 reg 	state_ide;
@@ -119,7 +142,7 @@ reg 	state_crc_delimiter;
 reg 	state_ack_slot;
 reg 	state_ack_delimiter;
 reg 	state_eof;
-reg 	state_interframe;
+reg 	state_intermission;
 
 reg		state_error_flags;
 reg		state_error_delimiter;
@@ -138,8 +161,6 @@ can_crc i_can_crc
 	.crc(calculated_crc)
 );
 
-// == Behaviour == 
-
 
 
 //====================================================================
@@ -147,13 +168,10 @@ can_crc i_can_crc
 //====================================================================
 	
 assign 	go_state_idle				= 	reset | 
-										(sample_point	& rx_bit 	& state_interframe	& contador_interframe == len_interframe-1);
+										(sample_point	& rx_bit 	& state_intermission	& contador_interframe == len_interframe-1);
 										
-//																	((state_interframe	& contador_interframe == len_interframe-1) |
-//																	(state_error_delimiter & contador_delimiter == len_delimiter-1) |
-//																	(state_overload_delimiter & contador_delimiter == len_delimiter-1))	);
 assign 	go_state_id_a				= 	sample_point	& ~rx_bit	& (state_idle 			| 
-																	  (state_interframe	& contador_interframe == len_interframe-1));
+																	  (state_intermission	& contador_interframe == len_interframe-1));
 assign 	go_state_rtr_srr_temp		= 	sample_point				& state_id_a  			& (contador_id_a == len_id_a-1);
 assign 	go_state_ide				=	sample_point				& state_rtr_srr_temp;
 assign 	go_state_id_b				=	sample_point	& rx_bit	& state_ide;
@@ -170,7 +188,7 @@ assign 	go_state_crc_delimiter		=	sample_point				& state_crc				& (contador_crc
 assign 	go_state_ack_slot			=	sample_point	& rx_bit	& state_crc_delimiter;
 assign 	go_state_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_slot;
 assign 	go_state_eof				=	sample_point	& rx_bit	& state_ack_delimiter;
-assign 	go_state_interframe			=	sample_point	& rx_bit	& 
+assign 	go_state_intermission		=	sample_point	& rx_bit	& 
 																		((state_eof					& contador_eof == len_eof-1) |
 																		(state_error_delimiter 		& contador_delimiter == len_delimiter-1) |
 																		(state_overload_delimiter 	& contador_delimiter == len_delimiter-1));
@@ -180,8 +198,11 @@ assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit	& state_crc_delimiter;
 assign	bit_error_ack_slot			=	sample_point	& rx_bit	& state_ack_slot;
 assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_delimiter;
 assign	bit_error_eof				=	sample_point	& ~rx_bit	& state_eof;
-assign	bit_error_interframe		=	sample_point	& ~rx_bit	& state_interframe;
-assign	bit_crc_error				= 	sample_point				& state_crc_delimiter 	& (calculated_crc != field_crc);
+assign	bit_error_interframe		=	sample_point	& ~rx_bit	& state_intermission;
+assign	bit_error_crc_dont_match	= 	sample_point				& state_ack_delimiter 	& (calculated_crc != field_crc); //O erro de CRC é verificado no estado ACK Delimiter. CAN2Spec - Seção 6.2 - pg 23
+assign	bit_error_flags				=	sample_point				& (state_overload_flags | state_error_flags)	& 							
+																		((rx_bit	& contador_flags < len_flags_min-1) |
+																		(~rx_bit	& contador_flags >= len_flags_max));
 	
 assign	enable_bitstuffing			=	state_id_a |
 										state_rtr_srr_temp |
@@ -194,9 +215,9 @@ assign	enable_bitstuffing			=	state_id_a |
 										state_data |
 										state_crc;
 										
-assign	bit_de_stuffing				=	enable_bitstuffing	& ((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit);
+assign	bit_de_stuffing				=	enable_bitstuffing	& (((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit));
 
-assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (({last_rx_bits,rx_bit}==6'h00) | ({last_rx_bits,rx_bit}==6'h3F));
+assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (((last_rx_bits == 5'h00) & ~rx_bit) | ((last_rx_bits == 5'h1F) & rx_bit));
 
 assign	go_state_error_flags 		=	bit_error_srr |
 										bit_error_crc_delimiter | 
@@ -205,14 +226,15 @@ assign	go_state_error_flags 		=	bit_error_srr |
 										bit_error_eof | 
 										bit_error_interframe |
 										bit_error_bit_stuffing | 
-										bit_crc_error;
+										bit_error_crc_dont_match |
+										bit_error_flags;
 								
 assign	go_state_error_delimiter	=	sample_point	& rx_bit	& state_error_flags		& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
 
 assign	go_state_overload_flags		=	sample_point	& ~rx_bit	& 
 												((state_eof & contador_eof == len_eof-1) |
 												(state_error_delimiter & contador_delimiter == len_delimiter-1) |
-												(state_interframe & contador_interframe < len_interframe) |
+												(state_intermission & contador_interframe < len_interframe-1) |
 												(state_overload_delimiter & contador_delimiter==len_delimiter-1));
 
 assign	go_state_overload_delimiter	=	sample_point	& rx_bit	& state_overload_flags	& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
@@ -243,27 +265,195 @@ else if (sample_point)
 end
 
 //====================================================================
-//===================== Gerenciamento de impressão erros =============
+//===================== Gerenciamento de impressão ===================
 //====================================================================
 
-// Impressão dos erros
-/*
-always @(posedge clock or posedge reset)
-begin
-if(reset)
-  ;
-else if (state_error_flags)
+// Impressão dos estados
 
-	//Casos dos erros de forma
-	if(bit_error_srr)			$display("Erro de SRR");
-	if(bit_error_crc_delimiter)	$display("Erro de CRC delimiter");
-	if(bit_error_ack_slot)		$display("Erro de ACK slot");
-	if(bit_error_ack_delimiter)	$display("Erro de ACK delimiter");
-	if(bit_error_eof)			$display("Erro de EOF");
-	if(bit_error_interframe)	$display("Erro de interframe");
-	if(bit_crc_error)			$display("Erro de CRC");
+always @(state_idle)
+begin
+if(state_idle & rx_bit)			//Entrando no estado com rx_bit=1
+	$display(("DEBUG: Estado IDLE"));
+else if(state_idle & ~rx_bit)	//Entrando no estado com rx_bit=0
+	$display("DEBUG: Estado Start of Frame");
 end
-*/
+
+always @(state_id_a)
+begin
+if(state_id_a) 	//Entrando no estado
+	$display(("DEBUG: Estado ID_a (11 bits)"));
+else			//Saindo do estado
+	$display("DEBUG: ID_a = b%b (0x%X)", field_id_a, field_id_a);
+end
+
+always @(state_rtr_srr_temp)
+begin
+if(state_rtr_srr_temp)	//Entrando no estado
+	$display(("DEBUG: Estado RTR_SRR_temp"));
+else				//Saindo do estado
+	$display("DEBUG: RTR_SRR_temp = b%b", rtr_srr_temp);
+end
+
+always @(state_ide)
+begin
+if(state_ide)		//Entrando no estado
+	$display(("DEBUG: Estado IDE"));
+else				//Saindo do estado
+	$display("DEBUG: IDE = b%b", field_ide);
+end
+
+always @(state_id_b)
+if(state_id_b) 	//Entrando no estado
+begin
+	$display("DEBUG: SRR = b%b", rtr_srr_temp); //SRR = RTR_SRR_temp (Frame extendido)
+	$display(("DEBUG: Estado ID_b (18 bits) (Frame extendido)"));
+end
+else			//Saindo do estado
+begin
+	$display("DEBUG: ID_b = b%b (0x%X)", field_id_b, field_id_b);
+	$display("DEBUG: ID_ab (full) = b%b (0x%X)", {field_id_a,field_id_b}, {field_id_a,field_id_b});
+end
+
+always @(state_rtr)
+begin
+if(state_rtr)		//Entrando no estado
+	$display(("DEBUG: Estado RTR (Frame extendido)"));
+else				//Saindo do estado
+	$display("DEBUG: RTR = b%b", field_rtr);
+end
+
+always @(state_reserved1)
+begin
+if(state_reserved1)		//Entrando no estado
+	$display(("DEBUG: Estado Reserved1 (Frame extendido)"));
+else					//Saindo do estado
+	$display("DEBUG: Reserved1 = b%b", field_reserved1);
+end
+
+always @(state_reserved0)
+begin
+if(state_reserved0)		//Entrando no estado
+begin
+	if(~field_ide)
+	begin
+		$display("DEBUG: RTR = b%b", rtr_srr_temp); //RTR=RTR_SRR_temp (Frame base)
+	end
+	$display(("DEBUG: Estado Reserved0"));
+end
+else					//Saindo do estado
+	$display("DEBUG: Reserved0 = b%b", field_reserved0);
+end
+
+always @(state_dlc)
+begin
+if(state_dlc)			//Entrando no estado
+	$display(("DEBUG: Estado DLC"));
+else					//Saindo do estado
+	$display("DEBUG: DLC = b%b (0x%X, %d)", field_dlc,field_dlc,field_dlc);
+end
+
+always @(state_data)
+begin
+if(state_data)			//Entrando no estado
+	$display(("DEBUG: Estado DATA"));
+else					//Saindo do estado
+	$display("DEBUG: DATA = b%b (0x%X)", field_data,field_data);
+end
+
+always @(state_crc)
+begin
+if(state_crc)			//Entrando no estado
+	$display(("DEBUG: Estado CRC"));
+else					//Saindo do estado
+	$display("DEBUG: CRC = b%b (0x%X)", field_crc,field_crc);
+end
+
+always @(state_crc_delimiter)
+begin
+if(state_crc_delimiter)	//Entrando no estado
+	$display(("DEBUG: Estado CRC Delimiter"));
+else					//Saindo do estado
+	$display("DEBUG: CRC Delimiter = b%b", field_crc_delimiter);
+end
+
+always @(state_ack_slot)
+begin
+if(state_ack_slot)	//Entrando no estado
+	$display(("DEBUG: Estado ACK Slot"));
+else					//Saindo do estado
+	$display("DEBUG: ACK slot = b%b", field_ack_slot);
+end
+
+always @(state_ack_delimiter)
+begin
+if(state_ack_delimiter)	//Entrando no estado
+	$display(("DEBUG: Estado ACK Delimiter"));
+else					//Saindo do estado
+	$display("DEBUG: ACK Delimiter = b%b", field_ack_delimiter);
+end
+
+always @(state_eof)
+begin
+if(state_eof)	//Entrando no estado
+	$display(("DEBUG: Estado End of Frame"));
+end
+
+always @(state_overload_flags)
+begin
+if(state_overload_flags)	//Entrando no estado
+	$display(("DEBUG: Estado Overload Flags"));
+end
+
+always @(state_overload_delimiter)
+begin
+if(state_overload_delimiter)	//Entrando no estado
+	$display(("DEBUG: Estado Overload Delimiter"));
+end
+
+always @(state_error_flags)
+begin
+if(state_error_flags)	//Entrando no estado
+	$display(("DEBUG: Estado Overload Flags"));
+end
+
+always @(state_error_delimiter)
+begin
+if(state_error_delimiter)	//Entrando no estado
+	$display(("DEBUG: Estado Error Delimiter"));
+end
+
+always @(state_intermission)
+begin
+if(state_intermission)	//Entrando no estado
+	$display(("DEBUG: Estado Intermission"));
+end
+
+
+// Impressão dos erros
+
+//always @(posedge clock or posedge reset)
+//begin
+//if(reset)
+//  ;
+//else if (state_error_flags)
+//
+//	//Casos dos erros de forma
+//	if(bit_error_srr)
+//		$display("DEBUG: Erro de SRR");
+//	if(bit_error_crc_delimiter)
+//		$display("DEBUG: Erro de CRC delimiter");
+//	if(bit_error_ack_slot)
+//		$display("DEBUG: Erro de ACK slot");
+//	if(bit_error_ack_delimiter)
+//		$display("DEBUG: Erro de ACK delimiter");
+//	if(bit_error_eof)
+//		$display("DEBUG: Erro de EOF");
+//	if(bit_error_interframe)
+//		$display("DEBUG: Erro de interframe");
+//	if(bit_error_crc_dont_match)
+//		$display("DEBUG: Erro de CRC");
+//end
+
 //====================================================================
 //===================== Gerenciamento dos estados ====================
 //====================================================================
@@ -475,7 +665,7 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_eof <= 1'b0;
-else if(go_state_overload_flags | go_state_interframe | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_overload_flags | go_state_intermission | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_eof <= 1'b0;
 else if(go_state_eof)
 	state_eof <= 1'b1; //Entra no estado!
@@ -486,11 +676,11 @@ end
 always @(posedge clock or posedge reset)
 begin
 if(reset)
-	state_interframe <= 1'b0;
+	state_intermission <= 1'b0;
 else if(go_state_idle | go_state_id_a  | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
-	state_interframe <= 1'b0;
-else if(go_state_interframe)
-	state_interframe <= 1'b1; //Entra no estado!
+	state_intermission <= 1'b0;
+else if(go_state_intermission)
+	state_intermission <= 1'b1; //Entra no estado!
 end
 
 //====================================================================
@@ -582,7 +772,7 @@ always @ (posedge clock or posedge reset)
 begin
   if (reset)
 	contador_interframe <= 0;
-  else if (sample_point & state_interframe )
+  else if (sample_point & state_intermission )
     contador_interframe <= contador_interframe + 1;
   else if (sample_point)
     contador_interframe <= 0;
