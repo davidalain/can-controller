@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 1ns/100ps
 
 //====================================================================
 //====================== Includes ====================================
@@ -25,6 +25,7 @@ parameter MAX_FRAME_LEN	= 512;
 parameter [MAX_FRAME_LEN-1:0] DATA_BITS = 'b0110011100100001000101010101010101010101010101010101010101010101010101010101010101000001000010100011011111111110110011100100001000101010101010101010101010101010101010101010101010101010101010101000001000010100011011111111;
 
 parameter NUM_BITS_TO_SEND = 220;
+
 
 //====================================================================
 //===================== Variáveis ====================================
@@ -59,20 +60,21 @@ can_decoder i_can_decoder
 	
 	// Deixar os campos como saida do modulo para ver a saída nos testes
 	
-	.field_start_of_frame (field_start_of_frame),
-	.field_id_a           (field_id_a),
-	.field_ide            (field_ide),
-	.field_rtr            (field_rtr),
-	.field_srr			  (field_srr),					// Campo do frame CAN extendido (rtr_srr_temp)
-	.field_reserved1      (field_reserved1),
-	.field_reserved0      (field_reserved0),
-	.field_id_b			  (field_id_b),					// Campo do frame CAN extendido
-	.field_dlc            (field_dlc),
-	.field_data           (field_data),
-	.field_crc            (field_crc),
-	.field_crc_delimiter  (field_crc_delimiter),
-	.field_ack_slot       (field_ack_slot),
-	.field_ack_delimiter  (field_ack_delimiter)
+	.field_start_of_frame	(field_start_of_frame),
+	.field_id_a				(field_id_a),
+	.field_ide				(field_ide),
+	.field_rtr				(field_rtr),
+	.field_srr				(field_srr),					// Campo do frame CAN extendido (srr = rtr_srr_temp)
+	.field_reserved1		(field_reserved1),
+	.field_reserved0		(field_reserved0),
+	.field_id_b				(field_id_b),					// Campo do frame CAN extendido
+	.field_dlc				(field_dlc),
+	.field_data				(field_data),
+	.field_crc				(field_crc),
+	.field_crc_delimiter	(field_crc_delimiter),
+	.field_ack_slot			(field_ack_slot),
+	.field_ack_delimiter	(field_ack_delimiter),
+	.rtr_srr_temp			(rtr_srr_temp)
 );
 
 //====================================================================
@@ -91,13 +93,16 @@ begin
 	/* ---------------------------------- */
 	/* ---------------------------------- */
 	/* ---------------------------------- */
+	
 	clk <= 1'b0;
 	clk2sample <= 1'b0;
 	sample_point <= 1'b0;
 	rst <= 1'b1;
 	bit_index_sent <= NUM_BITS_TO_SEND-1;
 	rx_bit <= DATA_BITS[NUM_BITS_TO_SEND-1];
-	#15
+	#200
+	
+	$display("DEBUG: =============== INICIOU ==================");
 	rst <= 1'b0;
 end
 
@@ -124,12 +129,12 @@ end
 //generate clock
 always
 begin
-	#5 clk = !clk;
+	#100 clk = !clk;
 end
 	
 //generate sample_point
 always @(posedge clk)
-	if (clk2sample < 5) 
+	if (clk2sample < (10-1)) 
 	begin
 		clk2sample <= clk2sample + 1;
 		sample_point <= 0;
