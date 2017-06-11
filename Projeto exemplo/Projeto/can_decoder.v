@@ -146,10 +146,12 @@ can_crc i_can_crc
 //== Lógica combinacional para gerenciamento da máquina de estados ===
 //====================================================================
 	
-assign 	go_state_idle				= 	reset | (sample_point	& rx_bit 	& 
-																	((state_interframe	& contador_interframe == len_interframe-1) |
-																	(state_error_delimiter & contador_delimiter == len_delimiter-1) |
-																	(state_overload_delimiter & contador_delimiter == len_delimiter-1))	);
+assign 	go_state_idle				= 	reset | 
+										(sample_point	& rx_bit 	& state_interframe	& contador_interframe == len_interframe-1);
+										
+//																	((state_interframe	& contador_interframe == len_interframe-1) |
+//																	(state_error_delimiter & contador_delimiter == len_delimiter-1) |
+//																	(state_overload_delimiter & contador_delimiter == len_delimiter-1))	);
 assign 	go_state_id_a				= 	sample_point	& ~rx_bit	& (state_idle 			| 
 																	  (state_interframe	& contador_interframe == len_interframe-1));
 assign 	go_state_rtr_srr_temp		= 	sample_point				& state_id_a  			& (contador_id_a == len_id_a-1);
@@ -159,15 +161,19 @@ assign 	go_state_rtr				=	sample_point				& state_id_b			& (contador_id_b == len
 assign 	go_state_reserved1			=	sample_point				& state_rtr;
 assign 	go_state_reserved0			=	sample_point				& ( state_reserved1 | (~rx_bit & state_ide));
 assign 	go_state_dlc				=	sample_point				& state_reserved0;
-assign 	go_state_data				=	sample_point				& state_dlc				& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} != 0);
+assign 	go_state_data				=	sample_point				& state_dlc		& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} != 0 & ~field_rtr);
 assign 	go_state_crc				=	sample_point				& 
 																	((state_dlc		& (((contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} == 0)) | field_rtr)) | 
 																	(state_data		& ((contador_data == (8 * field_dlc)-1))));
+																	
 assign 	go_state_crc_delimiter		=	sample_point				& state_crc				& (contador_crc == len_crc-1);
 assign 	go_state_ack_slot			=	sample_point	& rx_bit	& state_crc_delimiter;
 assign 	go_state_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_slot;
 assign 	go_state_eof				=	sample_point	& rx_bit	& state_ack_delimiter;
-assign 	go_state_interframe			=	sample_point				& state_eof				& (contador_eof == len_eof-1);
+assign 	go_state_interframe			=	sample_point	& rx_bit	& 
+																		((state_eof					& contador_eof == len_eof-1) |
+																		(state_error_delimiter 		& contador_delimiter == len_delimiter-1) |
+																		(state_overload_delimiter 	& contador_delimiter == len_delimiter-1));
 	
 assign	bit_error_srr				=	sample_point	& rx_bit	& state_ide				& ~rtr_srr_temp;
 assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit	& state_crc_delimiter;
