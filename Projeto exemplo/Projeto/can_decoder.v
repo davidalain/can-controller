@@ -483,7 +483,7 @@ end
 always @(bit_error_crc_dont_match)
 begin
 if(bit_error_crc_dont_match)	//Quando a flag for setada pra 1
-	$display("%s", `COLOR_RED("DEBUG: Error CRC não bate"));
+	$display("%s", `COLOR_RED("DEBUG: Error CRC don't match"));
 end
 
 always @(bit_error_flags)
