@@ -201,7 +201,7 @@ assign 	go_state_intermission		=	sample_point	& rx_bit							&
 																							(state_overload_delimiter 	& contador_delimiter == len_delimiter-1));
 	
 assign	bit_error_srr				=	sample_point	& rx_bit	& ~bit_de_stuffing 		& state_ide				& ~rtr_srr_temp;
-assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit							& state_crc_delimiter;
+assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit	& ~bit_de_stuffing		& state_crc_delimiter;
 assign	bit_error_ack_slot			=	sample_point	& rx_bit							& state_ack_slot;
 assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit							& state_ack_delimiter;
 assign	bit_error_eof				=	sample_point	& ~rx_bit							& state_eof;
@@ -220,7 +220,8 @@ assign	enable_bitstuffing			=	state_id_a |
 										state_reserved0 |
 										state_dlc | 
 										state_data |
-										state_crc;
+										state_crc |
+										state_crc_delimiter; // No caso de o crc terminar com 11111 o proximo bit é de bit stuffing. Por isso, e pelo jeito que estamos tratando, o estado de crc_del deve ser adicionado a esta lista
 										
 assign	bit_de_stuffing				=	sample_point		&	enable_bitstuffing	& (((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit));
 
@@ -779,7 +780,7 @@ always @ (posedge clock or posedge reset)
 begin
 if (reset)
 	field_crc_delimiter <= 1'bx;
-else if (sample_point & state_crc_delimiter)
+else if (sample_point & state_crc_delimiter & (~bit_de_stuffing)) 
 	field_crc_delimiter <= rx_bit;
 end
 
