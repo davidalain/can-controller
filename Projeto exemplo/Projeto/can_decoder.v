@@ -205,7 +205,7 @@ assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit							& state_crc_delim
 assign	bit_error_ack_slot			=	sample_point	& rx_bit							& state_ack_slot;
 assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit							& state_ack_delimiter;
 assign	bit_error_eof				=	sample_point	& ~rx_bit							& state_eof;
-assign	bit_error_intermission		=	sample_point	& ~rx_bit							& state_intermission;
+assign	bit_error_intermission		=	sample_point	& ~rx_bit							& state_intermission	& (contador_intermission != len_intermission-1);
 assign	bit_error_crc_dont_match	= 	sample_point										& state_ack_delimiter 	& (calculated_crc != field_crc); //O erro de CRC é verificado no estado ACK Delimiter. CAN2Spec - Seção 6.2 - pg 23
 assign	bit_error_flags				=	sample_point										& (state_overload_flags | state_error_flags) & 							
 																																		((rx_bit	& contador_flags < len_flags_min-1) |
@@ -231,7 +231,6 @@ assign	go_state_error_flags 		=	bit_error_srr |
 										bit_error_ack_slot |
 										bit_error_ack_delimiter | 
 										bit_error_eof | 
-										bit_error_intermission |
 										bit_error_bit_stuffing | 
 										bit_error_crc_dont_match |
 										bit_error_flags;
@@ -246,7 +245,8 @@ assign	go_state_overload_flags		=	sample_point	& ~rx_bit	&
 
 assign	go_state_overload_delimiter	=	sample_point	& rx_bit	& state_overload_flags	& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
 
-assign	crc_initialize		=	go_state_idle;
+assign	crc_initialize		=	reset | 
+										(sample_point	& rx_bit 							& state_intermission	& contador_intermission == len_intermission-2);
 
 assign	crc_enable			=	state_id_a |
 								state_rtr_srr_temp |
