@@ -511,7 +511,7 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_error_delimiter <= 1'b0;
-else if(go_state_idle | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_intermission | go_state_error_flags | go_state_overload_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_error_delimiter <= 1'b0;
 else if(go_state_error_delimiter)
 	state_error_delimiter <= 1'b1; //Entra no estado!
@@ -533,7 +533,7 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_overload_delimiter <= 1'b0;
-else if(go_state_idle | go_state_overload_flags) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_intermission | go_state_error_flags | go_state_overload_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_overload_delimiter <= 1'b0;
 else if(go_state_overload_delimiter)
 	state_overload_delimiter <= 1'b1; //Entra no estado!
@@ -544,7 +544,7 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_idle <= 1'b1;
-else if(go_state_id_a | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_id_a) //Sai do estado se a flag do próximo estiver ativa!
 	state_idle <= 1'b0;
 else if(go_state_idle)
 	state_idle <= 1'b1; //Entra no estado!
@@ -714,7 +714,7 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_intermission <= 1'b0;
-else if(go_state_idle | go_state_id_a  | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_idle | go_state_id_a | go_state_overload_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_intermission <= 1'b0;
 else if(go_state_intermission)
 	state_intermission <= 1'b1; //Entra no estado!
