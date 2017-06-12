@@ -56,7 +56,7 @@ parameter len_id_b 			= 5'd18;
 parameter len_dlc 			= 3'd4;
 parameter len_crc			= 4'd15;
 parameter len_eof			= 3'd7;
-parameter len_interframe	= 2'd2; //De acordo com a especificação são 3 bits recessivos. Mas na prática pode acontecer a transmissão de frames em sequência em que o terceiro bit do Intermission já pode ser o Start of Frame do próximo frame, então são 2. Vide documento can2spec.pdf, seção 9.1, item 2.
+parameter len_intermission	= 2'd2; //De acordo com a especificação são 3 bits recessivos. Mas na prática pode acontecer a transmissão de frames em sequência em que o terceiro bit do Intermission já pode ser o Start of Frame do próximo frame, então são 2. Vide documento can2spec.pdf, seção 9.1, item 2.
 
 parameter len_flags_min 	= 4'd6;
 parameter len_flags_max 	= 4'd12;
@@ -105,7 +105,7 @@ reg[2:0] 	contador_dlc;
 reg[5:0]	contador_data;
 reg[3:0]	contador_crc;
 reg[2:0]	contador_eof;
-reg[1:0]	contador_interframe; //CHECK: Dois bits ou três bits.
+reg[1:0]	contador_intermission; //CHECK: Dois bits ou três bits.
 
 reg[3:0]	contador_flags;
 reg[3:0]	contador_delimiter;
@@ -174,41 +174,42 @@ can_crc i_can_crc
 //====================================================================
 	
 assign 	go_state_idle				= 	reset | 
-										(sample_point	& rx_bit 	& state_intermission	& contador_interframe == len_interframe-1);
-										
-assign 	go_state_id_a				= 	sample_point	& ~rx_bit	& (state_idle 			| 
-																	  (state_intermission	& contador_interframe == len_interframe-1));
-assign 	go_state_rtr_srr_temp		= 	sample_point				& state_id_a  			& (contador_id_a == len_id_a-1);
-assign 	go_state_ide				=	sample_point				& state_rtr_srr_temp;
-assign 	go_state_id_b				=	sample_point	& rx_bit	& state_ide;
-assign 	go_state_rtr				=	sample_point				& state_id_b			& (contador_id_b == len_id_b-1);
-assign 	go_state_reserved1			=	sample_point				& state_rtr;
-assign 	go_state_reserved0			=	sample_point				& ( state_reserved1 | (~rx_bit & state_ide));
-assign 	go_state_dlc				=	sample_point				& state_reserved0;
-assign 	go_state_data				=	sample_point				& state_dlc		& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} != 0 & ~field_rtr);
-assign 	go_state_crc				=	sample_point				& 
-																	((state_dlc		& (((contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} == 0)) | field_rtr)) | 
-																	(state_data		& ((contador_data == (8 * field_dlc)-1))));
+										(sample_point	& rx_bit 							& state_intermission	& contador_intermission == len_intermission-1);
+											
+assign 	go_state_id_a				= 	sample_point	& ~rx_bit							& (state_idle 			| 
+																							(state_intermission	& contador_intermission == len_intermission-1));
+																							
+assign 	go_state_rtr_srr_temp		= 	sample_point				& ~bit_de_stuffing		& state_id_a  			& (contador_id_a == len_id_a-1);
+assign 	go_state_ide				=	sample_point				& ~bit_de_stuffing		& state_rtr_srr_temp;
+assign 	go_state_id_b				=	sample_point	& rx_bit	& ~bit_de_stuffing		& state_ide;
+assign 	go_state_rtr				=	sample_point				& ~bit_de_stuffing		& state_id_b			& (contador_id_b == len_id_b-1);
+assign 	go_state_reserved1			=	sample_point				& ~bit_de_stuffing		& state_rtr;
+assign 	go_state_reserved0			=	sample_point				& ~bit_de_stuffing		& ( state_reserved1 | (~rx_bit & state_ide));
+assign 	go_state_dlc				=	sample_point				& ~bit_de_stuffing		& state_reserved0;
+assign 	go_state_data				=	sample_point				& ~bit_de_stuffing		& state_dlc		& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} != 0 & ~field_rtr);
+assign 	go_state_crc				=	sample_point				& ~bit_de_stuffing		& 
+																							((state_dlc		& (contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} == 4'b0 | field_rtr)) | 
+																							(state_data		& ((contador_data == (8 * field_dlc)-1))));
 																	
-assign 	go_state_crc_delimiter		=	sample_point				& state_crc				& (contador_crc == len_crc-1) & ~bit_de_stuffing;
-assign 	go_state_ack_slot			=	sample_point	& rx_bit	& state_crc_delimiter;
-assign 	go_state_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_slot;
-assign 	go_state_eof				=	sample_point	& rx_bit	& state_ack_delimiter;
-assign 	go_state_intermission		=	sample_point	& rx_bit	& 
-																		((state_eof					& contador_eof == len_eof-1) |
-																		(state_error_delimiter 		& contador_delimiter == len_delimiter-1) |
-																		(state_overload_delimiter 	& contador_delimiter == len_delimiter-1));
+assign 	go_state_crc_delimiter		=	sample_point				& ~bit_de_stuffing		& state_crc				& (contador_crc == len_crc-1) ;
+assign 	go_state_ack_slot			=	sample_point	& rx_bit							& state_crc_delimiter;
+assign 	go_state_ack_delimiter		=	sample_point	& ~rx_bit							& state_ack_slot;
+assign 	go_state_eof				=	sample_point	& rx_bit							& state_ack_delimiter;
+assign 	go_state_intermission		=	sample_point	& rx_bit							& 
+																							((state_eof					& contador_eof == len_eof-1) |
+																							(state_error_delimiter 		& contador_delimiter == len_delimiter-1) |
+																							(state_overload_delimiter 	& contador_delimiter == len_delimiter-1));
 	
-assign	bit_error_srr				=	sample_point	& rx_bit	& state_ide				& ~rtr_srr_temp;
-assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit	& state_crc_delimiter;
-assign	bit_error_ack_slot			=	sample_point	& rx_bit	& state_ack_slot;
-assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_delimiter;
-assign	bit_error_eof				=	sample_point	& ~rx_bit	& state_eof;
-assign	bit_error_intermission		=	sample_point	& ~rx_bit	& state_intermission;
-assign	bit_error_crc_dont_match	= 	sample_point				& state_ack_delimiter 	& (calculated_crc != field_crc); //O erro de CRC é verificado no estado ACK Delimiter. CAN2Spec - Seção 6.2 - pg 23
-assign	bit_error_flags				=	sample_point				& (state_overload_flags | state_error_flags)	& 							
-																		((rx_bit	& contador_flags < len_flags_min-1) |
-																		(~rx_bit	& contador_flags >= len_flags_max));
+assign	bit_error_srr				=	sample_point	& rx_bit	& ~bit_de_stuffing 		& state_ide				& ~rtr_srr_temp;
+assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit							& state_crc_delimiter;
+assign	bit_error_ack_slot			=	sample_point	& rx_bit							& state_ack_slot;
+assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit							& state_ack_delimiter;
+assign	bit_error_eof				=	sample_point	& ~rx_bit							& state_eof;
+assign	bit_error_intermission		=	sample_point	& ~rx_bit							& state_intermission;
+assign	bit_error_crc_dont_match	= 	sample_point										& state_ack_delimiter 	& (calculated_crc != field_crc); //O erro de CRC é verificado no estado ACK Delimiter. CAN2Spec - Seção 6.2 - pg 23
+assign	bit_error_flags				=	sample_point										& (state_overload_flags | state_error_flags) & 							
+																																		((rx_bit	& contador_flags < len_flags_min-1) |
+																																		(~rx_bit	& contador_flags >= len_flags_max));
 	
 assign	enable_bitstuffing			=	state_id_a |
 										state_rtr_srr_temp |
@@ -221,9 +222,9 @@ assign	enable_bitstuffing			=	state_id_a |
 										state_data |
 										state_crc;
 										
-assign	bit_de_stuffing				=	enable_bitstuffing	& (((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit));
+assign	bit_de_stuffing				=	sample_point		&	enable_bitstuffing	& (((last_rx_bits == 5'h00) & rx_bit) | ((last_rx_bits == 5'h1F) & ~rx_bit));
 
-assign	bit_error_bit_stuffing		= 	enable_bitstuffing	& (((last_rx_bits == 5'h00) & ~rx_bit) | ((last_rx_bits == 5'h1F) & rx_bit));
+assign	bit_error_bit_stuffing		= 	sample_point		&	enable_bitstuffing	& (((last_rx_bits == 5'h00) & ~rx_bit) | ((last_rx_bits == 5'h1F) & rx_bit));
 
 assign	go_state_error_flags 		=	bit_error_srr |
 										bit_error_crc_delimiter | 
@@ -240,7 +241,7 @@ assign	go_state_error_delimiter	=	sample_point	& rx_bit	& state_error_flags		& (
 assign	go_state_overload_flags		=	sample_point	& ~rx_bit	& 
 												((state_eof & contador_eof == len_eof-1) |
 												(state_error_delimiter & contador_delimiter == len_delimiter-1) |
-												(state_intermission & contador_interframe < len_interframe-1) |
+												(state_intermission & contador_intermission < len_intermission-1) |
 												(state_overload_delimiter & contador_delimiter==len_delimiter-1));
 
 assign	go_state_overload_delimiter	=	sample_point	& rx_bit	& state_overload_flags	& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
@@ -708,7 +709,7 @@ else if(go_state_eof)
 end
 
 
-// Estado interframe 
+// Estado intermission 
 always @(posedge clock or posedge reset)
 begin
 if(reset)
@@ -807,11 +808,11 @@ end
 always @ (posedge clock or posedge reset)
 begin
   if (reset)
-	contador_interframe <= 0;
+	contador_intermission <= 0;
   else if (sample_point & state_intermission )
-    contador_interframe <= contador_interframe + 1;
+    contador_intermission <= contador_intermission + 1;
   else if (sample_point)
-    contador_interframe <= 0;
+    contador_intermission <= 0;
 end
 
 
@@ -915,7 +916,7 @@ begin
   begin
 	//Se DLC == 4'b1XXX, aplica máscara 4'b1000 para garantir ser no máximo 8 o valor do DLC.
 	//Nota: field_dlc[2] representará o bit de indice 3 após a execução da linha abaixo.
-    field_dlc <= (field_dlc[2] == 0) ? ({field_dlc[2:0], rx_bit}) : ({field_dlc[2:0], rx_bit} & 4'b1000);
+    field_dlc <= (~field_dlc[2]) ? ({field_dlc[2:0], rx_bit}) : ({field_dlc[2:0], rx_bit} & 4'b1000);
     contador_dlc <= contador_dlc + 1;
   end
   else if (sample_point & ~state_dlc)
