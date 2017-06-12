@@ -56,7 +56,7 @@ parameter len_id_b 			= 5'd18;
 parameter len_dlc 			= 3'd4;
 parameter len_crc			= 4'd15;
 parameter len_eof			= 3'd7;
-parameter len_intermission	= 2'd2; //De acordo com a especificação são 3 bits recessivos. Mas na prática pode acontecer a transmissão de frames em sequência em que o terceiro bit do Intermission já pode ser o Start of Frame do próximo frame, então são 2. Vide documento can2spec.pdf, seção 9.1, item 2.
+parameter len_intermission	= 2'd3; //De acordo com a especificação são 3 bits recessivos. Mas na prática pode acontecer a transmissão de frames em sequência em que o terceiro bit do Intermission já pode ser o Start of Frame do próximo frame, então são 2. Vide documento can2spec.pdf, seção 9.1, item 2.
 
 parameter len_flags_min 	= 4'd6;
 parameter len_flags_max 	= 4'd12;
@@ -482,7 +482,7 @@ end
 always @(bit_error_crc_dont_match)
 begin
 if(bit_error_crc_dont_match)	//Quando a flag for setada pra 1
-	$display("%s", `COLOR_RED("DEBUG: Error CRC não bate"));
+	$display("%s", `COLOR_RED("DEBUG: Error CRC don't match"));
 end
 
 always @(bit_error_flags)
