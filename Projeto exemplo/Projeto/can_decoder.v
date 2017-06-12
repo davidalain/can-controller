@@ -204,7 +204,7 @@ assign	bit_error_crc_delimiter		=	sample_point	& ~rx_bit	& state_crc_delimiter;
 assign	bit_error_ack_slot			=	sample_point	& rx_bit	& state_ack_slot;
 assign	bit_error_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_delimiter;
 assign	bit_error_eof				=	sample_point	& ~rx_bit	& state_eof;
-assign	bit_error_interframe		=	sample_point	& ~rx_bit	& state_intermission;
+assign	bit_error_intermission		=	sample_point	& ~rx_bit	& state_intermission;
 assign	bit_error_crc_dont_match	= 	sample_point				& state_ack_delimiter 	& (calculated_crc != field_crc); //O erro de CRC é verificado no estado ACK Delimiter. CAN2Spec - Seção 6.2 - pg 23
 assign	bit_error_flags				=	sample_point				& (state_overload_flags | state_error_flags)	& 							
 																		((rx_bit	& contador_flags < len_flags_min-1) |
@@ -230,7 +230,7 @@ assign	go_state_error_flags 		=	bit_error_srr |
 										bit_error_ack_slot |
 										bit_error_ack_delimiter | 
 										bit_error_eof | 
-										bit_error_interframe |
+										bit_error_intermission |
 										bit_error_bit_stuffing | 
 										bit_error_crc_dont_match |
 										bit_error_flags;
@@ -419,7 +419,7 @@ end
 always @(state_error_flags)
 begin
 if(state_error_flags)	//Entrando no estado
-	$display("%s", `COLOR_GREEN("DEBUG: Estado Overload Flags"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Error Flags"));
 end
 
 always @(state_error_delimiter)
@@ -434,31 +434,61 @@ if(state_intermission)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado Intermission"));
 end
 
-
 // Impressão dos erros
 
-//always @(posedge clock or posedge reset)
-//begin
-//if(reset)
-//  ;
-//else if (state_error_flags)
-//
-//	//Casos dos erros de forma
-//	if(bit_error_srr)
-//		$display("DEBUG: 		Erro de SRR");
-//	if(bit_error_crc_delimiter)
-//		$display("DEBUG: 		Erro de CRC delimiter");
-//	if(bit_error_ack_slot)
-//		$display("DEBUG: 		Erro de ACK slot");
-//	if(bit_error_ack_delimiter)
-//		$display("DEBUG: 		Erro de ACK delimiter");
-//	if(bit_error_eof)
-//		$display("DEBUG: 		Erro de EOF");
-//	if(bit_error_interframe)
-//		$display("DEBUG: 		Erro de interframe");
-//	if(bit_error_crc_dont_match)
-//		$display("DEBUG: 		Erro de CRC");
-//end
+always @(bit_error_srr)
+begin
+if(bit_error_srr)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error SRR = 0"));
+end
+
+always @(bit_error_crc_delimiter)
+begin
+if(bit_error_crc_delimiter)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error CRC Delimiter = 0"));
+end
+
+always @(bit_error_ack_slot)
+begin
+if(bit_error_ack_slot)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error ACK Slot = 1"));
+end
+
+always @(bit_error_ack_delimiter)
+begin
+if(bit_error_ack_delimiter)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error ACK Delimiter = 0"));
+end
+
+always @(bit_error_eof)
+begin
+if(bit_error_eof)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error EOF contem bit 0"));
+end
+
+always @(bit_error_intermission)
+begin
+if(bit_error_intermission)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error Intermission contem bit 0"));
+end
+
+always @(bit_error_bit_stuffing)
+begin
+if(bit_error_bit_stuffing)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error Bit Stuffing"));
+end
+
+always @(bit_error_crc_dont_match)
+begin
+if(bit_error_crc_dont_match)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error CRC não bate"));
+end
+
+always @(bit_error_flags)
+begin
+if(bit_error_flags)	//Quando a flag for setada pra 1
+	$display("%s", `COLOR_RED("DEBUG: Error campo de flags com contem bit 1 ou contador_flags > 12"));
+end
 
 //====================================================================
 //===================== Gerenciamento dos estados ====================
@@ -695,7 +725,7 @@ end
 
 // ========== Campos sem bit stuffing =============
 
-// Para ser sintetizavel, uma "variavel" só pode estar presente em um always
+// Para ser sintetizavel, uma "variavel" só pode ser modificada em um único bloco always
 
 // Campo Error Flags & Overload Flags
 always @(posedge clock or posedge reset)
