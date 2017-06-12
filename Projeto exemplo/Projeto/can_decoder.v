@@ -190,7 +190,7 @@ assign 	go_state_crc				=	sample_point				&
 																	((state_dlc		& (((contador_dlc == len_dlc-1) & ({field_dlc[2:0],rx_bit} == 0)) | field_rtr)) | 
 																	(state_data		& ((contador_data == (8 * field_dlc)-1))));
 																	
-assign 	go_state_crc_delimiter		=	sample_point				& state_crc				& (contador_crc == len_crc-1);
+assign 	go_state_crc_delimiter		=	sample_point				& state_crc				& (contador_crc == len_crc-1) & ~bit_de_stuffing;
 assign 	go_state_ack_slot			=	sample_point	& rx_bit	& state_crc_delimiter;
 assign 	go_state_ack_delimiter		=	sample_point	& ~rx_bit	& state_ack_slot;
 assign 	go_state_eof				=	sample_point	& rx_bit	& state_ack_delimiter;
