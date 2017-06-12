@@ -63,25 +63,28 @@ parameter len_flags_max 	= 4'd12;
 parameter len_delimiter 	= 4'd8;
 
 
-//`define COLOR_BLACK_INI         `"\033[1;30m`"
-//`define COLOR_RED_INI	        `"\033[1;31m`"
+//`define COLOR_BLACK_INI         	`"\033[1;30m`"
+//`define COLOR_RED_INI	        	`"\033[1;31m`"
 //`define COLOR_GREEN_INI	        `"\033[1;32m`"
-//`define COLOR_YELLOW_INI		`"\033[1;33m`"
+//`define COLOR_YELLOW_INI			`"\033[1;33m`"
 //`define COLOR_BLUE_INI	        `"\033[1;34m`"
-//`define COLOR_MAGENTA_INI       `"\033[1;35m`"
+//`define COLOR_MAGENTA_INI       	`"\033[1;35m`"
 //`define COLOR_CYAN_INI	        `"\033[1;36m`"
 //`define	COLOR_WHITE_INI	        `"\033[1;37m`"
 //
-//`define COLOR_END               `"\033[m`"
+//`define COLOR_END               	`"\033[m`"
 //
-//`define COLOR_BLACK(str)        `COLOR_BLACK_INI ``str`` `COLOR_END
-//`define COLOR_RED(str)          `COLOR_RED_INI ``str`` `COLOR_END
-//`define COLOR_GREEN(str)		`COLOR_GREEN_INI ``str`` `COLOR_END
-//`define COLOR_YELLOW(str)		`COLOR_YELLOW_INI ``str`` `COLOR_END
-//`define COLOR_BLUE(str)	        `COLOR_BLUE_INI ``str`` `COLOR_END
-//`define COLOR_MAGENTA(str)      `COLOR_MAGENTA_INI ``str`` `COLOR_END
-//`define COLOR_CYAN(str)	        `COLOR_CYAN_INI ``str`` `COLOR_END
-//`define	COLOR_WHITE(str)        `COLOR_WHITE_INI ``str`` `COLOR_END
+`define COLOR_BLACK(str)        {"\033[1;30m",``str``, "\033[m"}
+`define COLOR_RED(str)          {"\033[1;31m",``str``, "\033[m"}
+`define COLOR_GREEN(str)		{"\033[1;32m",``str``, "\033[m"}
+`define COLOR_YELLOW(str)		{"\033[1;33m",``str``, "\033[m"}
+`define COLOR_BLUE(str)	        {"\033[1;34m",``str``, "\033[m"}
+`define COLOR_MAGENTA(str)      {"\033[1;35m",``str``, "\033[m"}
+`define COLOR_CYAN(str)	        {"\033[1;36m",``str``, "\033[m"}
+`define	COLOR_WHITE(str)        {"\033[1;37m",``str``, "\033[m"}
+
+parameter	COLOR_RED_INI 		= "\033[1;31m";
+parameter	COLOR_END           = "\033[m";
 
 //====================================================================
 //===================== Variáveis ====================================
@@ -273,61 +276,61 @@ end
 always @(state_idle)
 begin
 if(state_idle & rx_bit)			//Entrando no estado com rx_bit=1
-	$display(("DEBUG: Estado IDLE"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado IDLE"));
 else if(state_idle & ~rx_bit)	//Entrando no estado com rx_bit=0
-	$display("DEBUG: Estado Start of Frame");
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Start of Frame"));
 end
 
 always @(state_id_a)
 begin
 if(state_id_a) 	//Entrando no estado
-	$display(("DEBUG: Estado ID_a (11 bits)"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado ID_a (11 bits)"));
 else			//Saindo do estado
-	$display("DEBUG: ID_a = b%b (0x%X)", field_id_a, field_id_a);
+	$display("DEBUG: 		ID_a = b%b (0x%X)", field_id_a, field_id_a);
 end
 
 always @(state_rtr_srr_temp)
 begin
 if(state_rtr_srr_temp)	//Entrando no estado
-	$display(("DEBUG: Estado RTR_SRR_temp"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado RTR_SRR_temp"));
 else				//Saindo do estado
-	$display("DEBUG: RTR_SRR_temp = b%b", rtr_srr_temp);
+	$display("DEBUG: 		RTR_SRR_temp = b%b", rtr_srr_temp);
 end
 
 always @(state_ide)
 begin
 if(state_ide)		//Entrando no estado
-	$display(("DEBUG: Estado IDE"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado IDE"));
 else				//Saindo do estado
-	$display("DEBUG: IDE = b%b", field_ide);
+	$display("DEBUG: 		IDE = b%b", field_ide);
 end
 
 always @(state_id_b)
 if(state_id_b) 	//Entrando no estado
 begin
-	$display("DEBUG: SRR = b%b", rtr_srr_temp); //SRR = RTR_SRR_temp (Frame extendido)
-	$display(("DEBUG: Estado ID_b (18 bits) (Frame extendido)"));
+	$display("DEBUG: 		SRR = b%b", rtr_srr_temp); //SRR = RTR_SRR_temp (Frame extendido)
+	$display("%s", `COLOR_GREEN("DEBUG: Estado ID_b (18 bits) (Frame extendido)"));
 end
 else			//Saindo do estado
 begin
-	$display("DEBUG: ID_b = b%b (0x%X)", field_id_b, field_id_b);
-	$display("DEBUG: ID_ab (full) = b%b (0x%X)", {field_id_a,field_id_b}, {field_id_a,field_id_b});
+	$display("DEBUG: 		ID_b = b%b (0x%X)", field_id_b, field_id_b);
+	$display("DEBUG: 		ID_ab (full) = b%b (0x%X)", {field_id_a,field_id_b}, {field_id_a,field_id_b});
 end
 
 always @(state_rtr)
 begin
 if(state_rtr)		//Entrando no estado
-	$display(("DEBUG: Estado RTR (Frame extendido)"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado RTR (Frame extendido)"));
 else				//Saindo do estado
-	$display("DEBUG: RTR = b%b", field_rtr);
+	$display("DEBUG: 		RTR = b%b", field_rtr);
 end
 
 always @(state_reserved1)
 begin
 if(state_reserved1)		//Entrando no estado
-	$display(("DEBUG: Estado Reserved1 (Frame extendido)"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Reserved1 (Frame extendido)"));
 else					//Saindo do estado
-	$display("DEBUG: Reserved1 = b%b", field_reserved1);
+	$display("DEBUG: 		Reserved1 = b%b", field_reserved1);
 end
 
 always @(state_reserved0)
@@ -336,96 +339,96 @@ if(state_reserved0)		//Entrando no estado
 begin
 	if(~field_ide)
 	begin
-		$display("DEBUG: RTR = b%b", rtr_srr_temp); //RTR=RTR_SRR_temp (Frame base)
+		$display("DEBUG: 		RTR = b%b", rtr_srr_temp); //RTR=RTR_SRR_temp (Frame base)
 	end
-	$display(("DEBUG: Estado Reserved0"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Reserved0"));
 end
 else					//Saindo do estado
-	$display("DEBUG: Reserved0 = b%b", field_reserved0);
+	$display("DEBUG: 		Reserved0 = b%b", field_reserved0);
 end
 
 always @(state_dlc)
 begin
 if(state_dlc)			//Entrando no estado
-	$display(("DEBUG: Estado DLC"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado DLC"));
 else					//Saindo do estado
-	$display("DEBUG: DLC = b%b (0x%X, %d)", field_dlc,field_dlc,field_dlc);
+	$display("DEBUG: 		DLC = b%b (0x%X, %d)", field_dlc,field_dlc,field_dlc);
 end
 
 always @(state_data)
 begin
 if(state_data)			//Entrando no estado
-	$display(("DEBUG: Estado DATA"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado DATA"));
 else					//Saindo do estado
-	$display("DEBUG: DATA = b%b (0x%X)", field_data,field_data);
+	$display("DEBUG: 		DATA = b%b (0x%X)", field_data,field_data);
 end
 
 always @(state_crc)
 begin
 if(state_crc)			//Entrando no estado
-	$display(("DEBUG: Estado CRC"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado CRC"));
 else					//Saindo do estado
-	$display("DEBUG: CRC = b%b (0x%X)", field_crc,field_crc);
+	$display("DEBUG: 		CRC = b%b (0x%X)", field_crc,field_crc);
 end
 
 always @(state_crc_delimiter)
 begin
 if(state_crc_delimiter)	//Entrando no estado
-	$display(("DEBUG: Estado CRC Delimiter"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado CRC Delimiter"));
 else					//Saindo do estado
-	$display("DEBUG: CRC Delimiter = b%b", field_crc_delimiter);
+	$display("DEBUG: 		CRC Delimiter = b%b", field_crc_delimiter);
 end
 
 always @(state_ack_slot)
 begin
 if(state_ack_slot)	//Entrando no estado
-	$display(("DEBUG: Estado ACK Slot"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado ACK Slot"));
 else					//Saindo do estado
-	$display("DEBUG: ACK slot = b%b", field_ack_slot);
+	$display("DEBUG: 		ACK slot = b%b", field_ack_slot);
 end
 
 always @(state_ack_delimiter)
 begin
 if(state_ack_delimiter)	//Entrando no estado
-	$display(("DEBUG: Estado ACK Delimiter"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado ACK Delimiter"));
 else					//Saindo do estado
-	$display("DEBUG: ACK Delimiter = b%b", field_ack_delimiter);
+	$display("DEBUG: 		ACK Delimiter = b%b", field_ack_delimiter);
 end
 
 always @(state_eof)
 begin
 if(state_eof)	//Entrando no estado
-	$display(("DEBUG: Estado End of Frame"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado End of Frame"));
 end
 
 always @(state_overload_flags)
 begin
 if(state_overload_flags)	//Entrando no estado
-	$display(("DEBUG: Estado Overload Flags"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Overload Flags"));
 end
 
 always @(state_overload_delimiter)
 begin
 if(state_overload_delimiter)	//Entrando no estado
-	$display(("DEBUG: Estado Overload Delimiter"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Overload Delimiter"));
 end
 
 always @(state_error_flags)
 begin
 if(state_error_flags)	//Entrando no estado
-	$display(("DEBUG: Estado Overload Flags"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Overload Flags"));
 end
 
 always @(state_error_delimiter)
 begin
 if(state_error_delimiter)	//Entrando no estado
-	$display(("DEBUG: Estado Error Delimiter"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Error Delimiter"));
 end
 
 always @(state_intermission)
 begin
 if(state_intermission)	//Entrando no estado
-	$display(("DEBUG: Estado Intermission"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado Intermission"));
 end
 
 
@@ -439,19 +442,19 @@ end
 //
 //	//Casos dos erros de forma
 //	if(bit_error_srr)
-//		$display("DEBUG: Erro de SRR");
+//		$display("DEBUG: 		Erro de SRR");
 //	if(bit_error_crc_delimiter)
-//		$display("DEBUG: Erro de CRC delimiter");
+//		$display("DEBUG: 		Erro de CRC delimiter");
 //	if(bit_error_ack_slot)
-//		$display("DEBUG: Erro de ACK slot");
+//		$display("DEBUG: 		Erro de ACK slot");
 //	if(bit_error_ack_delimiter)
-//		$display("DEBUG: Erro de ACK delimiter");
+//		$display("DEBUG: 		Erro de ACK delimiter");
 //	if(bit_error_eof)
-//		$display("DEBUG: Erro de EOF");
+//		$display("DEBUG: 		Erro de EOF");
 //	if(bit_error_interframe)
-//		$display("DEBUG: Erro de interframe");
+//		$display("DEBUG: 		Erro de interframe");
 //	if(bit_error_crc_dont_match)
-//		$display("DEBUG: Erro de CRC");
+//		$display("DEBUG: 		Erro de CRC");
 //end
 
 //====================================================================
