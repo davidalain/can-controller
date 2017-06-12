@@ -74,17 +74,20 @@ parameter len_delimiter 	= 4'd8;
 //
 //`define COLOR_END               	`"\033[m`"
 //
-`define COLOR_BLACK(str)        {"\033[1;30m",``str``, "\033[m"}
-`define COLOR_RED(str)          {"\033[1;31m",``str``, "\033[m"}
-`define COLOR_GREEN(str)		{"\033[1;32m",``str``, "\033[m"}
-`define COLOR_YELLOW(str)		{"\033[1;33m",``str``, "\033[m"}
-`define COLOR_BLUE(str)	        {"\033[1;34m",``str``, "\033[m"}
-`define COLOR_MAGENTA(str)      {"\033[1;35m",``str``, "\033[m"}
-`define COLOR_CYAN(str)	        {"\033[1;36m",``str``, "\033[m"}
-`define	COLOR_WHITE(str)        {"\033[1;37m",``str``, "\033[m"}
+`define COLOR_BLACK(str)        {"\033[1;30m",str, "\033[m"}
+`define COLOR_RED(str)          {"\033[1;31m",str, "\033[m"}
+`define COLOR_GREEN(str)		{"\033[1;32m",str, "\033[m"}
+`define COLOR_YELLOW(str)		{"\033[1;33m",str, "\033[m"}
+`define COLOR_BLUE(str)	        {"\033[1;34m",str, "\033[m"}
+`define COLOR_MAGENTA(str)      {"\033[1;35m",str, "\033[m"}
+`define COLOR_CYAN(str)	        {"\033[1;36m",str, "\033[m"}
+`define	COLOR_WHITE(str)        {"\033[1;37m",str, "\033[m"}
 
 parameter	COLOR_RED_INI 		= "\033[1;31m";
 parameter	COLOR_END           = "\033[m";
+
+
+//`define		DISPLAY(msg,params) $display("%sDEBUG: 		ID_a = b%b (0x%X)%s", params);
 
 //====================================================================
 //===================== Variáveis ====================================
