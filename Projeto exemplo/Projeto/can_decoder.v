@@ -235,7 +235,7 @@ assign	go_state_error_flags 		=	bit_error_srr |
 										bit_error_crc_dont_match |
 										bit_error_flags;
 								
-assign	go_state_error_delimiter	=	sample_point	& rx_bit	& state_error_flags		& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
+assign	go_state_error_delimiter	=	sample_point	& rx_bit	& state_error_flags		& contador_flags >= len_flags_min-1;
 
 assign	go_state_overload_flags		=	sample_point	& ~rx_bit	& 
 												((state_eof & contador_eof == len_eof-1) |
