@@ -179,24 +179,25 @@ can_crc i_can_crc
 //====================================================================
 	
 assign 	go_state_idle					= 	reset | 
-											(sample_point	& rx_bit 							& state_intermission	& contador_intermission == len_intermission-1'b1);
+											(sample_point	& rx_bit 							& state_intermission	& (contador_intermission == len_intermission-1'b1));
 												
-assign 	go_state_id_a					= 	sample_point	& ~rx_bit							& (state_idle 			| 
-																								(state_intermission	& contador_intermission == len_intermission-1'b1));
+assign 	go_state_id_a					= 	sample_point	& ~rx_bit							& 
+																								(state_idle 			| 
+																								(state_intermission		& (contador_intermission == len_intermission-1'b1)));
 																								
 assign 	go_state_rtr_srr_temp			= 	sample_point				& ~bit_de_stuffing		& state_id_a  			& (contador_id_a == len_id_a-1'b1);
 assign 	go_state_ide					=	sample_point				& ~bit_de_stuffing		& state_rtr_srr_temp;
 assign 	go_state_id_b					=	sample_point	& rx_bit	& ~bit_de_stuffing		& state_ide;
 assign 	go_state_rtr					=	sample_point				& ~bit_de_stuffing		& state_id_b			& (contador_id_b == len_id_b-1'b1);
 assign 	go_state_reserved1				=	sample_point				& ~bit_de_stuffing		& state_rtr;
-assign 	go_state_reserved0				=	sample_point				& ~bit_de_stuffing		& ( state_reserved1 | (~rx_bit & state_ide));
+assign 	go_state_reserved0				=	sample_point				& ~bit_de_stuffing		& (state_reserved1 | (~rx_bit & state_ide));
 assign 	go_state_dlc					=	sample_point				& ~bit_de_stuffing		& state_reserved0;
-assign 	go_state_data					=	sample_point				& ~bit_de_stuffing		& state_dlc		& (contador_dlc == len_dlc-1'b1) & ({field_dlc[2:0],rx_bit} != 0 & ~field_rtr);
-assign 	go_state_crc					=	sample_point				& ~bit_de_stuffing		& 
-																								((state_dlc		& (contador_dlc == len_dlc-1'b1) & ({field_dlc[2:0],rx_bit} == 4'b0 | field_rtr)) | 
-																								(state_data		& ((contador_data == (8 * field_dlc)-1'b1))));
+assign 	go_state_data					=	sample_point				& ~bit_de_stuffing		& state_dlc				& (contador_dlc == len_dlc-1'b1) & ({field_dlc[2:0],rx_bit} != 4'b0 & ~field_rtr);
+assign 	go_state_crc					=	sample_point				& ~bit_de_stuffing		& 		
+																								((state_dlc				& (contador_dlc == len_dlc-1'b1) & ({field_dlc[2:0],rx_bit} == 4'b0 | field_rtr)) | 
+																								(state_data				& ((contador_data == (4'd8 * field_dlc)-1'b1))));
 																		
-assign 	go_state_crc_delimiter			=	sample_point				& ~bit_de_stuffing		& state_crc				& (contador_crc == len_crc-1'b1) ;
+assign 	go_state_crc_delimiter			=	sample_point				& ~bit_de_stuffing		& state_crc				& (contador_crc == len_crc-1'b1);
 assign 	go_state_ack_slot				=	sample_point	& rx_bit							& state_crc_delimiter;
 assign 	go_state_ack_delimiter			=	sample_point	& ~rx_bit							& state_ack_slot;
 assign 	go_state_eof					=	sample_point	& rx_bit							& state_ack_delimiter;
@@ -206,8 +207,7 @@ assign	go_state_post_eof				=	sample_point	& 									& state_eof					& contador
 assign	go_state_post_error_delimiter	=	sample_point	& 									& state_error_delimiter		& contador_delimiter == len_delimiter-1'b1;
 assign	go_state_post_overload_delimiter=	sample_point	& 									& state_overload_delimiter	& contador_delimiter == len_delimiter-1'b1;
 
-// Não vamos gerar erro com o valor do SRR. Vide adendo do can2spec da bosch	
-//assign	bit_error_srr					=	sample_point	& rx_bit	& ~bit_de_stuffing 		& state_ide				& ~rtr_srr_temp;
+// Não vamos gerar erro com o valor do SRR. Vide adendo do can2spec da bosch
 assign	bit_error_crc_delimiter			=	sample_point	& ~rx_bit	& ~bit_de_stuffing		& state_crc_delimiter;
 assign	bit_error_ack_slot				=	sample_point	& rx_bit							& state_ack_slot;
 assign	bit_error_ack_delimiter			=	sample_point	& ~rx_bit							& state_ack_delimiter;
@@ -234,8 +234,7 @@ assign	bit_de_stuffing					=	sample_point		&	enable_bitstuffing	& (((last_rx_bit
 	
 assign	bit_error_bit_stuffing			= 	sample_point		&	enable_bitstuffing	& (((last_rx_bits == 5'h00) & ~rx_bit) | ((last_rx_bits == 5'h1F) & rx_bit));
 	
-assign	go_state_error_flags 			=	//bit_error_srr |
-											bit_error_crc_delimiter | 
+assign	go_state_error_flags 			=	bit_error_crc_delimiter | 
 											bit_error_ack_slot |
 											bit_error_ack_delimiter | 
 											bit_error_eof | 
@@ -250,7 +249,7 @@ assign	go_state_overload_flags			=	sample_point	& ~rx_bit	& (state_post_eof | st
 assign	go_state_overload_delimiter		=	sample_point	& rx_bit	& state_overload_flags	& (contador_flags >= len_flags_min && contador_flags < len_flags_max);
 
 assign	crc_initialize					=	reset | 
-													(sample_point	& rx_bit 							& state_intermission	& contador_intermission == len_intermission-2);
+											(sample_point	& rx_bit 	& state_intermission	& (contador_intermission == len_intermission-2'd2));
 			
 assign	crc_enable						=	state_id_a |
 											state_rtr_srr_temp |
@@ -279,7 +278,7 @@ end
 //===================== Gerenciamento de impressão ===================
 //====================================================================
 
-// Impressão dos estados
+// ====== Impressão dos estados ======
 
 always @(state_idle)
 begin
@@ -439,13 +438,7 @@ if(state_intermission)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado Intermission"));
 end
 
-// Impressão dos erros
-
-//always @(bit_error_srr)
-//begin
-//if(bit_error_srr)	//Quando a flag for setada pra 1
-//	$display("%s", `COLOR_RED("DEBUG: Error SRR = 0"));
-//end
+// ====== Impressão dos erros ======
 
 always @(bit_error_crc_delimiter)
 begin
@@ -486,7 +479,7 @@ end
 always @(bit_error_crc_dont_match)
 begin
 if(bit_error_crc_dont_match)	//Quando a flag for setada pra 1
-	$display("%s", `COLOR_RED("DEBUG: Error CRC don't match"));
+	$display("%s", `COLOR_RED("DEBUG: Error CRC didn't match"));
 end
 
 always @(bit_error_flags)
@@ -837,7 +830,7 @@ begin
   if (reset)
 	contador_eof <= 0;
   else if (sample_point & state_eof)
-    contador_eof <= contador_eof + 1;
+    contador_eof <= contador_eof + 1'b1;
   else if (sample_point)
     contador_eof <= 0;
 end
@@ -848,7 +841,7 @@ begin
   if (reset)
 	contador_intermission <= 0;
   else if (sample_point & state_intermission )
-    contador_intermission <= contador_intermission + 1;
+    contador_intermission <= contador_intermission + 1'b1;
   else if (sample_point)
     contador_intermission <= 0;
 end
@@ -867,7 +860,7 @@ end
 else if (sample_point & state_id_a & (~bit_de_stuffing))
 begin
 	field_id_a <= {field_id_a[9:0], rx_bit};
-	contador_id_a <= contador_id_a + 1;
+	contador_id_a <= contador_id_a + 1'b1;
 end
 else if (sample_point & ~state_id_a)
 	contador_id_a <= 4'd0;
@@ -907,7 +900,7 @@ begin
 		field_srr <= rtr_srr_temp;
 	
 	field_id_b <= {field_id_b[16:0], rx_bit};
-	contador_id_b <= contador_id_b + 1;
+	contador_id_b <= contador_id_b + 1'b1;
 end
 else if (sample_point & ~state_id_b)
 	contador_id_b <= 5'd0;
@@ -955,7 +948,7 @@ begin
 	//Se DLC == 4'b1XXX, aplica máscara 4'b1000 para garantir ser no máximo 8 o valor do DLC.
 	//Nota: field_dlc[2] representará o bit de indice 3 após a execução da linha abaixo.
     field_dlc <= (~field_dlc[2]) ? ({field_dlc[2:0], rx_bit}) : ({field_dlc[2:0], rx_bit} & 4'b1000);
-    contador_dlc <= contador_dlc + 1;
+    contador_dlc <= contador_dlc + 1'b1;
   end
   else if (sample_point & ~state_dlc)
 	contador_dlc <= 3'd0;
@@ -973,7 +966,7 @@ begin
   else if (sample_point & state_data & (~bit_de_stuffing))
   begin
     field_data <= {field_data[62:0], rx_bit};
-	contador_data <= contador_data + 1;
+	contador_data <= contador_data + 1'b1;
   end
   else if (sample_point & ~state_data)
 	contador_data <= 6'd0;
@@ -990,7 +983,7 @@ begin
   else if (sample_point & state_crc & (~bit_de_stuffing))
   begin
     field_crc <= {field_crc[13:0], rx_bit};
-	contador_crc <= contador_crc + 1;
+	contador_crc <= contador_crc + 1'b1;
   end
   else if (sample_point & ~state_crc)
 	contador_crc <= 0;
