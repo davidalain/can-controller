@@ -1,0 +1,9 @@
+Detalhes especificação CAN
+
+The value of the last bit of END OF FRAME is treated as dont care, (a dominant value does not lead to a FORM ERROR). 
+[Marco di Natale - https://www-inst.eecs.berkeley.edu/~ee249/fa08/Lectures/handout_canbus2.pdf]
+
+
+If a CAN node has a message waiting for transmission and it samples a dominant bit at the third bit of INTERMISSION, it will interpret this as a START OF FRAME bit, and, with the next bit, start transmitting its message with the first bit of its IDENTIFIER without first transmitting a START OF FRAME bit and without becoming receiver.
+[Bosh Specs - http://www.bosch-semiconductors.de/media/ubk_semiconductors/pdf_1/canliteratur/can2spec.pdf]
+
