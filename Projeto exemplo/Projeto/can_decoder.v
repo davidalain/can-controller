@@ -205,8 +205,9 @@ assign 	go_state_intermission			=	sample_point	& rx_bit							& (state_post_eof 
 assign	go_state_post_eof				=	sample_point	& 									& state_eof					& contador_eof == len_eof-1'b1;
 assign	go_state_post_error_delimiter	=	sample_point	& 									& state_error_delimiter		& contador_delimiter == len_delimiter-1'b1;
 assign	go_state_post_overload_delimiter=	sample_point	& 									& state_overload_delimiter	& contador_delimiter == len_delimiter-1'b1;
-	
-assign	bit_error_srr					=	sample_point	& rx_bit	& ~bit_de_stuffing 		& state_ide				& ~rtr_srr_temp;
+
+// Não vamos gerar erro com o valor do SRR. Vide adendo do can2spec da bosch	
+//assign	bit_error_srr					=	sample_point	& rx_bit	& ~bit_de_stuffing 		& state_ide				& ~rtr_srr_temp;
 assign	bit_error_crc_delimiter			=	sample_point	& ~rx_bit	& ~bit_de_stuffing		& state_crc_delimiter;
 assign	bit_error_ack_slot				=	sample_point	& rx_bit							& state_ack_slot;
 assign	bit_error_ack_delimiter			=	sample_point	& ~rx_bit							& state_ack_delimiter;
@@ -233,7 +234,7 @@ assign	bit_de_stuffing					=	sample_point		&	enable_bitstuffing	& (((last_rx_bit
 	
 assign	bit_error_bit_stuffing			= 	sample_point		&	enable_bitstuffing	& (((last_rx_bits == 5'h00) & ~rx_bit) | ((last_rx_bits == 5'h1F) & rx_bit));
 	
-assign	go_state_error_flags 			=	bit_error_srr |
+assign	go_state_error_flags 			=	//bit_error_srr |
 											bit_error_crc_delimiter | 
 											bit_error_ack_slot |
 											bit_error_ack_delimiter | 
@@ -440,11 +441,11 @@ end
 
 // Impressão dos erros
 
-always @(bit_error_srr)
-begin
-if(bit_error_srr)	//Quando a flag for setada pra 1
-	$display("%s", `COLOR_RED("DEBUG: Error SRR = 0"));
-end
+//always @(bit_error_srr)
+//begin
+//if(bit_error_srr)	//Quando a flag for setada pra 1
+//	$display("%s", `COLOR_RED("DEBUG: Error SRR = 0"));
+//end
 
 always @(bit_error_crc_delimiter)
 begin
