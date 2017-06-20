@@ -19,7 +19,7 @@
         <y:ShapeNode>
           <y:Geometry height="100.0" width="100.0" x="-179.22568031871486" y="-190.0618660985163"/>
           <y:Fill color="#00FF00" color2="#00FF00" transparent="false"/>
-          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="4.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="30.677734375" x="34.6611328125" y="33.298828125">S0:
 IDLE<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -692,7 +692,7 @@ Flags<y:LabelModel>
               <y:Geometry height="32.659316865869755" width="122.51673414071286" x="-1007.4165002145237" y="894.1605399807381"/>
               <y:Fill color="#CCFFFF" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.744140625" x="4.886296757856485" y="6.979072495434821">Execução no estado<y:LabelModel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="112.744140625" x="4.886296757856371" y="6.979072495434821">Execução no estado<y:LabelModel>
                   <y:SmartNodeLabelModel distance="4.0"/>
                 </y:LabelModel>
                 <y:ModelParameter>
@@ -879,10 +879,11 @@ RTR_SRR_temp representa SRR, se Frame Extendido (IDE=1)<y:LabelModel>
     <node id="n35">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="45.155200000000036" width="290.702822281167" x="-439.09197846195093" y="-253.27390846134372"/>
+          <y:Geometry height="52.61535236074275" width="290.702822281167" x="-439.09197846195093" y="-253.27390846134372"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="279.478515625" x="5.6121533280835365" y="5.876428125000018">Fica neste estado até receber um bit dominante (0),
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="48.103515625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="279.478515625" x="5.6121533280835365" y="2.2559183678713737">Estado inicial.
+Fica neste estado até receber um bit dominante (0),
 que indica o Start of Frame (SOF)<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
