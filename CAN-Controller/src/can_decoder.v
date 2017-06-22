@@ -13,20 +13,20 @@
 //====================================================================
 
 module can_decoder(
+	/** ====== Entradas ========= **/
 	clock,			// Clock do circuito
 	reset,			// Reset (em nível lógico 1)
 
 	rx_bit,  		// Sinal com o bit lido no barramento
 	sample_point,  	// Indica quando o bit deve ser lido (na transicao deste sinal de 0 para 1)
 	
-	// Deixar os campos como saida do modulo para ver a saída nos testes
-	
+	/** ====== Saídas ============ **/
 	field_start_of_frame,
 	field_id_a,
 	field_ide,
 	field_rtr,
-	field_srr,		// Campo do frame CAN extendido (rtr_srr_temp)
-	field_reserved1,
+	field_srr,		// Campo do frame CAN extendido (srr=rtr_srr_temp)
+	field_reserved1,// Campo do frame CAN extendido
 	field_reserved0,
 	field_id_b,		// Campo do frame CAN extendido
 	field_dlc,
@@ -36,7 +36,7 @@ module can_decoder(
 	field_ack_slot,
 	field_ack_delimiter,
 	
-	rtr_srr_temp
+	rtr_srr_temp	// Variável temporária que entregará o valor de RTR (Frame Base) ou SRR (Frame Extendido)
 );
 
 
@@ -213,7 +213,7 @@ assign	bit_error_ack_slot				=	sample_point	& rx_bit							& state_ack_slot;
 assign	bit_error_ack_delimiter			=	sample_point	& ~rx_bit							& state_ack_delimiter;
 assign	bit_error_eof					=	sample_point	& ~rx_bit							& state_eof;
 assign	bit_error_intermission			=	sample_point	& ~rx_bit							& state_intermission	& (contador_intermission != len_intermission-1'b1);
-assign	bit_error_crc_dont_match		= 	sample_point										& state_ack_delimiter 	& (calculated_crc != field_crc); //O erro de CRC é verificado no estado ACK Delimiter. CAN2Spec - Seção 6.2 - pg 23
+assign	bit_error_crc_didnt_match		= 	sample_point										& state_ack_delimiter 	& (calculated_crc != field_crc); //O erro de CRC é verificado no estado ACK Delimiter. CAN2Spec - Seção 6.2 - pg 23
 assign	bit_error_flags					=	sample_point										& (state_overload_flags | state_error_flags) & 							
 																																			((rx_bit	& contador_flags < len_flags_min-1'b1) |
 																																			(~rx_bit	& contador_flags >= len_flags_max));
@@ -239,7 +239,7 @@ assign	go_state_error_flags 			=	bit_error_crc_delimiter |
 											bit_error_ack_delimiter | 
 											bit_error_eof | 
 											bit_error_bit_stuffing | 
-											bit_error_crc_dont_match |
+											bit_error_crc_didnt_match |
 											bit_error_flags;
 									
 assign	go_state_error_delimiter		=	sample_point	& rx_bit	& state_error_flags		& contador_flags >= len_flags_min-1'b1;
@@ -476,9 +476,9 @@ if(bit_error_bit_stuffing)	//Quando a flag for setada pra 1
 	$display("%s", `COLOR_RED("DEBUG: Error Bit Stuffing"));
 end
 
-always @(bit_error_crc_dont_match)
+always @(bit_error_crc_didnt_match)
 begin
-if(bit_error_crc_dont_match)	//Quando a flag for setada pra 1
+if(bit_error_crc_didnt_match)	//Quando a flag for setada pra 1
 	$display("%s", `COLOR_RED("DEBUG: Error CRC didn't match"));
 end
 
