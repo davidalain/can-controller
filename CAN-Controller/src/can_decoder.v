@@ -293,7 +293,7 @@ begin
 if(state_id_a) 	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado ID_a (11 bits)"));
 else			//Saindo do estado
-	$display("DEBUG: 		ID_a = b%b (0x%X)", field_id_a, field_id_a);
+	$display("DEBUG:   ID_a = b%b (0x%X)", field_id_a, field_id_a);
 end
 
 always @(state_rtr_srr_temp)
@@ -301,7 +301,7 @@ begin
 if(state_rtr_srr_temp)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado RTR_SRR_temp"));
 else				//Saindo do estado
-	$display("DEBUG: 		RTR_SRR_temp = b%b", rtr_srr_temp);
+	$display("DEBUG:   RTR_SRR_temp = b%b", rtr_srr_temp);
 end
 
 always @(state_ide)
@@ -309,19 +309,19 @@ begin
 if(state_ide)		//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado IDE"));
 else				//Saindo do estado
-	$display("DEBUG: 		IDE = b%b", field_ide);
+	$display("DEBUG:   IDE = b%b", field_ide);
 end
 
 always @(state_id_b)
 if(state_id_b) 	//Entrando no estado
 begin
-	$display("DEBUG: 		SRR = b%b", rtr_srr_temp); //SRR = RTR_SRR_temp (Frame extendido)
+	$display("DEBUG:   SRR = b%b", rtr_srr_temp); //SRR = RTR_SRR_temp (Frame extendido)
 	$display("%s", `COLOR_GREEN("DEBUG: Estado ID_b (18 bits) (Frame extendido)"));
 end
 else			//Saindo do estado
 begin
-	$display("DEBUG: 		ID_b = b%b (0x%X)", field_id_b, field_id_b);
-	$display("DEBUG: 		ID_ab (full) = b%b (0x%X)", {field_id_a,field_id_b}, {field_id_a,field_id_b});
+	$display("DEBUG:   ID_b = b%b (0x%X)", field_id_b, field_id_b);
+	$display("DEBUG:   ID_ab (full) = b%b (0x%X)", {field_id_a,field_id_b}, {field_id_a,field_id_b});
 end
 
 always @(state_rtr)
@@ -329,7 +329,7 @@ begin
 if(state_rtr)		//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado RTR (Frame extendido)"));
 else				//Saindo do estado
-	$display("DEBUG: 		RTR = b%b", field_rtr);
+	$display("DEBUG:   RTR = b%b", field_rtr);
 end
 
 always @(state_reserved1)
@@ -337,7 +337,7 @@ begin
 if(state_reserved1)		//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado Reserved1 (Frame extendido)"));
 else					//Saindo do estado
-	$display("DEBUG: 		Reserved1 = b%b", field_reserved1);
+	$display("DEBUG:   Reserved1 = b%b", field_reserved1);
 end
 
 always @(state_reserved0)
@@ -346,12 +346,12 @@ if(state_reserved0)		//Entrando no estado
 begin
 	if(~field_ide)
 	begin
-		$display("DEBUG: 		RTR = b%b", rtr_srr_temp); //RTR=RTR_SRR_temp (Frame base)
+		$display("DEBUG:   RTR = b%b", rtr_srr_temp); //RTR=RTR_SRR_temp (Frame base)
 	end
 	$display("%s", `COLOR_GREEN("DEBUG: Estado Reserved0"));
 end
 else					//Saindo do estado
-	$display("DEBUG: 		Reserved0 = b%b", field_reserved0);
+	$display("DEBUG:   Reserved0 = b%b", field_reserved0);
 end
 
 always @(state_dlc)
@@ -359,7 +359,7 @@ begin
 if(state_dlc)			//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado DLC"));
 else					//Saindo do estado
-	$display("DEBUG: 		DLC = b%b (0x%X, %d)", field_dlc,field_dlc,field_dlc);
+	$display("DEBUG:   DLC = b%b (0x%X, %d)", field_dlc,field_dlc,field_dlc);
 end
 
 always @(state_data)
@@ -367,7 +367,25 @@ begin
 if(state_data)			//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado DATA"));
 else					//Saindo do estado
-	$display("DEBUG: 		DATA = b%b (0x%X)", field_data,field_data);
+begin
+	if(field_dlc == 4'd1)
+		$display("DEBUG:   DATA = b%b (0x%X)", field_data[1*8-1:0],field_data[1*8-1:0]);
+	if(field_dlc == 4'd2)
+		$display("DEBUG:   DATA = b%b (0x%X)", field_data[2*8-1:0],field_data[2*8-1:0]);
+	if(field_dlc == 4'd3)
+		$display("DEBUG:   DATA = b%b (0x%X)", field_data[3*8-1:0],field_data[3*8-1:0]);
+	if(field_dlc == 4'd4)
+		$display("DEBUG:   DATA = b%b (0x%X)", field_data[4*8-1:0],field_data[4*8-1:0]);
+	if(field_dlc == 4'd5)
+		$display("DEBUG:   DATA = b%b (0x%X)", field_data[5*8-1:0],field_data[5*8-1:0]);
+	if(field_dlc == 4'd6)
+		$display("DEBUG:   DATA = b%b (0x%X)", field_data[6*8-1:0],field_data[6*8-1:0]);
+	if(field_dlc == 4'd7)
+		$display("DEBUG:   DATA = b%b (0x%X)", field_data[7*8-1:0],field_data[7*8-1:0]);
+	if(field_dlc >= 4'd8)
+		$display("DEBUG:   DATA = b%b (0x%X)", field_data[8*8-1:0],field_data[8*8-1:0]);
+
+end
 end
 
 always @(state_crc)
@@ -375,7 +393,7 @@ begin
 if(state_crc)			//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado CRC"));
 else					//Saindo do estado
-	$display("DEBUG: 		CRC = b%b (0x%X)", field_crc,field_crc);
+	$display("DEBUG:   CRC = b%b (0x%X)", field_crc,field_crc);
 end
 
 always @(state_crc_delimiter)
@@ -383,7 +401,7 @@ begin
 if(state_crc_delimiter)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado CRC Delimiter"));
 else					//Saindo do estado
-	$display("DEBUG: 		CRC Delimiter = b%b", field_crc_delimiter);
+	$display("DEBUG:   CRC Delimiter = b%b", field_crc_delimiter);
 end
 
 always @(state_ack_slot)
@@ -391,7 +409,7 @@ begin
 if(state_ack_slot)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado ACK Slot"));
 else					//Saindo do estado
-	$display("DEBUG: 		ACK slot = b%b", field_ack_slot);
+	$display("DEBUG:   ACK slot = b%b", field_ack_slot);
 end
 
 always @(state_ack_delimiter)
@@ -399,13 +417,35 @@ begin
 if(state_ack_delimiter)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado ACK Delimiter"));
 else					//Saindo do estado
-	$display("DEBUG: 		ACK Delimiter = b%b", field_ack_delimiter);
+	$display("DEBUG:   ACK Delimiter = b%b", field_ack_delimiter);
 end
 
 always @(state_eof)
 begin
 if(state_eof)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado End of Frame"));
+end
+
+always @(state_post_eof)
+begin
+if(state_post_eof)	//Entrando no estado
+begin
+	$display("%s", `COLOR_GREEN("DEBUG: Estado POST End of Frame"));
+	if(field_ide)
+	begin
+		if(field_rtr)
+			$display("%s", `COLOR_BLUE("DEBUG: Extended Remote Frame Recebido"));
+		else
+			$display("%s", `COLOR_BLUE("DEBUG: Extended Frame Recebido"));
+	end
+	else
+	begin 
+		if(field_rtr)
+			$display("%s", `COLOR_BLUE("DEBUG: Base Remote Frame Recebido"));
+		else
+			$display("%s", `COLOR_BLUE("DEBUG: Base Frame Recebido"));
+	end
+end
 end
 
 always @(state_overload_flags)
@@ -420,6 +460,15 @@ if(state_overload_delimiter)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado Overload Delimiter"));
 end
 
+always @(state_post_overload_delimiter)
+begin
+if(state_post_overload_delimiter)	//Entrando no estado
+begin
+	$display("%s", `COLOR_BLUE("DEBUG: Overload Frame Recebido"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado POST Overload Delimiter"));
+end
+end
+
 always @(state_error_flags)
 begin
 if(state_error_flags)	//Entrando no estado
@@ -430,6 +479,15 @@ always @(state_error_delimiter)
 begin
 if(state_error_delimiter)	//Entrando no estado
 	$display("%s", `COLOR_GREEN("DEBUG: Estado Error Delimiter"));
+end
+
+always @(state_post_error_delimiter)
+begin
+if(state_post_error_delimiter)	//Entrando no estado
+begin
+	$display("%s", `COLOR_BLUE("DEBUG: Error Frame Recebido"));
+	$display("%s", `COLOR_GREEN("DEBUG: Estado POST Error Delimiter"));
+end
 end
 
 always @(state_intermission)
