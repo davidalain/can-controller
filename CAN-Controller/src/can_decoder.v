@@ -779,7 +779,7 @@ always @(posedge clock or posedge reset)
 begin
 if(reset)
 	state_eof <= 1'b0;
-else if(go_state_overload_flags | go_state_intermission | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
+else if(go_state_post_eof | go_state_overload_flags | go_state_intermission | go_state_error_flags) //Sai do estado se a flag do próximo estiver ativa!
 	state_eof <= 1'b0;
 else if(go_state_eof)
 	state_eof <= 1'b1; //Entra no estado!
