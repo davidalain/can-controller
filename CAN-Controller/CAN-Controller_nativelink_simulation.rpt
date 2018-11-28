@@ -1,17 +1,16 @@
 Info: Start Nativelink Simulation process
-Info: NativeLink has detected Verilog design -- Verilog simulation models will be used
 
 ========= EDA Simulation Settings =====================
 
-Sim Mode              :  RTL
+Sim Mode              :  Gate
 Family                :  cycloneivgx
 Quartus root          :  c:/intelfpga_lite/16.1/quartus/bin64/
 Quartus sim root      :  c:/intelfpga_lite/16.1/quartus/eda/sim_lib
 Simulation Tool       :  modelsim-altera
 Simulation Language   :  verilog
 Simulation Mode       :  GUI
-Sim Output File       :  
-Sim SDF file          :  
+Sim Output File       :  CAN-Controller_7_1200mv_125c_slow.vo
+Sim SDF File       :  CAN-Controller_7_1200mv_125c_v_slow.sdo
 Sim dir               :  simulation\modelsim
 
 =======================================================
